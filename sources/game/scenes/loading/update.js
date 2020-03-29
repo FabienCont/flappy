@@ -8,7 +8,7 @@ function update() {
 
             this.load('demo');
 
-        }, 3000);
+        }, 100);
 
         this.state.redirect = true;
     }

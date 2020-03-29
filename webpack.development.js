@@ -11,7 +11,7 @@ module.exports = merge(require('./webpack.common.js'), {
         'clientLogLevel': 'warning',
         'contentBase': path.resolve(__dirname, 'dist/'),
         'hot': true,
-        'open': true,
+        'open': false,
         'overlay': {
 
             'warnings': true,

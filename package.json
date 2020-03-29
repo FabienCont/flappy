@@ -1,12 +1,10 @@
 {
     "author": "deformhead",
     "bugs": {
-
         "url": "https://github.com/hello/friend/issues"
     },
     "description": "game built with theatre (javascript es6 game framework)",
     "devDependencies": {
-
         "@babel/core": "7.4.0",
         "@babel/preset-env": "7.4.2",
         "babel-loader": "8.0.5",
@@ -21,7 +19,6 @@
     },
     "homepage": "https://github.com/hello/friend#readme",
     "keywords": [
-
         "theatre",
         "game",
         "framework"
@@ -29,12 +26,10 @@
     "license": "MIT",
     "main": "sources/index.js",
     "repository": {
-
         "type": "git",
         "url": "git+https://github.com/hello/friend.git"
     },
     "scripts": {
-
         "build": "npm run build:linux:64 && npm run build:windows:32 && npm run build:windows:64",
         "build:linux:64": "electron-packager dist/ theatre --arch=x64 --asar --out=build/ --overwrite --platform=linux",
         "build:windows:32": "electron-packager dist/ theatre --arch=ia32 --asar --out=build/ --overwrite --platform=win32",

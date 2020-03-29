@@ -36,6 +36,8 @@ function Canvas(type, identifier, width, height, pixelated = false) {
     }
 
     element.setAttribute('id', identifier);
+    element.setAttribute('tabindex', 0);
+    element.focus();
 
     resize(width, height);
 
