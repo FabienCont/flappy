@@ -1,0 +1,9 @@
+{
+  "systems":[
+    {
+      "name":"inputs",
+      "scope":"common",
+      "components":["inputs"]
+    }
+  ]
+}

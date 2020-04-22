@@ -78,8 +78,7 @@ function Camera(context, width, height) {
                 context.globalAlpha = opacity;
 
                 context.drawImage(
-
-                    source,
+                    source(),
                     frame.x, frame.y, frame.width, frame.height,
                     destination.x - (this.position.x + shaking.shift.x), destination.y - (this.position.y + shaking.shift.y), destination.width, destination.height
                 );

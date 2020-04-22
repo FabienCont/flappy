@@ -1,0 +1,14 @@
+{
+  "renderers":[
+    {
+      "name":"spritesheets",
+      "scope":"common",
+      "components":["images"]
+    },
+    {
+      "name":"images",
+      "scope":"common",
+      "components":["camera", "images", "origin", "position"]
+    }
+  ]
+}

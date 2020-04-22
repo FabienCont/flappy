@@ -3,6 +3,12 @@ function Canvas(type, identifier, width, height, pixelated = false) {
     const element = document.createElement('canvas');
     const context = element.getContext(type);
 
+    function focus() {
+
+        element.setAttribute('tabindex', 0);
+        element.focus();
+    }
+
     function resize(width, height) {
 
         let ratio = window.devicePixelRatio || 1;
@@ -36,13 +42,13 @@ function Canvas(type, identifier, width, height, pixelated = false) {
     }
 
     element.setAttribute('id', identifier);
-    element.setAttribute('tabindex', 0);
-    element.focus();
+    element.addEventListener('mousedown', focus);
 
     resize(width, height);
 
     this.context = context;
     this.element = element;
+    this.focus = focus;
     this.resize = resize;
 }
 

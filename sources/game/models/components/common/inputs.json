@@ -1,0 +1,21 @@
+{
+  "name":"inputs",
+  "params":
+    {
+      "inputs":{
+          "_default":[],
+          "_type":"array<object>",
+          "_object": {
+              "action": {
+                  "_type": "string"
+              },
+              "state": {
+                  "_type": "string"
+              },
+              "command": {
+                  "_type": "string"
+              }
+          }
+      }
+  }
+}

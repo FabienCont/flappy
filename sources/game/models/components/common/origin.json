@@ -1,0 +1,10 @@
+{
+  "name":"origin",
+  "params":
+    {
+      "reference":{
+          "_default":"$origins.default",
+          "_type":"ref"
+      }
+    }
+}

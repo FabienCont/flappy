@@ -1,0 +1,13 @@
+{
+  "name":"hitbox",
+  "params": {
+    "width" : {
+      "_default":0,
+      "_type":"number"
+    },
+    "height" : {
+      "_default":0,
+      "_type":"number"
+    }
+  }
+}
