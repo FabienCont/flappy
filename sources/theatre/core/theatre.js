@@ -70,9 +70,13 @@ function Theatre(config) {
         this.delta = 0;
 
         this.loop = new Loop(forward.bind(this), framerate, speed);
-        preloadAssets.call(this);
+        var promisePreloadAssets=preloadAssets.call(this);
+        var promisePreloadModels=preloadModels.call(this);
         preloadScenes.call(this);
-        preloadModels.call(this);
+
+        Promise.all([promisePreloadAssets,promisePreloadModels]).then((modules) => {
+          this.preloading=false;
+        });
 
 
 /*        assets.call(this);
@@ -158,8 +162,9 @@ function Theatre(config) {
     }
 
     this.playing = true;
-    this.preloading = false;
+    this.preloading = true;
     this.currentScene;
+    this.$={};
     this.scenes = {};
     this.size = size;
     this.snippets = {};

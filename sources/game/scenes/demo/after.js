@@ -7,7 +7,7 @@ function after() {
     /*this.$.world.system('debug', [], debug);
 
     this.$.controllers.inputs.length = 0;*/
-  //this.$controllers.inputs.length = 0;
+  this.$controllers.inputs.length = 0;
 
 }
 

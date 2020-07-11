@@ -2,6 +2,9 @@
   "name":"commands",
   "params":
     {
-      "commands":null
+      "commands":{
+          "_default":[],
+          "_type":"array<string>"
+      }
     }
 }

@@ -7,9 +7,7 @@ function setup() {
     console.log('setup demo scene');
 
     this.$origins = {
-
         'default': {
-
             'x': this.size.width / 2,
             'y': this.size.height / 2,
             'z': 0,
@@ -17,7 +15,7 @@ function setup() {
         }
     };
 
-    this.$controllers = new Controllers(this.element, this.assets.datasets.demo['inputs']());
+    this.$controllers = new Controllers(this.element, this.models.scenes[this.currentScene]['inputs']());
     this.$world = new World(this);
     this.$camera = new Camera(this.context, this.size.width, this.size.height);
 }

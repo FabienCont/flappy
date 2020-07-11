@@ -20,8 +20,8 @@
     {
         "name": "inputs",
         "scope":"common",
-        "params": [
-
+        "params": {
+          "inputs":
             [
                 {
                     "action": "KEY_UP",
@@ -64,7 +64,36 @@
                     "command": "MOVE_RIGHT"
                 }
             ]
-        ]
+        }
+    },
+    {
+        "name": "forces",
+        "scope":"common",
+        "params": {
+            "parts":[
+                {
+                    "x": 0,
+                    "y": -200,
+                    "duration": 1000,
+                    "easing": {
+                        "type": "snippets",
+                        "scope": "demo",
+                        "name": "ease-linear"
+                    },
+                    "elapsed": 0,
+                    "ending": {
+                        "type": "snippets",
+                        "scope": "demo",
+                        "name": "forces-ending"
+                    },
+                    "handling": {
+                        "type": "snippets",
+                        "scope": "demo",
+                        "name": "forces-handling"
+                    }
+                }
+            ]
+        }
     },
     {
       "name":"images",

@@ -2,8 +2,8 @@
 import {images} from 'systems/common/images.js';
 import {spritesheets} from 'systems/common/spritesheets.js';
 import {loadRenderers} from 'core/loadRenderers';
-function render() {
 
+function render() {
     // console.log('render demo scene');
 
     this.context.fillStyle = '#cbdbfc';
@@ -12,7 +12,7 @@ function render() {
     //this.$world.system(['camera', 'fade'], fade);
 
     loadRenderers.call(this);
-    
+
     this.$camera.render();
 }
 

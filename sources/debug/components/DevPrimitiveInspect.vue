@@ -1,6 +1,6 @@
 <template>
   <div @click.stop.prevent="" class="dev-primitive-inspect">
-    <label v-if="name">{{name}}:</label>
+    <label v-if="name && typeof primitiveToInspect!=='module'">{{name}}:</label>
     <template v-if="typeof primitiveToInspect==='number'">
       <input class="dev-primitive-inspect-input" :disabled="!isEditable" type="number" step="0.1" :value="primitiveToInspect"  @input="updateValueNumber">
     </template>
@@ -9,6 +9,12 @@
     </template>
     <template v-else-if="typeof primitiveToInspect==='boolean'">
       <input class="dev-primitive-inspect-input" :disabled="!isEditable" type="checkbox" :value="primitiveToInspect"  @input="updateValue">
+    </template>
+    <template v-else-if="typeof primitiveToInspect==='function'">
+      <input class="dev-primitive-inspect-input" :disabled="false" type="text" :value="primitiveToInspect">
+    </template>
+    <template v-else-if="typeof primitiveToInspect==='module'">
+      <input class="dev-primitive-inspect-input" :disabled="false" type="text" :value="primitiveToInspect">
     </template>
   </div>
 </template>

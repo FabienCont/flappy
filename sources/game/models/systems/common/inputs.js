@@ -21,10 +21,7 @@ function inputs(entities) {
                         entity.add({
 
                             'name': 'commands',
-                            'params': [
-
-                                [input.command]
-                            ]
+                            'commands':[input.command]
                         });
                     }
                 }

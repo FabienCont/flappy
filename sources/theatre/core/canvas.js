@@ -21,8 +21,8 @@ function Canvas(type, identifier, width, height, pixelated = false) {
         element.setAttribute('height', ratio * height);
         element.setAttribute('width', ratio * width);
 
-        element.style.height = height + 'px';
-        element.style.width = width + 'px';
+        element.style.height = '100%';
+        element.style.width = '100%';
 
         context.scale(ratio, ratio);
 

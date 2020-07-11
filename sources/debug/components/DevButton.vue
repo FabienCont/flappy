@@ -13,7 +13,7 @@ export default {
 <style lang="scss">
 
   @import 'debug/styles/_variables';
-  
+
   .dev-button{
     border: none;
     background-color: $dev--color-color0;

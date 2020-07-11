@@ -1,5 +1,6 @@
 const preloadModels = function() {
 
+ return new Promise((resolve, reject) => {
     const context = require.context('models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy');
 
     let promiseArray = [];
@@ -51,11 +52,12 @@ const preloadModels = function() {
     Promise.all(promiseArray).then((modules) => {
         if (module.hot) {
             module.hot.dispose(context.id, (contextId) => {
-                loadModels()
+                preloadModels()
             });
         }
-        this.preloading = false;
+        resolve()
     });
+  });
 }
 
 function loadModel(key,module) {
@@ -76,8 +78,12 @@ function loadModel(key,module) {
         };
 
 
-
+        if (type === 'snippets') {
+            asset.getter = asset.source.default.bind(this);
+            resolve(asset);
+        }else{
           asset.getter = () => asset.source;
+        }
 
           resolve(asset);
 

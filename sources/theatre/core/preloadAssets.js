@@ -1,4 +1,5 @@
 const preloadAssets = function() {
+  return new Promise((resolve, reject) => {
 
     const context = require.context('assets/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy');
 
@@ -51,11 +52,13 @@ const preloadAssets = function() {
     Promise.all(promiseArray).then((modules) => {
         if (module.hot) {
             module.hot.dispose(context.id, (contextId) => {
-                loadAssets()
+                preloadAssets()
             });
         }
-        this.preloading = false;
+        resolve()
     });
+
+  });
 }
 
 function loadAsset(key,module) {

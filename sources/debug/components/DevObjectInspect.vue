@@ -16,7 +16,7 @@
             <dev-object-inspect :name="key" v-if="isChildOpen || depth==0" :depth="depth + 1" :objectToInspect.sync="val"></dev-object-inspect>
           </template>
         </template>
-        <template v-else-if="typeof val!=='function'">
+        <template v-else>
           <dev-primitive-inspect v-if="isChildOpen || depth==0" :name="key" :depth="depth + 1" :isEditable="isEditable(key)" :primitiveToInspect="val" @update:primitiveToInspect="newVal => objectToInspect[key] = newVal"></dev-primitive-inspect>
         </template>
       </template>

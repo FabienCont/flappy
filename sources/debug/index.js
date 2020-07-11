@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Devtool from "debug/view/Devtool.vue";
+import Devpanel from "debug/view/Devpanel.vue";
 import {baseComponentAutoImport} from './baseComponentAutoImport.js';
 
 baseComponentAutoImport();
@@ -7,9 +7,9 @@ window.setTimeout(function(){
 
 var app = new Vue({
   el: '.game-devtool',
-  template:'<devtool></devtool>',
+  template:'<devpanel></devpanel>',
   components:{
-    Devtool
+    Devpanel
   }
 })
 },1000);

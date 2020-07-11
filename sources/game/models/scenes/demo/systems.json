@@ -4,6 +4,16 @@
       "name":"inputs",
       "scope":"common",
       "components":["inputs"]
+    },
+    {
+      "name":"commands",
+      "scope":"demo",
+      "components":["commands"]
+    },
+    {
+      "name":"forces",
+      "scope":"common",
+      "components":["position","forces"]
     }
   ]
 }

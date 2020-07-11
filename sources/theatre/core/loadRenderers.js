@@ -6,7 +6,6 @@ const loadRenderers=function(){
   });
 }
 
-
 const getRenderers=function(){
   try{
     return this.models.scenes[this.currentScene].renderers().renderers;

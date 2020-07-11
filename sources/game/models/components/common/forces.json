@@ -1,32 +1,9 @@
 {
   "name":"forces",
-  "params":
-    {
-      "parts":[
-        {
-          "x":{
-            "_default":0,
-            "_type":"number"
-          },
-          "y":{
-            "_default":0,
-            "_type":"number"
-          },
-          "duration":{
-            "_default":0,
-            "_type":"number"
-          },
-          "easing":{
-            "_default":"linear",
-            "_type":"string"
-          },
-          "elapsed":{
-            "_default":0,
-            "_type":"number"
-          },
-          "ending":false,
-          "handling":false,
-          "moved":{
+  "params":{
+      "parts":{
+        "_type":"array<object>",
+        "_object":{
             "x":{
               "_default":0,
               "_type":"number"
@@ -34,9 +11,74 @@
             "y":{
               "_default":0,
               "_type":"number"
+            },
+            "duration":{
+              "_default":0,
+              "_type":"number"
+            },
+            "easing":{
+              "_default":{"type":"snippets","scope":"common","function":"linear"},
+              "_type":"object",
+              "type": {
+                "_default":"snippets",
+                "_type":"string"
+              },
+              "scope": {
+                "_type":"string"
+              },
+              "name": {
+                "_type":"string"
+              }
+            },
+            "elapsed":{
+              "_default":0,
+              "_type":"number"
+            },
+            "ending":{
+              "_default":false,
+              "_type":"object",
+              "type": {
+                "_default":"snippets",
+                "_type":"string"
+              },
+              "scope": {
+                "_default":"demo",
+                "_type":"string"
+              },
+              "name": {
+                "_default":"forces-handling",
+                "_type":"string"
+              }
+            },
+            "handling":{
+              "_default":false,
+              "_type":"object",
+              "type": {
+                "_default":"snippets",
+                "_type":"string"
+              },
+              "scope": {
+                "_default":"demo",
+                "_type":"string"
+              },
+              "name": {
+                "_default":"forces-handling",
+                "_type":"string"
+              }
+            },
+            "moved":{
+              "_type":"object",
+              "_default":{"x":0,"y":0},
+              "x":{
+                "_default":0,
+                "_type":"number"
+              },
+              "y":{
+                "_default":0,
+                "_type":"number"
+              }
             }
-          }
         }
-      ]
-    }
+      }
+   }
 }
