@@ -88,7 +88,7 @@ function loadAsset(key,module) {
         }
 
         // if current asset is an image then preload it
-        if (asset.type === 'image') {
+        if (asset.type === 'image' || asset.type === 'sprite') {
 
             const image = new Image();
 
