@@ -1,6 +1,10 @@
+import {loadRenderers} from 'core/loadRenderers';
+
 function render() {
 
     // console.log('render loading scene');
+
+    loadRenderers.call(this,this.$renderers);
 
     this.context.fillStyle = '#181a1f';
     this.context.fillRect(0, 0, this.size.width, this.size.height);

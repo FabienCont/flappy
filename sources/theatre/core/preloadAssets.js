@@ -51,8 +51,11 @@ const preloadAssets = function() {
 
     Promise.all(promiseArray).then((modules) => {
         if (module.hot) {
-            module.hot.dispose(context.id, (contextId) => {
-                preloadAssets()
+          /*  module.hot.dispose(context.id, (contextId) => {
+                preloadAssets.call(this);
+            });*/
+            module.hot.accept(context.id, (contextId) => {
+                preloadAssets.call(this);
             });
         }
         resolve()
@@ -88,7 +91,7 @@ function loadAsset(key,module) {
         }
 
         // if current asset is an image then preload it
-        if (asset.type === 'image' || asset.type === 'sprite') {
+        if (asset.type === 'image' || asset.type === 'spritesheet') {
 
             const image = new Image();
 

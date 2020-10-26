@@ -3,9 +3,9 @@
     <div v-if="isHide">
       <dev-icon @click="show()" iconName="add"></dev-icon>
     </div>
-    <div v-else="!isHide" class="devpanel-box">
+    <div :style="devPanelStyle" v-else="!isHide" class="devpanel-box">
       <div class="devpanel-box-header">
-        <div class="devpanel-box-header-button">
+        <div class=" devpanel-box-header-button">
           <div class="devpanel-box-header-left">
             <dev-icon class="devpanel-header-button" iconName="target"></dev-icon>
             <dev-icon class="devpanel-header-button" iconName="eye"></dev-icon>
@@ -17,7 +17,13 @@
         </div>
         <div class="devpanel-box-header-loop">
           <div>
-            <h4>Current Scene:"{{sceneName}}"</h4>
+            <dev-primitive-inspect class="devpanel-header-input" @update:primitiveToInspect="newVal => panelWidth = newVal" isEditable="true" name="panel width" :primitiveToInspect="panelWidth"></dev-primitive-inspect>
+            <h4>Current Scene: {{sceneName}}</h4>
+            <span>Selected Scene:
+              <dev-select :options='this.optionsScenes' :default='sceneName' @input="selectScene($event)">
+
+              </dev-select>
+            </span>
           </div>
           <dev-icon class="devpanel-header-button" @click="play()" v-if="isPlaying===false" iconName="right"></dev-icon>
           <!-- <dev-button class="devpanel-header-button" @click="test()" v-if="isPlaying===true">Test</dev-button> -->
@@ -28,23 +34,24 @@
           <dev-primitive-inspect class="devpanel-header-input" @update:primitiveToInspect="newVal => tickStep = newVal" isEditable="true" name="tick step" :primitiveToInspect="tickStep"></dev-primitive-inspect>
           <dev-primitive-inspect class="devpanel-header-input" @update:primitiveToInspect="newVal => loop.speed = newVal" isEditable="true" name="speed" :primitiveToInspect="loop.speed"></dev-primitive-inspect>
           <dev-primitive-inspect class="devpanel-header-input" @update:primitiveToInspect="newVal => loop.framerate = newVal" isEditable="true" name="framerate" :primitiveToInspect="loop.framerate"></dev-primitive-inspect>
+
         </div>
       </div>
       <div class="devpanel-box-tab">
-        <dev-tab :isActive="activeTab=='scene'" @click.stop.prevent="setActiveTab('scene')">Scene</dev-tab>
-        <dev-tab :isActive="activeTab=='theatre'" @click.stop.prevent="setActiveTab('theatre')">Theatre</dev-tab>
+        <dev-tab :isActive="activeTab=='live'" @click.stop.prevent="setActiveTab('live')">Live</dev-tab>
         <dev-tab :isActive="activeTab=='models'" @click.stop.prevent="setActiveTab('models')">Models</dev-tab>
         <dev-tab :isActive="activeTab=='assets'" @click.stop.prevent="setActiveTab('assets')">Assets</dev-tab>
+        <dev-tab :isActive="activeTab=='theatre'" @click.stop.prevent="setActiveTab('theatre')">$Framework</dev-tab>
       </div>
       <div class="devpanel-box-inspect">
         <!-- <div class="devpanel-box-search">
           <dev-icon iconName="search"></dev-icon>
           <dev-primitive-inspect @update:primitiveToInspect="newVal => searchText = newVal" isEditable="true" name="" :primitiveToInspect="searchText"></dev-primitive-inspect>
         </div> -->
-        <dev-object-inspect v-if="activeTab=='scene'" name="Entities" :depth="0" :objectToInspect.sync="entities"></dev-object-inspect>
+        <dev-object-inspect v-if="activeTab=='live'" name="Live" :depth="0" :objectToInspect.sync="world"></dev-object-inspect>
+        <dev-models v-if="activeTab=='models'" name="Models" :depth="0" :models="models"></dev-models>
+        <dev-assets v-if="activeTab=='assets'" name="Assets" :depth="0" :models.sync="assets"></dev-assets>
         <dev-object-inspect v-if="activeTab=='theatre'" name="Theatre" :depth="0" :objectToInspect.sync="theatre"></dev-object-inspect>
-        <dev-models v-if="activeTab=='models'" name="Models" :depth="0" :models.sync="models"></dev-models>
-        <dev-object-inspect v-if="activeTab=='assets'" name="Assets" :depth="0" :objectToInspect.sync="assets"></dev-object-inspect>
       </div>
       <!-- <div class="devpanel-box-edit">
         <dev-object-edit :objectToEdit.sync="theatre"></dev-object-edit>
@@ -56,33 +63,45 @@
 
 <script>
 import {callModelsApi} from "debug/utils/modelsApi";
-import devModels from "debug/view/DevModels.vue"
+import devModels from "debug/view/DevModels.vue";
+import devAssets from "debug/view/DevAssets.vue"
 //check Ref
 export default {
-  name: 'Devpanel',
-  components:{devModels},
+  name: 'devpanel',
+  components:{devModels,devAssets},
   data(){
     return {
       //getter
       theatre:window.theatre,
+      scenes:window.theatre.scenes,
+      world:window.theatre.$world,
+      selectedScene:()=>{return window.theatre.currentScene},
       // assets:window.theatre.assets,
       // assetsLoaded:window.theatre.assetsLoaded,
       // $camera:window.theatre.$camera,
       // $origins:window.theatre.$origins
       assets:window.theatre.assets,
       models:window.theatre.models,
-      sceneName:window.theatre.currentScene,
       loop:window.theatre.loop,
-      entities:window.theatre.$world.entities,
-      activeTab:"theatre",
+      activeTab:"models",
       isHide:false,
       searchText:"",
-      tickStep:1
+      tickStep:1,
+      panelWidth:'400px'
     }
   },
   computed:{
+    sceneName:function(){
+      return this.theatre.currentScene;
+    },
     isPlaying:function(){
       return this.theatre.playing;
+    },
+    devPanelStyle:function(){
+        return 'width:'+this.panelWidth;
+    },
+    optionsScenes:function(){
+      return Object.keys(this.scenes);
     }
   },
   methods:{
@@ -109,7 +128,15 @@ export default {
       this.theatre.tick(this.tickStep);
     },
     restart:function(){
-      this.theatre.restart();
+      if(this.sceneName!=this.selectedScene){
+          this.loadScene(this.selectedScene);
+      }else this.theatre.restart();
+    },
+    loadScene:function(scene){
+      this.theatre.load(scene);
+    },
+    selectScene:function(scene){
+      this.selectedScene=scene;
     }
   }
 }
@@ -123,7 +150,7 @@ export default {
   font-size: 12px;
 }
 .devpanel-box{
-  width: 350px;
+  width: 400px;
   height: 100%;
   overflow-y:auto;
   box-sizing: border-box;

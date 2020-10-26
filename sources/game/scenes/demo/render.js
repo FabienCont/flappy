@@ -1,6 +1,4 @@
 //import {fade} from 'systems/common/fade.js';
-import {images} from 'systems/common/images.js';
-import {spritesheets} from 'systems/common/spritesheets.js';
 import {loadRenderers} from 'core/loadRenderers';
 
 function render() {
@@ -11,7 +9,7 @@ function render() {
 
     //this.$world.system(['camera', 'fade'], fade);
 
-    loadRenderers.call(this);
+    loadRenderers.call(this,this.$renderers);
 
     this.$camera.render();
 }

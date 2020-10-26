@@ -1,13 +1,11 @@
-{
-  "entities":[
-    {
-      "name":"character",
-      "scope":"demo",
-      "components":
-      [
-        {"name":"camera"},
-        {"name":"position","params":{"y":50}}
-      ]
-    }
-  ]
-}
+[
+  {
+    "name":"character",
+    "scope":"demo",
+    "components":
+    [
+      {"name":"camera"},
+      {"name":"position","params":{"y":50}}
+    ]
+  }
+]

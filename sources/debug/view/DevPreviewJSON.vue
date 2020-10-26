@@ -1,6 +1,6 @@
 <template>
   <div class="dev-preview">
-    <textarea class="dev-preview-textarea" v-model="element" placeholder="editez le fichier"></textarea>
+    <textarea ref="previewArea" class="dev-preview-textarea" v-model="element" placeholder="editez le fichier"></textarea>
   </div>
 </template>
 
@@ -8,13 +8,21 @@
 import {callModelsApi} from "debug/utils/modelsApi"
 //check Ref
 export default {
-  name: 'devpreview',
+  name: 'devpreviewjson',
   data(){
     return {
     }
   },
+  watch:{
+    element:function(val){
+        this.$refs.previewArea.style.height = 'auto';
+        this.$nextTick(() => {
+          this.$refs.previewArea.style.height = this.$refs.previewArea.scrollHeight + 'px';
+        })
+      }
+  },
   props: {
-    element:Object
+    element:String
   },
   computed:{
   },
@@ -33,6 +41,7 @@ export default {
   width:100%;
 }
 .dev-preview-textarea{
+  margin-top: 5px;
   width:90%;
 }
 </style>

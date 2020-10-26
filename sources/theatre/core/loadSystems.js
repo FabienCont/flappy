@@ -1,5 +1,4 @@
-const loadSystems=function(){
-  var sceneSystems=getSystems.call(this);
+const loadSystems=function(sceneSystems){
   sceneSystems.forEach((system) => {
     var updateSystem=getSystem.call(this,system.name,system.scope);
     this.$world.system(system.components, updateSystem);
@@ -8,7 +7,10 @@ const loadSystems=function(){
 
 const getSystems=function(){
   try{
-    return this.models.scenes[this.currentScene].systems().systems;
+    let sceneModel=this.models.scenes[this.currentScene];
+    if(sceneModel!==undefined && sceneModel.systems!=undefined && sceneModel.systems() ){
+      return sceneModel.systems();
+    }else return[];
   }catch(err){
     console.error("no systems found for this scene :"+this.currentScene)
   }
@@ -28,4 +30,4 @@ const getSystem=function(systemName,systemScope){
   }
 }
 
-export {loadSystems};
+export {loadSystems,getSystems};

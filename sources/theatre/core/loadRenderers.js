@@ -1,18 +1,23 @@
-const loadRenderers=function(){
-  var sceneRenderers=getRenderers.call(this);
-  sceneRenderers.forEach((renderer) => {
-    var rendererSystem=getSystem.call(this,renderer.name,renderer.scope);
-    this.$world.system(renderer.components, rendererSystem);
-  });
+const loadRenderers=function(sceneRenderers){
+  if(sceneRenderers){
+      sceneRenderers.forEach((renderer) => {
+      var rendererSystem=getSystem.call(this,renderer.name,renderer.scope);
+      this.$world.system(renderer.components, rendererSystem);
+    });
+  }
 }
 
 const getRenderers=function(){
   try{
-    return this.models.scenes[this.currentScene].renderers().renderers;
+    let sceneModel=this.models.scenes[this.currentScene];
+    if(sceneModel!==undefined && sceneModel.renderers!=undefined && sceneModel.renderers() ){
+      return sceneModel.renderers();
+    }else return[];
   }catch(err){
-    console.error("no renderers found for this scene :"+this.currentScene)
+    console.error("no renderers found for this scene :"+this.currentScene);
   }
 }
+
 const getSystem=function(systemName,systemScope){
   try{
     if(typeof systemName!=="string"|| systemName===""){
@@ -25,4 +30,4 @@ const getSystem=function(systemName,systemScope){
   }
 }
 
-export {loadRenderers};
+export {loadRenderers,getRenderers};

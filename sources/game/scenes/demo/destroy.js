@@ -9,6 +9,8 @@ function destroy() {
     delete this.$controllers;
     delete this.$origins;
     delete this.$world;
+    delete this.$systems;
+    delete this.$renderers;
 }
 
 export {destroy};

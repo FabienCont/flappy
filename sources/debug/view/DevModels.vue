@@ -3,65 +3,83 @@
     <h3>Models</h3>
     <template v-for="(type,keyType) of models">
       <div @click.stop.prevent="toggleTypeModel(keyType)">
-        <div class="dev-models-dropdown">
-          <dev-icon :width="svgSize" :height="svgSize" :iconName="getTypeIcon(keyType)"></dev-icon>
-          <span> {{keyType}}</span>
+        <div class="dev-models-dropdown-container">
+          <span class="dev-models-dropdown">
+            <dev-icon :width="svgSize" :height="svgSize" :iconName="getTypeIcon(keyType)"></dev-icon>
+            {{keyType}}
+          </span>
+          <dev-icon @click.stop.prevent="newTypeElement(keyType)" class="dev-models-type-add" :width="svgSize" :height="svgSize" iconName="add"></dev-icon>
         </div>
         <div class="dev-models-scope" v-if="isTypeOpen(keyType)" v-for="(scope,keyScope) of type">
           <div class="dev-models-dropdown" @click.stop.prevent="toggleScopeModel(keyScope)">
-            <dev-icon :width="svgSize" :height="svgSize" :iconName="getScopeIcon(keyType)"></dev-icon>
-            <span> {{keyScope}}</span>
+            <dev-icon :width="svgSize" :height="svgSize" :iconName="getScopeIcon(keyScope)"></dev-icon>
+            <span>{{keyScope}}</span>
           </div>
-          <div  class="dev-models-name" v-if="isScopeOpen(keyScope)" v-for="(name,keyName) of scope">
-            <div @click.stop.prevent="selectPreviewElement(keyType,keyScope,keyName)">
-              <span> {{keyName}}</span>
-            </div>
+          <div class="dev-models-name-container" v-if="isScopeOpen(keyScope)" v-for="(name,keyName) of scope">
+            <span class="dev-models-name" @click.stop.prevent="selectPreviewElement(keyType,keyScope,keyName)">
+              {{keyName}}
+            </span>
+            <dev-icon class="dev-models-name-delete" @click.stop.prevent="deleteComponent" :width="svgSize" :height="svgSize" iconName="delete"></dev-icon>
           </div>
         </div>
       </div>
     </template>
     <div class="dev-model-preview" v-if="elementPreview">
-      <dev-model-preview :element="elementPreview">
-      </dev-model-preview>
+      <dev-separator/>
+      <dev-js-preview  v-if="typePreview ==='snippets' ||typePreview ==='systems'" :element="elementPreview">
+      </dev-js-preview>
+      <dev-components-preview @saveModel="childSaveModel" v-else-if="typePreview ==='components'" :elementScope="scopePreview" :element="elementPreview">
+      </dev-components-preview>
+      <dev-object-inspect v-else :name="namePreview" :depth="0" :objectToInspect="elementPreview">
+      </dev-object-inspect>
     </div>
   </div>
 </template>
 
 <script>
 import {callModelsApi,getModelFromServer} from "debug/utils/modelsApi";
-import DevModelPreview from "debug/view/DevModelPreview.vue";
+import DevJsPreview from "debug/view/DevJsPreview.vue";
+import DevComponentsPreview from "debug/view/DevComponentsPreview.vue";
+
 //check Ref
 export default {
   name: 'devmodels',
   components:{
-    DevModelPreview
+    DevJsPreview,
+    DevComponentsPreview
   },
   data(){
     return {
       typeOpenedArray:[],
       scopeOpenedArray:[],
       svgSize:"1.7em",
-      elementPreview:null,
+      elementPreview:{},
       typePreview:null,
       scopePreview:null,
-      namePreview:null,
+      namePreview:null
     }
   },
   props: {
     models:Object
   },
-  computed:{
-  },
   methods:{
-    test:function(){
-      var objectToSend={"test":"success"}
-      callModelsApi("entities","demo","test2",objectToSend)
+    newTypeElement:function(type){
+      this.typePreview=type;
+      this.scopePreview="";
+      this.namePreview="newElement";
+      this.elementPreview={name:"newElement",params:{}};
+    },
+    deleteComponent:function(){
+      //TODO:delete service
+    },
+    childSaveModel:function(objectToSend){
+      callModelsApi(this.typePreview,objectToSend.scope,objectToSend.name,objectToSend.content);
     },
     selectPreviewElement: function(typePreview,scopePreview,namePreview){
       this.typePreview=typePreview;
       this.scopePreview=scopePreview;
       this.namePreview=namePreview;
-      if(typePreview==="systems" ||typePreview==="snippets"){
+      if(typePreview==="systems"||typePreview==="snippets"){
         getModelFromServer(typePreview,scopePreview,namePreview).then((fileContent)=> {
           this.elementPreview=fileContent;
         });
@@ -107,8 +125,22 @@ export default {
  .dev-models-scope{
    margin-left: 1rem;
  }
- .dev-models-dropdown{
+ .dev-models-dropdown-container{
    display: flex;
+   align-items: center;
+ }
+ .dev-models-dropdown{
+   cursor: pointer;
+ }
+ .dev-models-dropdown:hover{
+   text-decoration: underline;
+ }
+ .dev-models-type-add{
+   cursor: pointer;
+ }
+ .dev-models-name-container{
+   display: flex;
+   flex:1;
    align-items: center;
  }
  .dev-models-name{
@@ -116,6 +148,9 @@ export default {
  }
  .dev-models-name:hover{
    text-decoration: underline;
+   cursor: pointer;
+ }
+ .dev-models-name-delete{
    cursor: pointer;
  }
  .dev-model-preview{

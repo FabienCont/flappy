@@ -1,5 +1,4 @@
-{
-  "renderers":[
+[
     {
       "name":"spritesheets",
       "scope":"common",
@@ -10,5 +9,4 @@
       "scope":"common",
       "components":["camera", "images", "origin", "position"]
     }
-  ]
-}
+]

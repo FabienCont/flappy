@@ -49,9 +49,9 @@ export default {
     },
     isEditable(key){
       if(typeof key ==="string" && key !=="name" ){
-        return false;
-      }else{
         return true;
+      }else{
+        return false;
       }
     },
   }

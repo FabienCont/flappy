@@ -51,8 +51,11 @@ const preloadModels = function() {
 
     Promise.all(promiseArray).then((modules) => {
         if (module.hot) {
-            module.hot.dispose(context.id, (contextId) => {
-                preloadModels()
+          /*  module.hot.dispose(context.id, (contextId) => {
+                preloadModels.call(this);
+            });*/
+            module.hot.accept(context.id, (contextId) => {
+                preloadModels.call(this);
             });
         }
         resolve()
