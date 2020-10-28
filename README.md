@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-# theatre
+# flappy with theatre
 
 > *Hello, friend.*
 

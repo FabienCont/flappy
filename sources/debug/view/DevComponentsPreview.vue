@@ -16,6 +16,15 @@
           <dev-select :options='optionsType' :default='paramValue._type' @input="(type)=>paramValue._type=type">
           </dev-select>
         </div>
+        <div v-if="paramValue._type==='object'">
+          object:
+        </div>
+        <div v-else-if="getArraySubtype(paramValue._type)!==null">
+          {{'_'+getArraySubtype(paramValue._type)}} :
+          <div class="dev-preview" v-for="(subVal,subKey) in paramValue['_'+getArraySubtype(paramValue._type)]" :key="subKey" >
+            {{subKey}} : {{subVal}}
+          </div>
+        </div>
         <dev-input v-if="paramValue._type==='string'||paramValue._type==='number'||paramValue._type==='ref'||paramValue._type==='boolean'"  :type="paramValue._type==='ref'?'string':paramValue._type" @update:inputValue="newVal => elementCopy.params[paramKey]._default = newVal" :isEditable="true" name="default" :inputValue="paramValue._default"></dev-input>
         <span v-else="paramValue._default!==undefined">
           default : {{paramValue._default}}
@@ -62,6 +71,11 @@ export default {
     }
   },
   methods:{
+    getArraySubtype:function(str){
+      let regex="(?<=array<)[a-zA-Z]+";
+      let match=str.match(regex);
+      return match!==null?match[0]:null;
+    },
     changeParamKey:function(paramKey,oldParamKey){
       if(this.elementCopy.params[paramKey]===undefined && this.elementCopy.params[paramKey]!==""){
         this.elementCopy.params[paramKey]=this.elementCopy.params[oldParamKey];

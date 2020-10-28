@@ -26,7 +26,6 @@
             </span>
           </div>
           <dev-icon class="devpanel-header-button" @click="play()" v-if="isPlaying===false" iconName="right"></dev-icon>
-          <!-- <dev-button class="devpanel-header-button" @click="test()" v-if="isPlaying===true">Test</dev-button> -->
           <dev-icon class="devpanel-header-button" iconName="pause" @click="pause()" v-if="isPlaying===true">Pause</dev-icon>
           <dev-icon class="devpanel-header-button" iconName="time" @click="tick()" v-if="isPlaying===false">Tick</dev-icon>
           <dev-icon class="devpanel-header-button" iconName="restart" @click="restart()">Restart</dev-icon>
@@ -44,19 +43,11 @@
         <dev-tab :isActive="activeTab=='theatre'" @click.stop.prevent="setActiveTab('theatre')">$Framework</dev-tab>
       </div>
       <div class="devpanel-box-inspect">
-        <!-- <div class="devpanel-box-search">
-          <dev-icon iconName="search"></dev-icon>
-          <dev-primitive-inspect @update:primitiveToInspect="newVal => searchText = newVal" isEditable="true" name="" :primitiveToInspect="searchText"></dev-primitive-inspect>
-        </div> -->
         <dev-object-inspect v-if="activeTab=='live'" name="Live" :depth="0" :objectToInspect.sync="world"></dev-object-inspect>
         <dev-models v-if="activeTab=='models'" name="Models" :depth="0" :models="models"></dev-models>
         <dev-assets v-if="activeTab=='assets'" name="Assets" :depth="0" :models.sync="assets"></dev-assets>
         <dev-object-inspect v-if="activeTab=='theatre'" name="Theatre" :depth="0" :objectToInspect.sync="theatre"></dev-object-inspect>
       </div>
-      <!-- <div class="devpanel-box-edit">
-        <dev-object-edit :objectToEdit.sync="theatre"></dev-object-edit>
-
-      </div> -->
     </div>
   </div>
 </template>
@@ -85,7 +76,6 @@ export default {
       loop:window.theatre.loop,
       activeTab:"models",
       isHide:false,
-      searchText:"",
       tickStep:1,
       panelWidth:'400px'
     }
@@ -105,10 +95,6 @@ export default {
     }
   },
   methods:{
-    test:function(){
-      var objectToSend={"test":"success"}
-      callModelsApi("entities","demo","test2",objectToSend)
-    },
     hide:function(){
       this.isHide=true;
     },

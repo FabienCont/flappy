@@ -11,11 +11,11 @@
           <dev-icon @click.stop.prevent="newTypeElement(keyType)" class="dev-models-type-add" :width="svgSize" :height="svgSize" iconName="add"></dev-icon>
         </div>
         <div class="dev-models-scope" v-if="isTypeOpen(keyType)" v-for="(scope,keyScope) of type">
-          <div class="dev-models-dropdown" @click.stop.prevent="toggleScopeModel(keyScope)">
+          <div class="dev-models-dropdown" @click.stop.prevent="toggleScopeModel(keyScope,keyType)">
             <dev-icon :width="svgSize" :height="svgSize" :iconName="getScopeIcon(keyScope)"></dev-icon>
             <span>{{keyScope}}</span>
           </div>
-          <div class="dev-models-name-container" v-if="isScopeOpen(keyScope)" v-for="(name,keyName) of scope">
+          <div class="dev-models-name-container" v-if="isScopeOpen(keyScope,keyType)" v-for="(name,keyName) of scope">
             <span class="dev-models-name" @click.stop.prevent="selectPreviewElement(keyType,keyScope,keyName)">
               {{keyName}}
             </span>
@@ -50,6 +50,7 @@ export default {
   },
   data(){
     return {
+      openElements:{},
       typeOpenedArray:[],
       scopeOpenedArray:[],
       svgSize:"1.7em",
@@ -88,28 +89,28 @@ export default {
       }
     },
     isTypeOpen:function(keyType){
-      return this.typeOpenedArray.includes(keyType)
+      return this.openElements[keyType]!==undefined;
     },
-    isScopeOpen:function(keyScope){
-      return this.scopeOpenedArray.includes(keyScope)
+    isScopeOpen:function(keyScope,keyType){
+      return this.isTypeOpen(keyType) && this.openElements[keyType][keyScope]!==undefined;;
     },
     toggleTypeModel:function(keyType){
       if(this.isTypeOpen(keyType)){
-        this.typeOpenedArray=this.typeOpenedArray.filter((key)=>key!==keyType);
-      }else this.typeOpenedArray.push(keyType)
+        this.$delete(this.openElements,keyType);
+      }else this.$set(this.openElements,keyType,{});
     },
-    toggleScopeModel:function(keyScope){
-      if(this.isScopeOpen(keyScope)){
-        this.scopeOpenedArray=this.scopeOpenedArray.filter((key)=>key!==keyScope);
-      }else this.scopeOpenedArray.push(keyScope)
+    toggleScopeModel:function(keyScope,keyType){
+      if(this.isScopeOpen(keyScope,keyType)){
+    this.$delete(this.openElements[keyType],keyScope);
+  }else this.$set(this.openElements[keyType],keyScope,{});
     },
     getTypeIcon:function(keyType){
       if(this.isTypeOpen(keyType)){
         return 'right';
       }else return 'bottom';
     },
-    getScopeIcon:function(keyScope){
-      if(this.isScopeOpen(keyScope)){
+    getScopeIcon:function(keyScope,keyType){
+      if(this.isScopeOpen(keyScope,keyType)){
         return 'right'
       }else return 'bottom'
     }
