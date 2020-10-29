@@ -4,7 +4,7 @@
 
 > *Hello, flappy friends.*
 
-[Link to the demo](https://fabiencont.github.io/flappy/)
+[Link to the demo](https://fabiencont.github.io/flappy/index.html)
 
 ## Overview
 
