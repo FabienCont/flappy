@@ -1,0 +1,141 @@
+{
+  "name":"pipeTop",
+  "components":[
+    {
+      "name":"camera",
+      "scope":"common"
+    },
+    {
+      "name":"position",
+      "scope":"common",
+      "params":{
+        "x":-48,
+        "y":-96,
+        "z":99
+      }
+    },
+    {
+      "name":"decor",
+      "scope":"demo"
+    },
+    {
+      "name":"hitbox",
+      "scope":"common",
+      "params":{
+        "height":48,
+        "width":16
+      }
+    },
+    {
+      "name":"origin",
+      "scope":"common"
+    },
+    {
+      "name":"images",
+      "scope":"common",
+      "params":{
+        "parts":[
+          {
+            "source": {
+              "scope":"demo",
+              "file":"pipe-16x16@1x"
+            },
+            "frames": [
+                [0, 1, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, -64, 0, 16, 16]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"pipe-16x16@1x"
+            },
+            "frames": [
+                [0, 1, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, -48, 0, 16, 16]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"pipe-16x16@1x"
+            },
+            "frames": [
+                [0, 1, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, -32, 0, 16, 16]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"pipe-16x16@1x"
+            },
+            "frames": [
+                [0, 1, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, -16, 0, 16, 16]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"pipe-16x16@1x"
+            },
+            "frames": [
+                [0, 1, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, 0, 0, 16, 16]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"pipe-16x16@1x"
+            },
+            "frames": [
+                [0, 1, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, 16, 0, 16, 16]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"pipe-16x16@1x"
+            },
+            "frames": [
+                [0, 1, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, 32, 0, 16, 16]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"pipe-16x16@1x"
+            },
+            "frames": [
+                [0, 1, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, 48, 0, 16, 16]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"pipe-16x16@1x"
+            },
+            "frames": [
+                [0, 2, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, 64, 0, 16, 16]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "name":"background",
+  "components":[
+    {
+      "name":"camera",
+      "scope":"common"
+    },
+    {
+      "name":"decor",
+      "scope":"demo"
+    },
+    {
+      "name":"position",
+      "scope":"common",
+      "params":{
+        "x":-96,
+        "y":0
+      }
+    },
+    {
+      "name":"origin",
+      "scope":"common"
+    },
+    {
+      "name":"images",
+      "scope":"common",
+      "params":{
+        "parts":[
+          {
+            "source": {
+              "scope":"demo",
+              "file":"background-16x16@1x"
+            },
+            "frames": [
+                [0, 0, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, -96, 0, 100, 200]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"background-16x16@1x"
+            },
+            "frames": [
+                [0, 1, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, 112, 110, 64, 64]
+          }
+        ]
+      }
+    }
+  ]
+}

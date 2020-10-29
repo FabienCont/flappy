@@ -1,0 +1,105 @@
+{
+  "name":"water",
+  "components":[
+    {
+      "name":"camera",
+      "scope":"common"
+    },
+    {
+      "name":"decor",
+      "scope":"demo"
+    },
+    {
+      "name":"position",
+      "scope":"common",
+      "params":{
+        "x":-96,
+        "y":96,
+        "z":100
+      }
+    },
+    {
+      "name":"origin",
+      "scope":"common"
+    },
+    {
+        "name": "forces",
+        "scope": "common",
+        "params": {
+            "parts": [{
+                "x": 1,
+                "y": 0,
+                "duration": 200,
+                "easing": {
+                    "type": "snippets",
+                    "scope": "demo",
+                    "name": "ease-linear"
+                },
+                "elapsed": 0,
+                "ending": {
+                    "type": "snippets",
+                    "scope": "demo",
+                    "name": "forces-water-left"
+                },
+                "handling": {
+                    "type": "snippets",
+                    "scope": "demo",
+                    "name": "forces-handling"
+                }
+            }]
+        }
+    },
+    {
+      "name":"images",
+      "scope":"common",
+      "params":{
+        "parts":[
+          {
+            "source": {
+              "scope":"demo",
+              "file":"waves-16x16@1x"
+            },
+            "frames": [
+                [0, 0, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [0, 8, 111, 17, 17]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"waves-16x16@1x"
+            },
+            "frames": [
+                [0, 0, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [16, 8, 111, 17, 17]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"waves-16x16@1x"
+            },
+            "frames": [
+                [0, 0, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [32, 8, 111, 17, 17]
+          },
+          {
+            "source": {
+              "scope":"demo",
+              "file":"waves-16x16@1x"
+            },
+            "frames": [
+                [0, 0, 16, 16]
+            ],
+            "frame": 0,
+            "destination": [48, 8, 111, 17, 17]
+          }
+        ]
+      }
+    }
+  ]
+}

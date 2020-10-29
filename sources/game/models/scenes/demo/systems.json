@@ -1,5 +1,15 @@
 [
   {
+    "name":"generateDecor",
+    "scope":"demo",
+    "components":["decor"]
+  },
+  {
+    "name":"move",
+    "scope":"demo",
+    "components":["position","player"]
+  },
+  {
     "name":"inputs",
     "scope":"common",
     "components":["inputs"]
@@ -13,5 +23,10 @@
     "name":"forces",
     "scope":"common",
     "components":["position","forces"]
+  },
+  {
+    "name":"hitbox",
+    "scope":"common",
+    "components":["position","hitbox"]
   }
 ]

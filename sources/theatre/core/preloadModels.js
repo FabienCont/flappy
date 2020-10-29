@@ -24,7 +24,7 @@ const preloadModels = function() {
                         }
                     }
 
-                    loadModel(key, module).then((component) => {
+                    loadModel.call(this,key, module).then((component) => {
 
                         this.modelsLoaded.push(component);
 
@@ -66,7 +66,7 @@ const preloadModels = function() {
 function loadModel(key,module) {
 
     // creates a promise for current asset preloading
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject)=> {
 
         console.log("load models or reload")
 

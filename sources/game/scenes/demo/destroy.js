@@ -8,6 +8,7 @@ function destroy() {
     delete this.$camera;
     delete this.$controllers;
     delete this.$origins;
+    delete this.$world.entities;
     delete this.$world;
     delete this.$systems;
     delete this.$renderers;

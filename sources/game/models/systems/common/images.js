@@ -27,7 +27,7 @@ function images(entities) {
 
             cameraComponent.camera.add({
 
-                'source': this.assets.images[source.scope][source.file],
+                'source': this.assets.images[source.scope][source.file](),
                 'frame': {
 
                     'x': width * x,
@@ -37,11 +37,11 @@ function images(entities) {
                 },
                 'destination': {
 
-                    'x': Math.floor((positionComponent.x + destination[0]) * originComponent.reference.scale + originComponent.reference.x),
-                    'y': Math.floor((positionComponent.y + destination[1]) * originComponent.reference.scale + originComponent.reference.y),
-                    'z': Math.floor(positionComponent.z + destination[2] + originComponent.reference.z),
-                    'width': (destination[3] * originComponent.reference.scale),
-                    'height': (destination[4] * originComponent.reference.scale)
+                    'x': Math.floor((positionComponent.x + destination[0]) * originComponent.reference.scale() + originComponent.reference.x()),
+                    'y': Math.floor((positionComponent.y + destination[1]) * originComponent.reference.scale() + originComponent.reference.y()),
+                    'z': Math.floor(positionComponent.z + destination[2] + originComponent.reference.z()),
+                    'width': (destination[3] * originComponent.reference.scale()),
+                    'height': (destination[4] * originComponent.reference.scale())
                 },
                 'opacity': cameraComponent.opacity * opacity
             });

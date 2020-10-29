@@ -4,8 +4,6 @@
     "scope":"demo",
     "components":
     [
-      {"name":"camera"},
-      {"name":"position","params":{"y":50}}
     ]
   }
 ]

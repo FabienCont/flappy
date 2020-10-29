@@ -1,3 +1,5 @@
+import {createComponentFromModel} from 'core/loadEntities.js';
+
 function commands(entities) {
 
     Object.entries(entities).forEach(([name, entity]) => {
@@ -10,22 +12,39 @@ function commands(entities) {
 
                 case 'MOVE_TOP':
 
-                    entity.get('position').y -= 16;
-                break;
+                let forces={
+                      "name": "forces",
+                      "scope":"common",
+                      "params": {
+                          "parts":[
+                              {
+                                  "x": 0,
+                                  "y": -32,
+                                  "duration": 200,
+                                  "easing": {
+                                      "type": "snippets",
+                                      "scope": "demo",
+                                      "name": "ease-out"
+                                  },
+                                  "elapsed": 0,
+                                  "ending": {
+                                      "type": "snippets",
+                                      "scope": "demo",
+                                      "name": "forces-down"
+                                  },
+                                  "handling": {
+                                      "type": "snippets",
+                                      "scope": "demo",
+                                      "name": "forces-handling"
+                                  }
+                              }
+                          ]
+                      }
+                    };
+                    let newForces=createComponentFromModel.call(this,forces);
 
-                case 'MOVE_RIGHT':
+                    entity.add(newForces)
 
-                    entity.get('position').x += 16;
-                break;
-
-                case 'MOVE_BOTTOM':
-
-                    entity.get('position').y += 16;
-                break;
-
-                case 'MOVE_LEFT':
-
-                    entity.get('position').x -= 16;
                 break;
             }
         });

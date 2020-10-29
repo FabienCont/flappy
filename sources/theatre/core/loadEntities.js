@@ -128,10 +128,9 @@ const getEntitiesScene=function(){
   }
 }
 
-const generateEntities=function(){
+const generateEntities=function(sceneEntities){
   try{
     var entities=[];
-    var sceneEntities=getEntitiesScene.call(this);
     sceneEntities.forEach((entityRef) => {
       var entityDef=getEntityDefinition.call(this,entityRef);
       var componentsOverride=convertArrayToObject(entityRef.components,'name');
@@ -196,7 +195,8 @@ const getComponentModel=function(componentRef){
 }
 
 const loadEntities=function(){
-  return generateEntities.call(this);
+  var sceneEntities=getEntitiesScene.call(this);
+  return generateEntities.call(this,sceneEntities);
 }
 
-export {loadEntities};
+export {loadEntities,generateEntities,createComponentFromModel};

@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[48],{64:function(e){e.exports=JSON.parse('{"name":"origin","params":{"reference":{"_default":"$origins.default","_type":"ref"}}}')}}]);
+//# sourceMappingURL=48.index.js.map
