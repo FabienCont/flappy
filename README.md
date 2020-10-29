@@ -2,7 +2,9 @@
 
 # flappy with theatre
 
-> *Hello, friend.*
+> *Hello, flappy friends.*
+
+[Link to the demo](https://fabiencont.github.io/flappy/)
 
 ## Overview
 

@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[56],{72:function(o){o.exports=JSON.parse('[{"name":"generateDecor","scope":"demo","components":["decor"]},{"name":"move","scope":"demo","components":["position","player"]},{"name":"inputs","scope":"common","components":["inputs"]},{"name":"commands","scope":"demo","components":["commands"]},{"name":"forces","scope":"common","components":["position","forces"]},{"name":"hitbox","scope":"common","components":["position","hitbox"]}]')}}]);
+//# sourceMappingURL=56.index.js.map

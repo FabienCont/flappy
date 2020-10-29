@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./sources/game/models/snippets/demo/ease-linear.js"],"names":["Ease"],"mappings":"yFAAA,mBAEe,qBAEX,OAAOA","file":"2.index.js","sourcesContent":["import * as Ease from 'modules/ease.js';\n\nexport default function () {\n\n    return Ease.easeOutQuart;\n};\n"],"sourceRoot":""}
