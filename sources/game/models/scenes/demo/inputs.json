@@ -1,4 +1,5 @@
 [
     "KEY_UP",
-    "KEY_SPACE"
+    "KEY_SPACE",
+    "CLICK_LEFT"
 ]

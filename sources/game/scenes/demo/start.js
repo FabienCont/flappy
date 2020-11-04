@@ -5,6 +5,7 @@ import {World} from 'modules/world.js';
 import {getRenderers} from 'core/loadRenderers';
 import {getSystems} from 'core/loadSystems';
 import {generateDecor} from 'systems/demo/generateDecor';
+import * as memory from 'modules/memory.js';
 
 function start() {
 
@@ -50,6 +51,11 @@ function start() {
   this.$world.add(entities);
   generateDecor.call(this,[]);
   this.$camera.look(()=>this.$world.entities.character.get('position').x+48,()=>72);
+  let bestScoreSaved=memory.get('bestScore');
+  if(bestScoreSaved!=undefined){
+    this.$world.entities.bestScore.get('score').value=bestScoreSaved;
+  }
+
 }
 
 export {start};

@@ -54,6 +54,8 @@ export default function (entity, collision) {
     let newForces=createComponentFromModel.call(this,forces);
     let newTimeout = createComponentFromModel.call(this, timeout);
 
+
+    this.assets.sounds.demo.explode().play();
     entity.add(newForces);
     entity.add(newTimeout);
 };

@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{87:function(n,e,s){"use strict";s.r(e);var a=s(2);e.default=function(n){var e=a.a.call(this,{name:"forces",scope:"common",params:{parts:[{x:0,y:8,duration:250,easing:{type:"snippets",scope:"demo",name:"ease-in"},elapsed:0,ending:null,handling:null}]}});n.get("forces").parts.push(e.parts[0])}}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[5],{88:function(n,e,s){"use strict";s.r(e);var a=s(2);e.default=function(n){var e=a.a.call(this,{name:"forces",scope:"common",params:{parts:[{x:0,y:8,duration:250,easing:{type:"snippets",scope:"demo",name:"ease-in"},elapsed:0,ending:null,handling:null}]}});n.get("forces").parts.push(e.parts[0])}}}]);
 //# sourceMappingURL=5.index.js.map

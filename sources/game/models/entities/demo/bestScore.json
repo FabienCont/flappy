@@ -13,7 +13,11 @@
         },
         {
             "name": "score",
-            "scope": "demo"
+            "scope": "demo",
+            "params":{
+              "value":0,
+              "isBestScore":true
+            }
         },
         {
             "name": "camera",

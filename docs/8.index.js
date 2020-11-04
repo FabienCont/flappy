@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{90:function(e,t,o){"use strict";o.r(t),t.default=function(e,t,o){this.$world.remove(o);var s=this.$world.entities.score.get("score");s.value=s.value+1;var i=this.$world.entities.bestScore.get("score");s.value>i.value&&(i.value=s.value)}}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{91:function(e,t,o){"use strict";o.r(t);var s=o(15);t.default=function(e,t,o){this.$world.remove(o);var r=this.$world.entities.score.get("score");r.value=r.value+1;var a=this.$world.entities.bestScore.get("score");r.value>a.value&&(a.value=r.value,s.b("bestScore",a.value))}}}]);
 //# sourceMappingURL=8.index.js.map

@@ -9,10 +9,10 @@
             "name": "hitbox",
             "scope": "common",
             "params": {
-                "height": 10,
-                "width": 10,
-                "x":3,
-                "y":3,
+                "height": 8,
+                "width": 8,
+                "x":2,
+                "y":2,
                 "type":"dynamic",
                 "collideable":{
                   "static":{
@@ -54,6 +54,11 @@
                         "action": "KEY_SPACE",
                         "state": "UP",
                         "command": "MOVE_TOP"
+                    },
+                    {
+                        "action": "CLICK_LEFT",
+                        "state": "DOWN",
+                        "command": "MOVE_TOP"
                     }
                 ]
             }
@@ -73,7 +78,7 @@
                         [2, 0, 16, 16]
                     ],
                     "frame": 0,
-                    "destination": [0, 0, 0, 16, 16]
+                    "destination": [0, 0, 0, 12, 12]
                 }]
             }
         },

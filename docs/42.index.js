@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[42],{53:function(a){a.exports=JSON.parse('{"name":"camera","params":{"camera":{"_default":"$camera","_type":"ref"},"opacity":{"_default":1,"_type":"number"}}}')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[42],{54:function(a){a.exports=JSON.parse('{"name":"camera","params":{"camera":{"_default":"$camera","_type":"ref"},"opacity":{"_default":1,"_type":"number"}}}')}}]);
 //# sourceMappingURL=42.index.js.map

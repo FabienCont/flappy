@@ -11,7 +11,7 @@ function render() {
 
     this.$camera.render();
     this.$cameraInfo.render();
-//    this.$world.system(["camera", "hitbox", "origin", "position"], showHitbox);
+   //this.$world.system(["camera", "hitbox", "origin", "position"], showHitbox);
 
 }
 

@@ -45,6 +45,7 @@ function commands(entities) {
                     if(parts.length>1){
                       parts.pop();
                     }
+                    this.assets.sounds.demo.jump().play();
                     entity.get('forces').parts.push(newForces.parts[0]);
 
                 break;

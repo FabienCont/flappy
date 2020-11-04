@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[50],{61:function(e){e.exports=JSON.parse('{"name":"position","params":{"x":{"_default":5,"_type":"number"},"y":{"_default":0,"_type":"number"},"z":{"_default":0,"_type":"number"}}}')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[50],{62:function(e){e.exports=JSON.parse('{"name":"position","params":{"x":{"_default":5,"_type":"number"},"y":{"_default":0,"_type":"number"},"z":{"_default":0,"_type":"number"}}}')}}]);
 //# sourceMappingURL=50.index.js.map

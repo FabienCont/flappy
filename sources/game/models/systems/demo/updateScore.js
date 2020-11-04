@@ -14,7 +14,7 @@ function updateScore(entities) {
         let newParts=[];
         let scoreStr=score.value.toString();
         for (var i = 0; i < scoreStr.length; i++) {
-          let part=createNumberImagePart(parseInt(scoreStr[i]),i,numberStr.length);
+          let part=createNumberImagePart(parseInt(scoreStr[i]),i,scoreStr.length,score.isBestScore);
           newParts.push(part);
         }
 
@@ -37,13 +37,14 @@ const findNumber=function(part){
     return part.frames[0][0].toString();
 }
 
-const createNumberImagePart=function(number,index){
+const createNumberImagePart=function(number,index,length,isBestScore){
 
-  let destinationX=(index*8)-4
+  let destinationX=((index+1)*8)-(8*length);
+  let file=isBestScore?"numbers-blue-8x16@1x":"numbers-8x16@1x"
   return {
     "source": {
       "scope":"demo",
-      "file":"numbers-8x16@1x"
+      "file":file
     },
     "frames": [
         [number, 0, 8, 16]

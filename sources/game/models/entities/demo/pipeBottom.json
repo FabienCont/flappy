@@ -15,7 +15,7 @@
       "scope":"common",
       "params":{
         "x":-48,
-        "y":82,
+        "y":96,
         "z":99
       }
     },
@@ -24,7 +24,8 @@
       "scope":"common",
       "params":{
         "x":1,
-        "height":31,
+        "y":-16,
+        "height":16,
         "width":14,
         "type":"static"
       }
@@ -47,18 +48,7 @@
                 [0, 0, 16, 16]
             ],
             "frame": 0,
-            "destination": [0, 0, 0, 16, 16]
-          },
-          {
-            "source": {
-              "scope":"demo",
-              "file":"pipe-16x16@1x"
-            },
-            "frames": [
-                [0, 1, 16, 16]
-            ],
-            "frame": 0,
-            "destination": [0, 16, 0, 16, 16]
+            "destination": [0, -16, 0, 16, 16]
           },
           {
             "source": {
@@ -69,7 +59,7 @@
                 [0, 0, 16, 16]
             ],
             "frame": 0,
-            "destination": [0, 16, 0, 16, 16]
+            "destination": [0, 0, 0, 16, 16]
           },
           {
             "source": {
@@ -80,7 +70,7 @@
                 [0, 1, 16, 16]
             ],
             "frame": 0,
-            "destination": [0, 32, 0, 16, 16]
+            "destination": [0, 16, 0, 16, 16]
           }
         ]
       }
