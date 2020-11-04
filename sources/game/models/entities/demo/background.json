@@ -1,5 +1,6 @@
 {
   "name":"background",
+  "scope":"demo",
   "components":[
     {
       "name":"camera",
@@ -35,7 +36,7 @@
                 [0, 0, 16, 16]
             ],
             "frame": 0,
-            "destination": [0, -96, 0, 100, 200]
+              "destination": [0, 0, 0, 64,98]
           },
           {
             "source": {
@@ -46,7 +47,7 @@
                 [0, 1, 16, 16]
             ],
             "frame": 0,
-            "destination": [0, 112, 110, 64, 64]
+            "destination": [0, 112, 0, 64, 64]
           }
         ]
       }

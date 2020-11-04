@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[49],{65:function(e){e.exports=JSON.parse('{"name":"position","params":{"x":{"_default":5,"_type":"number"},"y":{"_default":0,"_type":"number"},"z":{"_default":0,"_type":"number"}}}')}}]);
-//# sourceMappingURL=49.index.js.map

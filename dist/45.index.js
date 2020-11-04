@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[45],{61:function(e){e.exports=JSON.parse('{"name":"hitbox","params":{"width":{"_default":0,"_type":"number"},"height":{"_default":0,"_type":"number"}}}')}}]);
-//# sourceMappingURL=45.index.js.map

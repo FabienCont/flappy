@@ -12,6 +12,8 @@ function commands(entities) {
 
                 case 'MOVE_TOP':
 
+                this.$infos.started=true;
+
                 let forces={
                       "name": "forces",
                       "scope":"common",
@@ -19,7 +21,7 @@ function commands(entities) {
                           "parts":[
                               {
                                   "x": 0,
-                                  "y": -32,
+                                  "y": -20,
                                   "duration": 200,
                                   "easing": {
                                       "type": "snippets",
@@ -32,18 +34,18 @@ function commands(entities) {
                                       "scope": "demo",
                                       "name": "forces-down"
                                   },
-                                  "handling": {
-                                      "type": "snippets",
-                                      "scope": "demo",
-                                      "name": "forces-handling"
-                                  }
+                                  "handling":null
                               }
                           ]
                       }
                     };
                     let newForces=createComponentFromModel.call(this,forces);
 
-                    entity.add(newForces)
+                    let parts=entity.get('forces').parts;
+                    if(parts.length>1){
+                      parts.pop();
+                    }
+                    entity.get('forces').parts.push(newForces.parts[0]);
 
                 break;
             }

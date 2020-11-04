@@ -5,5 +5,26 @@
     "components":
     [
     ]
+  },
+  {
+    "name":"score",
+    "scope":"demo",
+    "components":
+    [
+    ]
+  },
+  {
+    "name":"bestScore",
+    "scope":"demo",
+    "components":
+    [
+    ]
+  },
+  {
+    "name":"bestScoreStatic",
+    "scope":"demo",
+    "components":
+    [
+    ]
   }
 ]

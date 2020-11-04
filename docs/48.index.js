@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[48],{64:function(e){e.exports=JSON.parse('{"name":"origin","params":{"reference":{"_default":"$origins.default","_type":"ref"}}}')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[48],{59:function(t){t.exports=JSON.parse('{"name":"inputs","params":{"inputs":{"_default":[],"_type":"array<object>","_object":{"action":{"_type":"string"},"state":{"_type":"string"},"command":{"_type":"string"}}}}}')}}]);
 //# sourceMappingURL=48.index.js.map

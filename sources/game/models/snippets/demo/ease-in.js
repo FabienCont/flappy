@@ -1,6 +1,6 @@
-import {easeInQuart} from 'modules/ease.js';
+import {easeInQuad} from 'modules/ease.js';
 
 export default function () {
 
-    return easeInQuart;
+    return easeInQuad;
 };

@@ -1,56 +1,60 @@
 import {generateEntities} from 'core/loadEntities.js';
-import top from 'entities/demo/top';
-import bottom from 'entities/demo/bottom';
-import water from 'entities/demo/water';
-import background from 'entities/demo/background';
-import pipeTop from 'entities/demo/pipeTop';
-import pipeBottom from 'entities/demo/pipeBottom';
 
 function generateDecor(entities) {
 
-    let countEntities=0;
-    let maxId=0;
-    let spaceBehindBird=(this.$camera.screen.x()-this.$camera.screen.width()/(this.$camera.screen.scale()*2));
-    let maxPosBeyondBird=this.$camera.position.x()+(this.$camera.screen.x()+this.$camera.screen.width()/(this.$camera.screen.scale()*2));
-    let minPosition=this.$camera.position.x()+spaceBehindBird;
-    let maxPosition=minPosition;
+    let birdPosition=this.$world.entities.character.get('position').x;
+    let maxPosBeyondBird=birdPosition+128;
+    let minPosition=birdPosition-32;
+    let entitiesName=["top","bottom","background","water","pipeTop","pipeBottom","cloud"];
 
+    if(this.$infos.started){
+      entitiesName.push("checkpoint")
+    }
+
+    let decorEntities={};
+    for (var i = 0; i < entitiesName.length; i++) {
+      let name=entitiesName[i];
+      decorEntities[name]={'model':this.models.entities.demo[name],'width':64,'maxPosition':minPosition,'maxId':0,'entities':[]}
+    }
+
+    decorEntities["cloud"].width=160;
 
     Object.entries(entities).filter(([name,entity])=>{
-      let isOut=(entity.get('position').x+90)<minPosition;
-      if(isOut)this.$world.remove(entity);
+
+      let entityName=name.match(/^([a-zA-Z]+)/)[1];
+      let isOut=(entity.get('position').x+decorEntities[entityName].width)<minPosition;
+      if(isOut){
+        this.$world.remove(entity);
+      }else{
+        let entityId=name.match(/^[a-zA-Z]+([0-9]+)/)[1];
+        decorEntities[entityName].entities.push(entity);
+        if(decorEntities[entityName].maxPosition<(entity.get('position').x+decorEntities[entityName].width)){
+            decorEntities[entityName].maxPosition=entity.get('position').x+decorEntities[entityName].width;
+            decorEntities[entityName].maxId=parseInt(entityId)+1;
+        }
+      }
       return !isOut;
     });
 
-    Object.entries(entities).forEach(([name, entity]) => {
-      if(name.startsWith('bottom')){
-        countEntities++;
-        let idFloor=name.split('bottom')[1];
-        idFloor=idFloor;
-        if(idFloor>maxId){
-          maxId=idFloor;
-          maxPosition=entity.get('position').x+entity.get('hitbox').width;
-        }
+
+    if(this.$infos.started && decorEntities['checkpoint'].entities.length===0){
+      let maxPosPipe=decorEntities['pipeTop'].maxPosition;
+      decorEntities['checkpoint'].maxPosition=maxPosPipe;
+    }
+
+
+    Object.entries(decorEntities).forEach(([name,entityInfo])=>{
+      while(maxPosBeyondBird>entityInfo.maxPosition){
+        let newEntities=generateEntities.call(this,[entityInfo.model()]);
+        newEntities.map((newEntity)=>{
+          newEntity.name=newEntity.name+entityInfo.maxId;
+          newEntity.get('position').x=entityInfo.maxPosition;
+          this.$world.add(newEntity);
+        });
+        entityInfo.maxPosition=entityInfo.maxPosition+entityInfo.width;
+        entityInfo.maxId=entityInfo.maxId+1;
       }
     });
-
-    top.scope="demo";
-    bottom.scope="demo";
-    water.scope="demo";
-    background.scope="demo";
-    pipeTop.scope="demo";
-    pipeBottom.scope="demo";
-
-    while(maxPosBeyondBird>maxPosition ){
-      maxId++;
-      let newEntities=generateEntities.call(this,[top,bottom,background,water,pipeTop,pipeBottom]);
-      newEntities.map((newEntity)=>{
-        newEntity.name=newEntity.name+maxId;
-        newEntity.get('position').x=maxPosition;
-        this.$world.add(newEntity);
-      });
-      maxPosition=maxPosition+64;
-    }
 }
 
 export {generateDecor};

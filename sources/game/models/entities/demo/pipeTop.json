@@ -1,5 +1,6 @@
 {
   "name":"pipeTop",
+  "scope":"demo",
   "components":[
     {
       "name":"camera",
@@ -10,7 +11,7 @@
       "scope":"common",
       "params":{
         "x":-48,
-        "y":-96,
+        "y":-16,
         "z":99
       }
     },
@@ -22,8 +23,10 @@
       "name":"hitbox",
       "scope":"common",
       "params":{
-        "height":48,
-        "width":16
+        "x":1,
+        "height":31,
+        "width":14,
+        "type":"static"
       }
     },
     {
@@ -44,84 +47,7 @@
                 [0, 1, 16, 16]
             ],
             "frame": 0,
-            "destination": [0, -64, 0, 16, 16]
-          },
-          {
-            "source": {
-              "scope":"demo",
-              "file":"pipe-16x16@1x"
-            },
-            "frames": [
-                [0, 1, 16, 16]
-            ],
-            "frame": 0,
-            "destination": [0, -48, 0, 16, 16]
-          },
-          {
-            "source": {
-              "scope":"demo",
-              "file":"pipe-16x16@1x"
-            },
-            "frames": [
-                [0, 1, 16, 16]
-            ],
-            "frame": 0,
-            "destination": [0, -32, 0, 16, 16]
-          },
-          {
-            "source": {
-              "scope":"demo",
-              "file":"pipe-16x16@1x"
-            },
-            "frames": [
-                [0, 1, 16, 16]
-            ],
-            "frame": 0,
-            "destination": [0, -16, 0, 16, 16]
-          },
-          {
-            "source": {
-              "scope":"demo",
-              "file":"pipe-16x16@1x"
-            },
-            "frames": [
-                [0, 1, 16, 16]
-            ],
-            "frame": 0,
             "destination": [0, 0, 0, 16, 16]
-          },
-          {
-            "source": {
-              "scope":"demo",
-              "file":"pipe-16x16@1x"
-            },
-            "frames": [
-                [0, 1, 16, 16]
-            ],
-            "frame": 0,
-            "destination": [0, 16, 0, 16, 16]
-          },
-          {
-            "source": {
-              "scope":"demo",
-              "file":"pipe-16x16@1x"
-            },
-            "frames": [
-                [0, 1, 16, 16]
-            ],
-            "frame": 0,
-            "destination": [0, 32, 0, 16, 16]
-          },
-          {
-            "source": {
-              "scope":"demo",
-              "file":"pipe-16x16@1x"
-            },
-            "frames": [
-                [0, 1, 16, 16]
-            ],
-            "frame": 0,
-            "destination": [0, 48, 0, 16, 16]
           },
           {
             "source": {
@@ -132,7 +58,7 @@
                 [0, 2, 16, 16]
             ],
             "frame": 0,
-            "destination": [0, 64, 0, 16, 16]
+            "destination": [0, 16, 0, 16, 16]
           }
         ]
       }

@@ -1,5 +1,36 @@
 import {Entity} from 'modules/world.js';
 
+
+const cloneArray = function (a, fn) {
+  var keys = Object.keys(a)
+  var a2 = new Array(keys.length)
+  for (var i = 0; i < keys.length; i++) {
+    var k = keys[i]
+    var cur = a[k]
+    if (typeof cur !== 'object' || cur === null) {
+      a2[k] = cur
+    } else {
+      a2[k] = fn(cur)
+    }
+  }
+  return a2
+};
+
+const cloneProto=function (o) {
+  if (typeof o !== 'object' || o === null) return o;
+  if (Array.isArray(o)) return cloneArray(o, cloneProto)
+  var o2 = {}
+  for (var k in o) {
+    var cur = o[k]
+    if (typeof cur !== 'object' || cur === null) {
+      o2[k] = cur
+    } else {
+      o2[k] = cloneProto(cur)
+    }
+  }
+  return o2
+}
+
 const loadRef=function(value){
   try{
     var ref="";
@@ -128,16 +159,33 @@ const getEntitiesScene=function(){
   }
 }
 
+const getCachedEntity=function(entityRef){
+  let cacheScope=this.cachedEntities[entityRef.scope];
+  return cacheScope?(cacheScope[entityRef.name]?cloneProto(cacheScope[entityRef.name]):null):null;
+}
+
+const setCachedEntity=function(entityRef,entityGenerated){
+  if(!this.cachedEntities[entityRef.scope]){
+      this.cachedEntities[entityRef.scope]={};
+    }
+    this.cachedEntities[entityRef.scope][entityRef.name]=cloneProto(entityGenerated);
+}
+
 const generateEntities=function(sceneEntities){
   try{
     var entities=[];
     sceneEntities.forEach((entityRef) => {
-      var entityDef=getEntityDefinition.call(this,entityRef);
-      var componentsOverride=convertArrayToObject(entityRef.components,'name');
-      var componentsModel=convertArrayToObject(entityDef.components,'name');
-      var newEntityComponents=mergeDeep(componentsModel,componentsOverride);
-      var newEntity=generateEntityModel.call(this,{name:entityDef.name,components:Object.values(newEntityComponents)});
-      newEntity=new Entity(newEntity.name,newEntity.components)
+      //let newEntity=getCachedEntity.call(this,entityRef);
+      let newEntity=null;
+      if(!newEntity){
+        var entityDef=getEntityDefinition.call(this,entityRef);
+        var componentsOverride=convertArrayToObject(entityRef.components,'name');
+        var componentsModel=convertArrayToObject(entityDef.components,'name');
+        var newEntityComponents=mergeDeep(componentsModel,componentsOverride);
+        newEntity=generateEntityModel.call(this,{name:entityDef.name,components:Object.values(newEntityComponents)});
+        newEntity=new Entity(newEntity.name,newEntity.components);
+        setCachedEntity.call(this,entityRef,newEntity);
+      }
       entities.push(newEntity);
     });
     return entities;

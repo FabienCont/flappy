@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{80:function(e,n,s){"use strict";s.r(n);var a=s(2);n.default=function(e){var n=a.a.call(this,{name:"forces",scope:"common",params:{parts:[{x:-1,y:0,duration:1e3,easing:{type:"snippets",scope:"demo",name:"ease-linear"},elapsed:0,ending:{type:"snippets",scope:"demo",name:"forces-water-right"},handling:{type:"snippets",scope:"demo",name:"forces-handling"}}]}});e.add(n)}}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{90:function(e,t,o){"use strict";o.r(t),t.default=function(e,t,o){this.$world.remove(o);var s=this.$world.entities.score.get("score");s.value=s.value+1;var i=this.$world.entities.bestScore.get("score");s.value>i.value&&(i.value=s.value)}}}]);
 //# sourceMappingURL=8.index.js.map

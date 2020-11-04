@@ -37,9 +37,9 @@ function images(entities) {
                 },
                 'destination': {
 
-                    'x': Math.floor((positionComponent.x + destination[0]) * originComponent.reference.scale() + originComponent.reference.x()),
-                    'y': Math.floor((positionComponent.y + destination[1]) * originComponent.reference.scale() + originComponent.reference.y()),
-                    'z': Math.floor(positionComponent.z + destination[2] + originComponent.reference.z()),
+                    'x': (positionComponent.x + destination[0]) * originComponent.reference.scale() + originComponent.reference.x(),
+                    'y': (positionComponent.y + destination[1]) * originComponent.reference.scale() + originComponent.reference.y(),
+                    'z': positionComponent.z + destination[2] + originComponent.reference.z(),
                     'width': (destination[3] * originComponent.reference.scale()),
                     'height': (destination[4] * originComponent.reference.scale())
                 },

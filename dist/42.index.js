@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[42],{58:function(a){a.exports=JSON.parse('{"name":"commands","params":{"commands":{"_default":[],"_type":"array<string>"}}}')}}]);
-//# sourceMappingURL=42.index.js.map

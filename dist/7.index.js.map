@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./sources/game/models/snippets/demo/forces-handling.js"],"names":["entity","console","log"],"mappings":"yFAAA,OAAe,mBAAUA,GAErBC,QAAQC,IAAI,4BAA6B","file":"7.index.js","sourcesContent":["export default function (entity) {\n\n    console.log(\"character.forces.handling\", \"neeew\");\n};\n"],"sourceRoot":""}

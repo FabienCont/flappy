@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[54],{70:function(p){p.exports=JSON.parse('["KEY_UP","KEY_SPACE"]')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[54],{65:function(e){e.exports=JSON.parse('{"name":"score","params":{"value":{"_default":0,"_type":"number"}}}')}}]);
 //# sourceMappingURL=54.index.js.map

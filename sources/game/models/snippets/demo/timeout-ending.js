@@ -1,5 +1,5 @@
-export default function (entity) {
+export default function (entity,extra) {
 
-    entity.remove('timeout');
-    console.log("character.timeout.ending", "neeew");
+    this.restart();
+
 };

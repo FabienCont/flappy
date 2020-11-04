@@ -8,8 +8,8 @@ export default function(entity) {
         "params": {
             "parts": [{
                 "x": 0,
-                "y": 1,
-                "duration": 200,
+                "y": 8,
+                "duration": 250,
                 "easing": {
                     "type": "snippets",
                     "scope": "demo",
@@ -17,17 +17,12 @@ export default function(entity) {
                 },
                 "elapsed": 0,
                 "ending": null,
-                "handling": {
-                    "type": "snippets",
-                    "scope": "demo",
-                    "name": "forces-handling"
-                }
+                "handling":null
             }]
         }
     };
 
     let newForces = createComponentFromModel.call(this, forces);
 
-    entity.add(newForces)
-
+    entity.get('forces').parts.push(newForces.parts[0]);
   };

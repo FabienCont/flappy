@@ -19,6 +19,17 @@ function Loop(handler, framerate = 60, speed = 1) {
             && paused === false) {
 
                 // define elapsed time since last user's update handler matching timeframe and speed
+                if (elapsedTime >= 5000) {
+
+                     console.log('droped', elapsedTime);
+
+                     // define elapsed time since last user's update handler matching timeframe and speed
+                     elapsedTime -= elapsedTime;
+
+                     handler(elapsedTime);
+
+                     continue;
+                }
                 elapsedTime -= 1000 / this.framerate / this.speed;
 
                 handler(1000 / this.framerate);

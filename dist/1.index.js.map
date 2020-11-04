@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack:///./sources/game/models/snippets/demo/ease-in.js"],"names":["easeInQuart"],"mappings":"yFAAA,mBAEe,qBAEX,OAAOA","file":"1.index.js","sourcesContent":["import {easeInQuart} from 'modules/ease.js';\n\nexport default function () {\n\n    return easeInQuart;\n};\n"],"sourceRoot":""}

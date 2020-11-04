@@ -5,11 +5,6 @@
     "components":["decor"]
   },
   {
-    "name":"move",
-    "scope":"demo",
-    "components":["position","player"]
-  },
-  {
     "name":"inputs",
     "scope":"common",
     "components":["inputs"]
@@ -28,5 +23,20 @@
     "name":"hitbox",
     "scope":"common",
     "components":["position","hitbox"]
+  },
+  {
+    "name":"previous",
+    "scope":"common",
+    "components":["position","hitbox"]
+  },
+  {
+    "name":"timeout",
+    "scope":"common",
+    "components":["timeout"]
+  },
+  {
+    "name":"updateScore",
+    "scope":"demo",
+    "components":["score","images"]
   }
 ]

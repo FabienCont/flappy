@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[49],{65:function(e){e.exports=JSON.parse('{"name":"position","params":{"x":{"_default":5,"_type":"number"},"y":{"_default":0,"_type":"number"},"z":{"_default":0,"_type":"number"}}}')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[49],{60:function(e){e.exports=JSON.parse('{"name":"origin","params":{"reference":{"_default":"$origins.default","_type":"ref"}}}')}}]);
 //# sourceMappingURL=49.index.js.map

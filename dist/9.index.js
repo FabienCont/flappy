@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{81:function(e,n,s){"use strict";s.r(n);var a=s(2);n.default=function(e){var n=a.a.call(this,{name:"forces",scope:"common",params:{parts:[{x:1,y:0,duration:1e3,easing:{type:"snippets",scope:"demo",name:"ease-linear"},elapsed:0,ending:{type:"snippets",scope:"demo",name:"forces-water-left"},handling:{type:"snippets",scope:"demo",name:"forces-handling"}}]}});e.add(n)}}}]);
-//# sourceMappingURL=9.index.js.map

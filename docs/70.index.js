@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[70],{81:function(o){o.exports=JSON.parse('[{"name":"spritesheets","scope":"common","components":["images"]},{"name":"images","scope":"common","components":["camera","images","origin","position"]}]')}}]);
+//# sourceMappingURL=70.index.js.map

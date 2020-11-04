@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[43],{59:function(n){n.exports=JSON.parse('{"name":"fade","params":{"duration":null,"easing":"linear","elapsed":0,"ending":null,"fade":null,"faded":0,"opacity":null}}')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[43],{54:function(a){a.exports=JSON.parse('{"name":"commands","params":{"commands":{"_default":[],"_type":"array<string>"}}}')}}]);
 //# sourceMappingURL=43.index.js.map

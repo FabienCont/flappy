@@ -1,0 +1,49 @@
+{
+    "name": "bestScore",
+    "scope": "demo",
+    "components": [
+        {
+            "name": "position",
+            "scope": "common",
+            "params":{
+              "x":63,
+              "y":54,
+              "z":1000
+            }
+        },
+        {
+            "name": "score",
+            "scope": "demo"
+        },
+        {
+            "name": "camera",
+            "scope": "common",
+            "params": {
+                "camera": "$cameraInfo"
+            }
+        },
+        {
+            "name": "origin",
+            "scope": "common"
+        },
+        {
+          "name":"images",
+          "scope":"common",
+          "params":{
+            "parts":[
+              {
+                "source": {
+                  "scope":"demo",
+                  "file":"numbers-blue-8x16@1x"
+                },
+                "frames": [
+                    [0, 0, 8, 16]
+                ],
+                "frame": 0,
+                "destination": [0, 0, 0, 8, 16]
+              }
+            ]
+          }
+        }
+    ]
+}

@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[7],{79:function(n,e,o){"use strict";o.r(e),e.default=function(n){console.log("character.forces.handling","neeew")}}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[7],{89:function(n,e,o){"use strict";o.r(e),e.default=function(n){console.log("character.forces.handling","neeew")}}}]);
 //# sourceMappingURL=7.index.js.map

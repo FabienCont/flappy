@@ -170,7 +170,7 @@ function Theatre(config) {
     this.snippets = {};
     this.state = {};
     this.version = '0.39.0';
-
+    this.cachedEntities={};
     this.load = load;
     this.pause = pause;
     this.play = play;

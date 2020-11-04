@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[51],{67:function(p){p.exports=JSON.parse('{"name":"player","params":{}}')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[51],{62:function(e){e.exports=JSON.parse('{"name":"timeout","params":{"duration":{"_default":1000,"_type":"number"},"elapsed":{"_default":0,"_type":"number"},"ending":{"_default":false,"_type":"object","type":{"_default":"snippets","_type":"string"},"scope":{"_default":"demo","_type":"string"},"name":{"_default":"timeout-ending","_type":"string"}}}}')}}]);
 //# sourceMappingURL=51.index.js.map

@@ -1,0 +1,7 @@
+components can't be empty entities json
+
+remove panel easily
+
+componentModel for generation
+
+theatre add this to snippets

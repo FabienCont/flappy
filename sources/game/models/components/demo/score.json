@@ -1,0 +1,9 @@
+{
+  "name": "score",
+  "params": {
+    "value": {
+      "_default": 0,
+      "_type": "number"
+    }
+  }
+}

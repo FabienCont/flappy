@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[11],{83:function(e,n,o){"use strict";o.r(n),n.default=function(e){e.remove("timeout"),console.log("character.timeout.ending","neeew")}}}]);
-//# sourceMappingURL=11.index.js.map

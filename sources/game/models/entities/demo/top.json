@@ -1,5 +1,6 @@
 {
   "name":"top",
+  "scope":"demo",
   "components":[
     {
       "name":"camera",
@@ -14,7 +15,7 @@
       "scope":"common",
       "params":{
         "x":-96,
-        "y":-96,
+        "y":0,
         "z":100
       }
     },
@@ -23,7 +24,8 @@
       "scope":"common",
       "params":{
         "width":64,
-        "height":16
+        "height":4,
+        "type":"static"
       }
     },
     {

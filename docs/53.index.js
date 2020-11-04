@@ -1,2 +1,2 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[53],{69:function(o){o.exports=JSON.parse('[{"name":"character","scope":"demo","components":[]}]')}}]);
+(window.webpackJsonp=window.webpackJsonp||[]).push([[53],{64:function(p){p.exports=JSON.parse('{"name":"player","params":{}}')}}]);
 //# sourceMappingURL=53.index.js.map
