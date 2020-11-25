@@ -20,6 +20,11 @@
     "components":["position","forces"]
   },
   {
+    "name":"rotateLimit",
+    "scope":"demo",
+    "components":["rotate"]
+  },
+  {
     "name":"hitbox",
     "scope":"common",
     "components":["position","hitbox"]

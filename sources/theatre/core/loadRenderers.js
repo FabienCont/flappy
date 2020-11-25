@@ -1,33 +1,34 @@
-const loadRenderers=function(sceneRenderers){
-  if(sceneRenderers){
-      sceneRenderers.forEach((renderer) => {
-      var rendererSystem=getSystem.call(this,renderer.name,renderer.scope);
+const getRenderers = function getRenderers() {
+  try {
+    const sceneModel = this.models.scenes[this.currentScene];
+    if (sceneModel !== undefined && sceneModel.renderers !== undefined && sceneModel.renderers()) {
+      return sceneModel.renderers();
+    }
+  } catch (err) {
+    console.error(`no renderers found for this scene :${this.currentScene}`);
+  }
+  return [];
+};
+
+const getSystem = function getSystem(systemName, systemScope) {
+  try {
+    if (typeof systemName !== 'string' || systemName === '') {
+      throw 'no system name defined';
+    }
+    return this.models.systems[systemScope][systemName]()[systemName];
+    // return require('components/common/'+componentRef.name+'.json');
+  } catch (err) {
+    throw `no system found with name :${systemName}`;
+  }
+};
+
+const loadRenderers = function loadRenderers(sceneRenderers) {
+  if (sceneRenderers) {
+    sceneRenderers.forEach((renderer) => {
+      const rendererSystem = getSystem.call(this, renderer.name, renderer.scope);
       this.$world.system(renderer.components, rendererSystem);
     });
   }
-}
+};
 
-const getRenderers=function(){
-  try{
-    let sceneModel=this.models.scenes[this.currentScene];
-    if(sceneModel!==undefined && sceneModel.renderers!=undefined && sceneModel.renderers() ){
-      return sceneModel.renderers();
-    }else return[];
-  }catch(err){
-    console.error("no renderers found for this scene :"+this.currentScene);
-  }
-}
-
-const getSystem=function(systemName,systemScope){
-  try{
-    if(typeof systemName!=="string"|| systemName===""){
-      throw "no system name defined"
-    }
-    return this.models.systems[systemScope][systemName]()[systemName];
-    //return require('components/common/'+componentRef.name+'.json');
-  }catch(err){
-    throw "no system found with name :"+systemName;
-  }
-}
-
-export {loadRenderers,getRenderers};
+export { loadRenderers, getRenderers };

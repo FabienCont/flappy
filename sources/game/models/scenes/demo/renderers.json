@@ -7,6 +7,16 @@
     {
       "name":"images",
       "scope":"common",
-      "components":["camera", "images", "origin", "position"]
+      "components":["camera", "images", "position"]
+    },
+    {
+      "name":"renderImages",
+      "scope":"canvas2d",
+      "components":[]
+    },
+    {
+      "name":"emptyCameras",
+      "scope":"common",
+      "components":[]
     }
 ]

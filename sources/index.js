@@ -1,9 +1,9 @@
-import {Theatre} from 'core/theatre.js';
+import Theatre from 'core/theatre';
 
-var container = document.body.querySelector('.theatre-container');
+const container = document.body.querySelector('.theatre-container');
 
 new Theatre({
-    'container': container,
-    'expose': true,
-    'sharp': true
+  container,
+  expose: true,
+  sharp: true,
 });

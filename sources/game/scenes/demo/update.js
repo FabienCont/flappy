@@ -1,9 +1,7 @@
-import {loadSystems} from "core/loadSystems";
+import { loadSystems } from 'core/loadSystems';
 
 function update() {
-
-    loadSystems.call(this,this.$systems);
-    this.$camera.update(this.delta.update);
+  loadSystems.call(this, this.$systems);
 }
 
-export {update};
+export { update };

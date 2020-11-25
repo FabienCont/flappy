@@ -1,0 +1,34 @@
+{
+    "name": "header",
+    "scope":"loading",
+    "components":   [
+        {
+            "name": "position",
+            "scope": "common",
+            "params": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        },
+        {
+            "name": "camera",
+            "scope": "common"
+        },
+        {
+            "name": "text",
+            "scope": "common",
+            "params": {
+                "x": 0,
+                "y": -70,
+                "z": 0,
+                "color": "white",
+                "text":"THEATRE",
+                "fontWeight":"normal",
+                "fontSize":30,
+                "fontFamily":"tahoma",
+                "letterSpacing":2
+            }
+        }
+      ]
+}

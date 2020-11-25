@@ -1,0 +1,23 @@
+[
+  {
+    "name":"header",
+    "scope":"loading",
+    "components":
+    [
+    ]
+  },
+  {
+    "name":"loadingBar",
+    "scope":"loading",
+    "components":
+    [
+    ]
+  },
+  {
+    "name":"loadingText",
+    "scope":"loading",
+    "components":
+    [
+    ]
+  }
+]

@@ -1,56 +1,52 @@
 function Canvas(type, identifier, width, height, pixelated = false) {
+  const element = document.createElement('canvas');
+  const context = element.getContext(type);
 
-    const element = document.createElement('canvas');
-    const context = element.getContext(type);
+  function focus() {
+    element.setAttribute('tabindex', 0);
+    element.focus();
+  }
 
-    function focus() {
+  function resize(width, height) {
+    const ratio = window.devicePixelRatio || 1;
 
-        element.setAttribute('tabindex', 0);
-        element.focus();
+    // if (pixelated === true) {
+    //   ratio = Math.floor(ratio);
+    // }
+
+    element.setAttribute('height', ratio * height);
+    element.setAttribute('width', ratio * width);
+
+    element.style.height = '100%';
+    element.style.width = '100%';
+
+    if (context.scale) {
+      context.scale(ratio, ratio);
     }
 
-    function resize(width, height) {
-
-        let ratio = window.devicePixelRatio || 1;
-
-        if (pixelated === true) {
-
-            ratio = Math.floor(ratio);
-        }
-
-        element.setAttribute('height', ratio * height);
-        element.setAttribute('width', ratio * width);
-
-        element.style.height = '100%';
-        element.style.width = '100%';
-
-        context.scale(ratio, ratio);
-
-        if (pixelated === true) {
-
-            sharp();
-        }
+    if (pixelated === true) {
+      sharp();
     }
+  }
 
-    function sharp() {
+  function sharp() {
+    element.style.imageRendering = '-moz-crisp-edges';
+    element.style.imageRendering = '-webkit-crisp-edges';
+    element.style.imageRendering = 'crisp-edges';
+    element.style.imageRendering = 'pixelated';
+    context.imageSmoothingEnabled = false;
+  }
 
-        element.style.imageRendering = '-moz-crisp-edges';
-        element.style.imageRendering = '-webkit-crisp-edges';
-        element.style.imageRendering = 'crisp-edges';
-        element.style.imageRendering = 'pixelated';
-        context.imageSmoothingEnabled = false;
-    }
+  element.setAttribute('id', identifier);
+  element.addEventListener('mousedown', focus);
 
-    element.setAttribute('id', identifier);
-    element.addEventListener('mousedown', focus);
+  resize(width, height);
 
-    resize(width, height);
-
-    this.context = context;
-    this.element = element;
-    this.focus = focus;
-    this.resize = resize;
+  this.context = context;
+  this.element = element;
+  this.focus = focus;
+  this.resize = resize;
 }
 
 // exports current module as an object
-export {Canvas};
+export { Canvas };

@@ -16,12 +16,8 @@
       "params":{
         "x":-96,
         "y":80,
-        "z":0
+        "z":1
       }
-    },
-    {
-      "name":"origin",
-      "scope":"common"
     },
     {
         "name": "forces",

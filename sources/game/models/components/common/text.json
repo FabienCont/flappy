@@ -1,0 +1,57 @@
+{
+  "name": "text",
+  "params": {
+    "text":{
+      "_default": "Hello World",
+      "_type": "string"
+    },
+    "color":{
+      "_default": "red",
+      "_type": "string"
+    },
+    "fontFamily":{
+      "_default": "Arial",
+      "_type": "string"
+    },
+    "fontWeight":{
+      "_default": "normal",
+      "_type": "string"
+    },
+    "fontSize":{
+      "_default": 25,
+      "_type": "number"
+    },
+    "lineWidth":{
+      "_default": 2,
+      "_type": "number"
+    },
+    "letterSpacing":{
+      "_default": 2,
+      "_type": "number"
+    },
+    "textBaseline":{
+      "_default": "top",
+      "_type": "string"
+    },
+    "textAlign":{
+      "_default": "left",
+      "_type": "string"
+    },
+    "drawType":{
+      "_default": "fill",
+      "_type": "string"
+    },
+    "x": {
+      "_default": 0,
+      "_type": "number"
+    },
+    "y": {
+      "_default": 0,
+      "_type": "number"
+    },
+    "z": {
+      "_default": 0,
+      "_type": "number"
+    }
+  }
+}

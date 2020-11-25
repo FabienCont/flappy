@@ -31,10 +31,6 @@
       }
     },
     {
-      "name":"origin",
-      "scope":"common"
-    },
-    {
       "name":"images",
       "scope":"common",
       "params":{
@@ -56,21 +52,10 @@
               "file":"pipe-shadow-16x8@1x"
             },
             "frames": [
-                [0, 0, 16, 16]
+                [0, 1, 16, 12]
             ],
             "frame": 0,
-            "destination": [0, 0, 0, 16, 16]
-          },
-          {
-            "source": {
-              "scope":"demo",
-              "file":"pipe-shadow-16x8@1x"
-            },
-            "frames": [
-                [0, 1, 16, 16]
-            ],
-            "frame": 0,
-            "destination": [0, 16, 0, 16, 16]
+            "destination": [0, 16, 0, 16, 12]
           }
         ]
       }

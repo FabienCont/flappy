@@ -5,3 +5,24 @@ remove panel easily
 componentModel for generation
 
 theatre add this to snippets
+
+
+aucune fonction dans les composants, que des références a des snippets à l'aide de strings
+
+Possibilité de gérer un dictionnaire en tant que type. Example : pb avec hitbox.js
+
+pouvoir utiliser un type snippet sur tous les params des composants -> pas de test de typage ?
+pouvoir définir des sousGroupes d'origin pour les déplacer en groupe.
+avoir une hitbox centré,top,left,right,bottom par rappport au spritesheets.
+Ajouter la gestion de la rotation dans les forces
+
+Erreur 404 lors de l'apperl A audio.play();
+
+cache scenes, entity, component
+
+add component instance
+
+
+add Id or pseudo to entity,components,forces,systems
+
+add indexOrder systems

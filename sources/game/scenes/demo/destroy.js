@@ -1,17 +1,15 @@
 function destroy() {
+  console.log('destroy demo scene');
+  console.log('-------');
 
-    console.log('destroy demo scene');
-    console.log('-------');
+  this.$controllers.destroy();
 
-    this.$controllers.destroy();
-
-    delete this.$camera;
-    delete this.$controllers;
-    delete this.$origins;
-    delete this.$world.entities;
-    delete this.$world;
-    delete this.$systems;
-    delete this.$renderers;
+  delete this.$camera;
+  delete this.$controllers;
+  delete this.$world.entities;
+  delete this.$world;
+  delete this.$systems;
+  delete this.$renderers;
 }
 
-export {destroy};
+export { destroy };

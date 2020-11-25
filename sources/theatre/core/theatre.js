@@ -1,191 +1,178 @@
-//import * as scenes from 'scenes/index.js';
-import {Canvas} from 'core/canvas.js';
-import {Loop} from 'core/loop.js';
+// import * as scenes from 'scenes/index.js';
+import { Canvas } from 'core/canvas';
+import { Loop } from 'core/loop';
 
-import {preloadAssets} from 'core/preloadAssets.js';
-import {preloadModels} from 'core/preloadModels.js';
-import {preloadScenes} from 'core/preloadScenes.js';
+import { preloadAssets } from 'core/preloadAssets';
+import { preloadModels } from 'core/preloadModels';
+import { preloadScenes } from 'core/preloadScenes';
 
 function Theatre(config) {
+  const { container } = config;
 
-    const {container} = config;
+  const expose = config.expose || false;
+  const framerate = config.framerate || 60;
+  const sharp = config.sharp || false;
+  const speed = config.speed || 1;
 
-    const expose = config.expose || false;
-    const framerate = config.framerate || 60;
-    const sharp = config.sharp || false;
-    const speed = config.speed || 1;
+  const size = {
+    height: container.offsetHeight,
+    width: container.offsetWidth,
+  };
 
-    const size = {
-        'height': container.offsetHeight,
-        'width': container.offsetWidth
-    };
+  let canvas = null;
+  let loading = null;
+  let restarting = false;
+  let updates = 0;
 
+  function forward(timeframe) {
+    this.delta = timeframe;
 
-    let canvas = null;
-    let loading = null;
-    let restarting = false;
-    let updates = 0;
-
-
-        function forward(timeframe) {
-
-            this.delta = timeframe;
-
-            if (container.offsetWidth !== this.size.width
+    if (container.offsetWidth !== this.size.width
             || container.offsetHeight !== this.size.height) {
+      resize.call(this);
+    }
 
-                resize.call(this);
-            }
+    if (this.playing === true) {
+      this.tick();
+    }
 
-            if (this.playing === true) {
+    this.scene.before.call(this);
 
-                this.tick();
-            }
+    if (updates > 0) {
+      update.call(this);
+    }
 
-            this.scene.before.call(this);
+    this.scene.render.call(this);
+    this.scene.after.call(this);
+  }
 
-            if (updates > 0) {
+  function initialize() {
+    const type = '2d';
 
-                update.call(this);
-            }
+    canvas = new Canvas(type, 'theatre', this.size.width, this.size.height, sharp);
 
-            this.scene.render.call(this);
-            this.scene.after.call(this);
-        }
+    this.cleanCanvas = () => {};
 
+    if (type === 'webgl') {
+      this.cleanCanvas = () => {
+        canvas.context.clear(canvas.context.COLOR_BUFFER_BIT);
+      };
+    } else if (type === '2d') {
+      this.cleanCanvas = () => {
+        canvas.context.fillStyle = '#000000';
+        canvas.context.fillRect(0, 0, canvas.context.canvas.width, canvas.context.canvas.height);
+      };
+    }
 
-    function initialize() {
+    container.appendChild(canvas.element);
 
-        canvas = new Canvas('2d', 'theatre', this.size.width, this.size.height, sharp);
+    canvas.focus();
 
-        container.appendChild(canvas.element);
+    this.context = canvas.context;
+    this.container = container;
+    this.element = canvas.element;
+    this.models = {};
+    this.assets = {};
+    this.delta = 0;
 
-        canvas.focus();
+    this.loop = new Loop(forward.bind(this), framerate, speed);
+    const promisePreloadAssets = preloadAssets.call(this);
+    const promisePreloadModels = preloadModels.call(this);
+    preloadScenes.call(this);
 
-        this.container = container;
-        this.context = canvas.context;
-        this.element = canvas.element;
-        this.models= {};
-        this.assets = {};
-        this.delta = 0;
+    promisePreloadAssets.then(() => {
+      this.preloading = false;
+    });
 
-        this.loop = new Loop(forward.bind(this), framerate, speed);
-        var promisePreloadAssets=preloadAssets.call(this);
-        var promisePreloadModels=preloadModels.call(this);
-        preloadScenes.call(this);
+    promisePreloadModels.then(() => {
+      this.scene = this.scenes.loading;
+      this.scene.setup.call(this);
+      this.scene.start.call(this);
 
-        Promise.all([promisePreloadAssets,promisePreloadModels]).then((modules) => {
-          this.preloading=false;
-        });
+      this.loop.update();
+    });
+  }
 
+  function load(scene) {
+    loading = scene;
+  }
 
-/*        assets.call(this);
-        components.call(this);
-        snippets.call(this);
-        scenes.call(this);*/
+  function pause() {
+    this.playing = false;
+  }
 
-        this.scene = this.scenes.loading;
+  function play() {
+    this.playing = true;
+  }
+
+  function resize() {
+    this.size.width = container.offsetWidth;
+    this.size.height = container.offsetHeight;
+
+    canvas.resize(this.size.width, this.size.height);
+
+    this.scene.resize.call(this);
+  }
+
+  function restart() {
+    restarting = true;
+  }
+
+  function tick(times = 1) {
+    updates += times;
+  }
+
+  function update() {
+    while (updates > 0) {
+      this.scene.update.call(this);
+
+      updates -= 1;
+
+      if (restarting === true) {
+        this.scene.start.call(this);
+
+        restarting = false;
+
+        continue;
+      }
+
+      if (loading !== null) {
+        this.scene.destroy.call(this);
+        this.scene = this.scenes[loading];
+        this.currentScene = loading;
         this.scene.setup.call(this);
         this.scene.start.call(this);
 
-        this.loop.update();
+        loading = null;
+
+        continue;
+      }
     }
+  }
 
+  this.playing = true;
+  this.preloading = true;
+  this.currentScene = 'loading';
+  this.$ = {};
+  this.scenes = {};
+  this.size = size;
+  this.snippets = {};
+  this.state = {};
+  this.version = '0.39.0';
+  this.cachedEntities = {};
+  this.load = load;
+  this.pause = pause;
+  this.play = play;
+  this.restart = restart;
+  this.tick = tick;
+  this.cameras = {};
 
-        function load(scene) {
+  initialize.call(this, config);
 
-            loading = scene;
-        }
-
-        function pause() {
-
-            this.playing = false;
-        }
-
-        function play() {
-
-            this.playing = true;
-        }
-
-        function resize() {
-
-            this.size.width = container.offsetWidth;
-            this.size.height = container.offsetHeight;
-
-            canvas.resize(this.size.width, this.size.height);
-
-            this.scene.resize.call(this);
-        }
-
-        function restart() {
-
-            restarting = true;
-        }
-
-
-
-    function tick(times = 1) {
-
-        updates += times;
-    }
-
-    function update() {
-
-        while (updates > 0) {
-
-            this.scene.update.call(this);
-
-            updates -= 1;
-
-            if (restarting === true) {
-
-                this.scene.start.call(this);
-
-                restarting = false;
-
-                continue;
-            }
-
-            if (loading !== null) {
-
-                this.scene.destroy.call(this);
-                this.scene = this.scenes[loading];
-                this.currentScene=loading;
-                this.scene.setup.call(this);
-                this.scene.start.call(this);
-
-                loading = null;
-
-                continue;
-            }
-        }
-    }
-
-    this.playing = true;
-    this.preloading = true;
-    this.currentScene;
-    this.$={};
-    this.scenes = {};
-    this.size = size;
-    this.snippets = {};
-    this.state = {};
-    this.version = '0.39.0';
-    this.cachedEntities={};
-    this.load = load;
-    this.pause = pause;
-    this.play = play;
-    this.restart = restart;
-    this.tick = tick;
-
-    initialize.call(this, config);
-
-    if (expose === true) {
-
-        window.theatre = this;
-    }
+  if (expose === true) {
+    window.theatre = this;
+  }
 }
 
 // exports current module as an object
-export {
-    Theatre
-};
+export default Theatre;

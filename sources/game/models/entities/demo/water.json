@@ -20,10 +20,6 @@
       }
     },
     {
-      "name":"origin",
-      "scope":"common"
-    },
-    {
         "name": "forces",
         "scope": "common",
         "params": {

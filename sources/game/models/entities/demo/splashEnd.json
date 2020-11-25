@@ -19,10 +19,6 @@
             }
         },
         {
-            "name": "origin",
-            "scope": "common"
-        },
-        {
           "name":"images",
           "scope":"common",
           "params":{

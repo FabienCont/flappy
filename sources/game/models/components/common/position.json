@@ -2,7 +2,7 @@
   "name": "position",
   "params": {
     "x": {
-      "_default": 5,
+      "_default": 0,
       "_type": "number"
     },
     "y": {

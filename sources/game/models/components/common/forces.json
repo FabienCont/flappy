@@ -12,6 +12,22 @@
               "_default":0,
               "_type":"number"
             },
+            "z":{
+              "_default":0,
+              "_type":"number"
+            },
+            "rotateX":{
+              "_default":0,
+              "_type":"number"
+            },
+            "rotateY":{
+              "_default":0,
+              "_type":"number"
+            },
+            "rotateZ":{
+              "_default":0,
+              "_type":"number"
+            },
             "duration":{
               "_default":0,
               "_type":"number"
@@ -68,12 +84,28 @@
             },
             "moved":{
               "_type":"object",
-              "_default":{"x":0,"y":0},
+              "_default":{"x":0,"y":0,"z":0,"rotateX":0,"rotateY":0,"rotateZ":0},
               "x":{
                 "_default":0,
                 "_type":"number"
               },
               "y":{
+                "_default":0,
+                "_type":"number"
+              },
+              "z":{
+                "_default":0,
+                "_type":"number"
+              },
+              "rotateX":{
+                "_default":0,
+                "_type":"number"
+              },
+              "rotateY":{
+                "_default":0,
+                "_type":"number"
+              },
+              "rotateZ":{
                 "_default":0,
                 "_type":"number"
               }

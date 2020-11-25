@@ -1,52 +1,61 @@
 function images(entities) {
+  Object.entries(entities).forEach(([name, entity]) => {
+    const cameraComponent = entity.get('camera');
+    const imagesComponent = entity.get('images');
+    const positionComponent = entity.get('position');
+    const rotateComponent = entity.get('rotate');
 
-    Object.entries(entities).forEach(([name, entity]) => {
+    let rotateX = 0;
+    let rotateY = 0;
+    let rotateZ = 0;
+    if (rotateComponent) {
+      rotateX = rotateComponent.x;
+      rotateY = rotateComponent.y;
+      rotateZ = rotateComponent.z;
+    }
+    imagesComponent.parts.forEach((image) => {
+      const {
+        destination, framerate, frames, opacity,
+      } = image;
 
-        const cameraComponent = entity.get('camera');
-        const imagesComponent = entity.get('images');
-        const originComponent = entity.get('origin');
-        const positionComponent = entity.get('position');
+      let { source } = image;
 
-        imagesComponent.parts.forEach((image) => {
+      let [x, y, width, height] = frames[image.frame];
 
-            const {destination, framerate, frames, opacity} = image;
+      if (typeof source === 'undefined') {
+        source = this.assets.images.common['placeholder-8x1']();
 
-            let {source} = image;
+        x %= 8;
+        y %= 1;
+        width = 1;
+        height = 1;
+      }
 
-            let [x, y, width, height] = frames[image.frame];
+      cameraComponent.camera.add('images', {
+        rotate: {
+          x: rotateX,
+          y: rotateY,
+          z: rotateZ,
+        },
+        source: this.assets.images[source.scope][source.file](),
+        frame: {
+          x: width * x,
+          y: height * y,
+          width,
+          height,
+        },
+        destination: {
 
-            if (typeof source === 'undefined') {
-
-                source = this.assets.images.common['placeholder-8x1']();
-
-                x = x % 8;
-                y = y % 1;
-                width = 1;
-                height = 1;
-            }
-
-            cameraComponent.camera.add({
-
-                'source': this.assets.images[source.scope][source.file](),
-                'frame': {
-
-                    'x': width * x,
-                    'y': height * y,
-                    'width': width,
-                    'height': height
-                },
-                'destination': {
-
-                    'x': (positionComponent.x + destination[0]) * originComponent.reference.scale() + originComponent.reference.x(),
-                    'y': (positionComponent.y + destination[1]) * originComponent.reference.scale() + originComponent.reference.y(),
-                    'z': positionComponent.z + destination[2] + originComponent.reference.z(),
-                    'width': (destination[3] * originComponent.reference.scale()),
-                    'height': (destination[4] * originComponent.reference.scale())
-                },
-                'opacity': cameraComponent.opacity * opacity
-            });
-        });
+          x: (positionComponent.x + destination[0]),
+          y: (positionComponent.y + destination[1]),
+          z: positionComponent.z + destination[2],
+          width: (destination[3]),
+          height: (destination[4]),
+        },
+        opacity: cameraComponent.opacity * opacity,
+      });
     });
+  });
 }
 
-export {images};
+export { images };

@@ -1,8 +1,6 @@
 function setup() {
-
-    console.log('setup demo scene');
-
-
+  // setup demo
+  console.log('setup demo scene');
 }
 
-export {setup};
+export { setup };

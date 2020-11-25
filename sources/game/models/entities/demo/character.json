@@ -34,12 +34,17 @@
             "params": {
                 "x": 48,
                 "y": 48,
-                "z": 1000
+                "z": 120
             }
         },
         {
-            "name": "origin",
-            "scope": "common"
+            "name": "rotate",
+            "scope": "common",
+            "params": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
         },
         {
             "name": "inputs",
@@ -52,7 +57,7 @@
                     },
                     {
                         "action": "KEY_SPACE",
-                        "state": "UP",
+                        "state": "DOWN",
                         "command": "MOVE_TOP"
                     },
                     {
@@ -79,7 +84,8 @@
                     ],
                     "frame": 0,
                     "destination": [0, 0, 0, 12, 12]
-                }]
+                }
+              ]
             }
         },
         {
@@ -87,8 +93,9 @@
             "scope": "common",
             "params": {
                 "parts": [{
-                    "x": 32,
+                    "x":40,
                     "y": 0,
+                    "z": 0,
                     "duration": 1000,
                     "easing": {
                         "type": "snippets",

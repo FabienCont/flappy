@@ -4,10 +4,10 @@ const WebpackNotifierPlugin = require('webpack-notifier');
 
 module.exports = merge(require('./webpack.common.js'), {
 
-    'devtool': 'source-map',
-    'mode': 'production',
-    'plugins': [
+  devtool: 'source-map',
+  mode: 'production',
+  plugins: [
 
-        new WebpackNotifierPlugin()
-    ]
+    new WebpackNotifierPlugin(),
+  ],
 });

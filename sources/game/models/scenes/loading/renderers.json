@@ -1,0 +1,7 @@
+[
+    {
+      "name":"renderText",
+      "scope":"canvas2d",
+      "components":["text"]
+    }
+]

@@ -1,0 +1,19 @@
+{
+    "name": "loadingBar",
+    "scope":"loading",
+    "components":   [
+        {
+            "name": "position",
+            "scope": "common",
+            "params": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        },
+        {
+            "name": "camera",
+            "scope": "common"
+        }
+      ]
+}
