@@ -13,7 +13,14 @@
                   "_type": "string"
               },
               "command": {
-                  "_type": "string"
+                  "_type": "object",
+                  "scope": {
+                    "_default":"demo",
+                    "_type":"string"
+                  },
+                  "name": {
+                    "_type":"string"
+                  }
               }
           }
       }

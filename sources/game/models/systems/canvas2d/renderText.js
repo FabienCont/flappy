@@ -1,14 +1,18 @@
+import { getCamera } from 'core/loadCameras';
+
 function renderText(entities) {
   Object.values(entities).forEach((entity) => {
     const pos = entity.get('position');
     const textComponent = entity.get('text');
-    const cameraComponent = entity.get('camera').camera;
-    const screenCam = cameraComponent.screen;
+    const cameraComponent = entity.get('camera');
+    const camera = getCamera.call(this, cameraComponent.cameraName);
+    const screenCam = camera.screen;
     const textString = textComponent.text;
-    const textFontSize = Math.floor(textComponent.fontSize * screenCam.scale());
+    const textFontSize = textComponent.fontSize * screenCam.scale();
+
     const xOffset = textComponent.x;
     const yOffset = textComponent.y;
-    this.context.lineWidth = textComponent.lineWidth;
+    this.context.lineWidth = textComponent.lineWidth * screenCam.scale();
     this.context.font = `${textComponent.fontWeight} ${textFontSize}px ${textComponent.fontFamily}`;
     this.context.fillStyle = textComponent.color;
     this.context.textBaseline = textComponent.textBaseline;
@@ -22,6 +26,7 @@ function renderText(entities) {
     const xPos = ((pos.x + xOffset) * screenCam.scale())
     - (textWidth / 2)
     + screenCam.x();
+
     const yPos = ((pos.y + yOffset) * screenCam.scale())
     + (textHeight / 2)
     + screenCam.y();

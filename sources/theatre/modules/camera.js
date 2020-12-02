@@ -1,6 +1,53 @@
-import * as Ease from './ease';
+function Camera(name, type, screenSize, attr) {
+  let scale = () => Math.min((screenSize.width / attr.width), (screenSize.height / attr.height));
+  this.screen = {};
+  switch (type) {
+    case 'contain-frameless':
 
-function Camera(name, screen) {
+      this.screen.x = () => 0;
+      this.screen.y = () => 0;
+      this.screen.z = () => 0;
+      this.screen.width = () => screenSize.width;
+      this.screen.height = () => screenSize.height;
+
+      break;
+
+    case 'contain-framed':
+
+      this.screen.x = () => (screenSize.width - attr.width * scale()) / 2;
+      this.screen.y = () => (screenSize.height - attr.height * scale()) / 2;
+      this.screen.z = () => 0;
+      this.screen.width = () => attr.width * scale();
+      this.screen.height = () => attr.height * scale();
+
+      break;
+
+    case 'contain-framed-center':
+
+      // scale = () => Math.min((screenSize.width / attr.width), (screenSize.height / attr.height));
+
+      this.screen.x = () => (attr.width * scale()) / 2;
+      this.screen.y = () => (attr.height * scale()) / 2;
+      this.screen.z = () => 0;
+      this.screen.width = () => attr.width * scale();
+      this.screen.height = () => attr.height * scale();
+
+      break;
+    case 'cover':
+
+      scale = () => Math.max((screenSize.width / attr.width), (screenSize.height / attr.height));
+
+      this.screen.x = () => 0;
+      this.screen.y = () => 0;
+      this.screen.z = () => 0;
+      this.screen.width = () => screenSize.width;
+      this.screen.height = () => screenSize.height;
+
+      break;
+    default:
+      throw new Error('incorrect camera type');
+  }
+
   function emptyDico() {
     this.dico = {};
   }
@@ -9,11 +56,11 @@ function Camera(name, screen) {
     return this.dico;
   }
 
-  function add(type, element) {
-    if (this.dico[type] === undefined) {
-      this.dico[type] = [element];
+  function add(dicoType, element) {
+    if (this.dico[dicoType] === undefined) {
+      this.dico[dicoType] = [element];
     }
-    this.dico[type].push(element);
+    this.dico[dicoType].push(element);
   }
 
   function look(x, y, z) {
@@ -24,7 +71,6 @@ function Camera(name, screen) {
 
   function visible(x, y, width, height) {
     const camera = {
-
       x: this.position.x() * this.screen.scale() - this.screen.width() / 2,
       y: this.position.y() * this.screen.scale() - this.screen.height() / 2,
       width: this.screen.width(),
@@ -50,15 +96,7 @@ function Camera(name, screen) {
     z: () => 0,
   };
 
-  this.screen = {
-    x: screen.x,
-    y: screen.y,
-    z: screen.z,
-    width: screen.width,
-    height: screen.height,
-    scale: screen.scale,
-  };
-
+  this.screen.scale = scale;
   this.dico = {};
   this.add = add;
   this.look = look;

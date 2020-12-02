@@ -28,7 +28,6 @@
                 "y": 0,
                 "duration": 1000,
                 "easing": {
-                    "type": "snippets",
                     "scope": "demo",
                     "name": "ease-linear"
                 },

@@ -1,11 +1,11 @@
-const loadSystems = function (sceneSystems) {
+const updateSystems = function (sceneSystems) {
   sceneSystems.forEach((system) => {
     const updateSystem = getSystem.call(this, system.name, system.scope);
     this.$world.system(system.components, updateSystem);
   });
 };
 
-const getSystems = function () {
+const loadSystems = function () {
   try {
     const sceneModel = this.models.scenes[this.currentScene];
     if (sceneModel !== undefined && sceneModel.systems != undefined && sceneModel.systems()) {
@@ -30,4 +30,4 @@ const getSystem = function (systemName, systemScope) {
   }
 };
 
-export { loadSystems, getSystems };
+export { updateSystems, loadSystems };

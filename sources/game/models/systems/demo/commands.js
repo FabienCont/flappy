@@ -1,56 +1,9 @@
-import { createComponentFromModel } from 'core/loadEntities.js';
-
 function commands(entities) {
-  Object.entries(entities).forEach(([name, entity]) => {
+  Object.values(entities).forEach((entity) => {
     const { commands } = entity.get('commands');
 
     commands.forEach((command) => {
-      switch (command) {
-        case 'MOVE_TOP':
-
-          this.$infos.started = true;
-          const rotateForce = -50 - entity.get('rotate').rotate;
-
-          const forces = {
-            name: 'forces',
-            scope: 'common',
-            params: {
-              parts: [
-                {
-                  x: 0,
-                  y: -20,
-                  z: 0,
-                  rotateX: rotateForce,
-                  rotateY: rotateForce,
-                  rotateZ: rotateForce,
-                  duration: 200,
-                  easing: {
-                    type: 'snippets',
-                    scope: 'demo',
-                    name: 'ease-out',
-                  },
-                  elapsed: 0,
-                  ending: {
-                    type: 'snippets',
-                    scope: 'demo',
-                    name: 'forces-down',
-                  },
-                  handling: null,
-                },
-              ],
-            },
-          };
-          const newForces = createComponentFromModel.call(this, forces);
-
-          const { parts } = entity.get('forces');
-          if (parts.length > 1) {
-            parts.pop();
-          }
-          this.assets.sounds.demo.jump().play();
-          entity.get('forces').parts.push(newForces.parts[0]);
-
-          break;
-      }
+      this.models.snippets[command.scope][command.name](entity);
     });
 
     entity.remove('commands');

@@ -23,7 +23,7 @@
             "name": "camera",
             "scope": "common",
             "params": {
-                "camera": "$cameraInfo"
+                "cameraName": "info"
             }
         },
         {

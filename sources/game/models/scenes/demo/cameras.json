@@ -1,0 +1,18 @@
+[
+  {
+    "name":"default",
+    "type":"contain-framed",
+    "params":{
+      "width": 160,
+      "height": 140
+    }
+  },
+  {
+    "name":"info",
+    "type":"contain-framed",
+    "params":{
+      "width": 160,
+      "height": 140
+    }
+  }
+]

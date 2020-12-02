@@ -30,22 +30,6 @@ const cloneProto = function (o) {
   return o2;
 };
 
-const loadRef = function (value) {
-  try {
-    let ref = '';
-    value.split('.').forEach((path, i) => {
-      if (i == 0) {
-        ref = this[path];
-      } else {
-        ref = ref[path];
-      }
-    });
-    return ref;
-  } catch (err) {
-    throw err;
-  }
-};
-
 const createNewParamsFromModel = function (paramsModel, params, deep = 0) {
   try {
     const newParams = {};
@@ -87,7 +71,16 @@ const createNewParamsFromModel = function (paramsModel, params, deep = 0) {
         } else {
           throw `missing/wrong subType${arraySubType}in array model for param :${keyModel}`;
         }
-      } else if (modelNewParam._type === 'object' && typeof valueParam === 'object' && !Array.isArray(valueParam)) {
+      } else if (modelNewParam._type === 'dico' && typeof valueParam === 'object' && !Array.isArray(valueParam)) {
+        newParams[keyModel] = {};
+        const modelNewParamKeys = Object.keys(valueParam);
+        for (var c = 0; c < modelNewParamKeys.length; c++) {
+          const modelNewParamKey = modelNewParamKeys[c];
+          const valueParamOfKey = valueParam[modelNewParamKey] ? valueParam[modelNewParamKey] : {};
+          const newParamObject = createNewParamsFromModel.call(this, { [modelNewParamKey]: modelNewParam._dico }, { [modelNewParamKey]: valueParamOfKey });
+          newParams[keyModel][modelNewParamKey] = newParamObject[modelNewParamKey];
+        }
+      } else if ((modelNewParam._type === 'object' || modelNewParam._type === 'snippet') && typeof valueParam === 'object' && !Array.isArray(valueParam)) {
         newParams[keyModel] = {};
         const modelNewParamKeys = Object.keys(modelNewParam).filter((key) => !key.startsWith('_'));
         for (var c = 0; c < modelNewParamKeys.length; c++) {
@@ -96,10 +89,10 @@ const createNewParamsFromModel = function (paramsModel, params, deep = 0) {
           const newParamObject = createNewParamsFromModel.call(this, { [modelNewParamKey]: modelNewParam[modelNewParamKey] }, { [modelNewParamKey]: valueParamOfKey });
           newParams[keyModel][modelNewParamKey] = newParamObject[modelNewParamKey];
         }
+      } else if (typeof valueParam.$snippet === 'object' && typeof valueParam === 'object') {
+        newParams[keyModel] = this.models.snippets[valueParam.$snippet.scope][valueParam.$snippet.name].call(this);
       } else if (modelNewParam._type === typeof valueParam) {
         newParams[keyModel] = valueParam;
-      } else if (modelNewParam._type === 'ref' && typeof valueParam === 'string') {
-        newParams[keyModel] = loadRef.call(this, valueParam);
       } else {
         throw `error wrong type parameters for ${keyModel}: waiting ${modelNewParam._type} and get ${typeof valueParam}`;
       }

@@ -33,12 +33,8 @@
               "_type":"number"
             },
             "easing":{
-              "_default":{"type":"snippets","scope":"common","function":"linear"},
-              "_type":"object",
-              "type": {
-                "_default":"snippets",
-                "_type":"string"
-              },
+              "_default":{"scope":"common","function":"linear"},
+              "_type":"snippet",
               "scope": {
                 "_type":"string"
               },
@@ -52,11 +48,7 @@
             },
             "ending":{
               "_default":false,
-              "_type":"object",
-              "type": {
-                "_default":"snippets",
-                "_type":"string"
-              },
+              "_type":"snippet",
               "scope": {
                 "_default":"demo",
                 "_type":"string"
@@ -68,11 +60,7 @@
             },
             "handling":{
               "_default":false,
-              "_type":"object",
-              "type": {
-                "_default":"snippets",
-                "_type":"string"
-              },
+              "_type":"snippet",
               "scope": {
                 "_default":"demo",
                 "_type":"string"

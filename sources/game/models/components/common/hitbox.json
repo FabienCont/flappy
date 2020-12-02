@@ -23,30 +23,10 @@
     },
     "collideable": {
         "_default":{},
-        "_type":"object",
-        "static": {
+        "_type":"dico",
+        "_dico": {
           "_default":null,
-          "_type":"object",
-          "type": {
-            "_default":"snippets",
-            "_type":"string"
-          },
-          "scope": {
-            "_default":"common",
-            "_type":"string"
-          },
-          "name": {
-            "_default":"handle-hitbox",
-            "_type":"string"
-          }
-        },
-        "score":{
-          "_default":null,
-          "_type":"object",
-          "type": {
-            "_default":"snippets",
-            "_type":"string"
-          },
+          "_type":"snippet",
           "scope": {
             "_default":"common",
             "_type":"string"

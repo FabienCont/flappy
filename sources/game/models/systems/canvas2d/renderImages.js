@@ -1,7 +1,7 @@
 const renderImages = function renderImages() {
   /* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: false}}] */
   const context = this.context;
-  Object.values(this.cameras).forEach((camera) => {
+  Object.values(this.$cameras).forEach((camera) => {
     let { images } = camera.getDico();
 
     const sortImages = (a, b) => a.destination.z - b.destination.z;
@@ -27,9 +27,9 @@ const renderImages = function renderImages() {
 
         context.globalAlpha = opacity;
 
-        const FIELD_OF_VIEW = this.context.canvas.width * 1;
-        const PROJECTION_CENTER_X = this.context.canvas.width / 2; // X center of the canvas HTML
-        const PROJECTION_CENTER_Y = this.context.canvas.height / 2; // Y center of the canvas HTML
+        const FIELD_OF_VIEW = camera.screen.width() * 1;
+        const PROJECTION_CENTER_X = camera.screen.width() / 2; // X center of the canvas HTML
+        const PROJECTION_CENTER_Y = camera.screen.height() / 2; // Y center of the canvas HTML
         // const sizeProjection = FIELD_OF_VIEW / (FIELD_OF_VIEW + destination.z);
         const sizeProjection = FIELD_OF_VIEW / (FIELD_OF_VIEW + camera.position.z());
         // const xProject = (x * sizeProjection) + PROJECTION_CENTER_X;
@@ -51,7 +51,6 @@ const renderImages = function renderImages() {
         };
 
         const offset = {
-
           top: Math.min(0, canvas.destination.y - camera.screen.y()),
           right: Math.max(0, canvas.destination.x + canvas.destination.width
             - (camera.screen.x() + camera.screen.width())),

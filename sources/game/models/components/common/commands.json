@@ -4,7 +4,15 @@
     {
       "commands":{
           "_default":[],
-          "_type":"array<string>"
+          "_type":"array<object>",
+          "_object":{
+            "scope": {
+              "_type":"string"
+            },
+            "name": {
+              "_type":"string"
+            }
+          }
       }
     }
 }

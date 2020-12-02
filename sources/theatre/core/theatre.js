@@ -153,10 +153,8 @@ function Theatre(config) {
   this.playing = true;
   this.preloading = true;
   this.currentScene = 'loading';
-  this.$ = {};
   this.scenes = {};
   this.size = size;
-  this.snippets = {};
   this.state = {};
   this.version = '0.39.0';
   this.cachedEntities = {};

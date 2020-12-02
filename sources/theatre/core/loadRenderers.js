@@ -1,4 +1,4 @@
-const getRenderers = function getRenderers() {
+const loadRenderers = function getRenderers() {
   try {
     const sceneModel = this.models.scenes[this.currentScene];
     if (sceneModel !== undefined && sceneModel.renderers !== undefined && sceneModel.renderers()) {
@@ -22,7 +22,7 @@ const getSystem = function getSystem(systemName, systemScope) {
   }
 };
 
-const loadRenderers = function loadRenderers(sceneRenderers) {
+const updateRenderers = function loadRenderers(sceneRenderers) {
   if (sceneRenderers) {
     sceneRenderers.forEach((renderer) => {
       const rendererSystem = getSystem.call(this, renderer.name, renderer.scope);
@@ -31,4 +31,4 @@ const loadRenderers = function loadRenderers(sceneRenderers) {
   }
 };
 
-export { loadRenderers, getRenderers };
+export { updateRenderers, loadRenderers };

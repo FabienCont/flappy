@@ -4,8 +4,14 @@
         <dev-icon class="dev-preview-toolbar-svg" :width="svgSize" :height="svgSize" iconName="cursor"></dev-icon>
         <dev-icon class="dev-preview-toolbar-svg" :width="svgSize" :height="svgSize" iconName="delete"></dev-icon>
     </div>
+    <dev-input name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
+    <dev-input name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
     <div class="dev-preview-img-content">
       <img :src="src" class="dev-preview-img" >
+    </div>
+    <div v-if="isElementModify" class="dev-edit-buttons">
+      <dev-button class="dev-preview-icon" @click="saveElement()">Save</dev-button>
+      <dev-button class="dev-preview-icon" @click="copyElement()">Cancel</dev-button>
     </div>
   </div>
 </template>
@@ -18,23 +24,39 @@ export default {
   data(){
     return {
       base64:'data:image/png;base64,',
-      svgSize:"1.7em"
+      svgSize:"1.7em",
+      elementCopy:JSON.parse(JSON.stringify(this.element)),
+      nameCopy:this.name,
+      scopeCopy:this.scope
+    }
+  },
+  watch:{
+    element:function(val){
+      this.copyElement();
     }
   },
   props: {
-    element:String
+    element:String,
+    name:String,
+    scope:String
   },
   computed:{
     src:function(){
       return this.base64+this.element;
+    },
+    isElementModify:function(){
+      return JSON.stringify(this.element)!==JSON.stringify(this.elementCopy) || this.scopeCopy!==this.scope || this.nameCopy!==this.name;
     }
   },
   methods:{
-    test:function(){
-      var objectToSend={"test":"success"}
-      callModelsApi("entities","demo","test2",objectToSend)
+    copyElement:function(){
+      this.elementCopy = Object.assign({}, this.elementCopy, JSON.parse(JSON.stringify(this.element)));
+      this.nameCopy=this.name;
+      this.scopeCopy=this.scope;
     },
-
+    saveElement:function(){
+      this.$emit("saveModel",{scope:this.scopeCopy,name:this.nameCopy,content:this.elementCopy});
+    },
   }
 }
 </script>

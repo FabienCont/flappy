@@ -1,6 +1,9 @@
+import { getCamera } from 'core/loadCameras';
+
 function images(entities) {
   Object.entries(entities).forEach(([name, entity]) => {
     const cameraComponent = entity.get('camera');
+    const camera = getCamera.call(this, cameraComponent.cameraName);
     const imagesComponent = entity.get('images');
     const positionComponent = entity.get('position');
     const rotateComponent = entity.get('rotate');
@@ -31,7 +34,7 @@ function images(entities) {
         height = 1;
       }
 
-      cameraComponent.camera.add('images', {
+      camera.add('images', {
         rotate: {
           x: rotateX,
           y: rotateY,

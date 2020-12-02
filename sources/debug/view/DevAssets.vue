@@ -22,7 +22,7 @@
     </template>
     <div class="dev-model-preview" v-if="elementPreview">
       <dev-separator/>
-      <dev-image-preview v-if="typePreview==='images'||typePreview==='spritesheets'" :element="elementPreview">
+      <dev-image-preview v-if="typePreview==='images'||typePreview==='spritesheets'" @saveModel="childSaveModel" :name="namePreview" :scope="scopePreview" :element="elementPreview">
       </dev-image-preview>
       <dev-array-inspect v-else :name="namePreview" :depth="0" :arrayToInspect.sync="elementPreview">
       </dev-array-inspect>
@@ -56,9 +56,8 @@ export default {
   computed:{
   },
   methods:{
-    test:function(){
-      var objectToSend={"test":"success"}
-      callModelsApi("entities","demo","test2",objectToSend)
+    childSaveModel:function(objectToSend){
+      callAssetsApi(this.typePreview,objectToSend.scope,objectToSend.name,objectToSend.content);
     },
     selectPreviewElement: function(typePreview,scopePreview,namePreview){
       this.typePreview=typePreview;

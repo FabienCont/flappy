@@ -2,9 +2,9 @@
   "name":"camera",
   "params":
     {
-      "camera":{
-        "_default":"$camera",
-        "_type":"ref"
+      "cameraName":{
+        "_default":"default",
+        "_type":"string"
       },
       "opacity":{
           "_default":1,

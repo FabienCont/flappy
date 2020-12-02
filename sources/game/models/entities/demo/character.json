@@ -16,12 +16,10 @@
                 "type":"dynamic",
                 "collideable":{
                   "static":{
-                    "type": "snippets",
                     "scope": "demo",
                     "name": "handle-hitbox"
                   },
                   "score":{
-                    "type": "snippets",
                     "scope": "demo",
                     "name": "handle-hitbox-score"
                   }
@@ -53,17 +51,26 @@
                 "inputs": [{
                         "action": "KEY_UP",
                         "state": "DOWN",
-                        "command": "MOVE_TOP"
+                        "command": {
+                          "scope": "demo",
+                          "name": "moveTop"
+                        }
                     },
                     {
                         "action": "KEY_SPACE",
                         "state": "DOWN",
-                        "command": "MOVE_TOP"
+                        "command":{
+                          "scope": "demo",
+                          "name": "moveTop"
+                        }
                     },
                     {
                         "action": "CLICK_LEFT",
                         "state": "DOWN",
-                        "command": "MOVE_TOP"
+                        "command":{
+                          "scope": "demo",
+                          "name": "moveTop"
+                        }
                     }
                 ]
             }
@@ -93,12 +100,12 @@
             "scope": "common",
             "params": {
                 "parts": [{
-                    "x":40,
+                    "rotateZ":0,
+                    "x": 50,
                     "y": 0,
                     "z": 0,
                     "duration": 1000,
                     "easing": {
-                        "type": "snippets",
                         "scope": "demo",
                         "name": "ease-linear"
                     },
