@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import {callModelsApi} from "debug/utils/modelsApi"
+
 //check Ref
 export default {
   name: 'devpreview',
@@ -24,15 +24,6 @@ export default {
   props: {
     element:String
   },
-  computed:{
-  },
-  methods:{
-    test:function(){
-      var objectToSend={"test":"success"}
-      callModelsApi("entities","demo","test2",objectToSend)
-    },
-
-  }
 }
 </script>
 

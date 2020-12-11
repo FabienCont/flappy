@@ -1,6 +1,6 @@
-const preloadAssets = function () {
+const preloadAssets = function (ctx) {
   return new Promise((resolve, reject) => {
-    const context = require.context('assets/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy');
+    const context = ctx || require.context('assets/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy');
 
     const promiseArray = [];
 
@@ -10,8 +10,8 @@ const preloadAssets = function () {
         context(key).then((module) => {
           const assetLoaded = this.assetsLoaded.find((asset) => asset.key == key);
 
-          if ((assetLoaded && assetLoaded.source != module) || assetLoaded === undefined) {
-            if (assetLoaded !== undefined && assetLoaded.source != module) {
+          if ((assetLoaded && assetLoaded.source !== module) || assetLoaded === undefined) {
+            if (assetLoaded !== undefined && assetLoaded.source !== module) {
               const index = this.assetsLoaded.indexOf(assetLoaded);
               if (index > -1) {
                 this.assetsLoaded.splice(index, 1);
@@ -68,7 +68,7 @@ function loadAsset(key, module) {
     };
 
     // if current asset is a dataset then preload it
-    if (asset.type === 'dataset') {
+    if (asset.type === 'dataset' || asset.type === 'animation') {
       asset.getter = () => asset.source;
 
       resolve(asset);

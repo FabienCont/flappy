@@ -15,7 +15,12 @@
             "name": "score",
             "scope": "demo",
             "params":{
-              "value":0,
+              "value":{
+                "$snippet":{
+                  "name":"set-best-score",
+                  "scope":"demo"
+                }
+              },
               "isBestScore":true
             }
         },

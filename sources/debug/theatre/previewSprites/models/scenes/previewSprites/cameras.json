@@ -1,0 +1,20 @@
+[
+  {
+    "name":"default",
+    "type":"contain-framed",
+    "params":{
+      "width":{
+        "$snippet":{
+          "scope":"common",
+          "name":"get-sprites-width"
+        }
+      },
+      "height":{
+        "$snippet":{
+        "scope":"common",
+        "name":"get-sprites-height"
+      }
+    }
+  }
+}
+]

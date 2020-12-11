@@ -1,10 +1,12 @@
-const preloadScenes = function preloadScenes() {
-  const context = require.context('scenes/', true, /^\.\/[^/]+\/index\.js$/, 'sync');
+const preloadScenes = function preloadScenes(ctx) {
+  const context = ctx || require.context('scenes/', true, /^\.\/[^/]+\/index\.js$/, 'sync');
 
   context.keys().forEach((key) => {
-    const name = key.match(/^\.\/([^/]+)\/index\.js$/)[1];
-
-    this.scenes[name] = context(key);
+    const match = key.match(/^\.\/([^/]+)\/index\.js$/);
+    if (match) {
+      const name = match[1];
+      this.scenes[name] = context(key);
+    }
   });
 };
 

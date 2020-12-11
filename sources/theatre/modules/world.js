@@ -1,3 +1,5 @@
+import { generateUUID } from 'core/uuidv4';
+
 function Entity(name, components) {
   function add(components) {
     if (Array.isArray(components) === false) {
@@ -47,7 +49,7 @@ function Entity(name, components) {
 
   this.components = {};
   this.name = name;
-
+  this.id = `${name}_${generateUUID()}`;
   this.add = add;
   this.get = get;
   this.has = has;
@@ -63,12 +65,12 @@ function World(context) {
     }
 
     entities.forEach((entity) => {
-      this.entities[entity.name] = entity;
+      this.entities[entity.id] = entity;
     });
   }
 
-  function get(entity) {
-    return this.entities[entity];
+  function get(entityId) {
+    return this.entities[entityId];
   }
 
   function remove(entities) {
@@ -78,7 +80,7 @@ function World(context) {
 
     for (let iterator = 0, { length } = entities; iterator < length; iterator += 1) {
       const entity = entities[iterator];
-      const key = entity.name || entity;
+      const key = entity.id || entity;
 
       if (this.entities.hasOwnProperty(key) === true) {
         delete this.entities[key];
@@ -89,9 +91,9 @@ function World(context) {
   function system(components, handler, entities = this.entities) {
     const chosen = {};
 
-    Object.entries(entities).forEach(([name, entity]) => {
+    Object.entries(entities).forEach(([id, entity]) => {
       if (entity.has(components) === true) {
-        chosen[name] = entity;
+        chosen[id] = entity;
       }
     });
 

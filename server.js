@@ -53,7 +53,7 @@ app.get('/api/assets/:type/:scope/:name', (req, res) => {
 
   if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
     try {
-      if (type === 'images' || type === 'spritesheets') {
+      if (type === 'images') {
         const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}.png`).toString('base64');
         console.log('Got body:', req.params);
         // res.writeHead(200, {'Content-Type': 'image/png'});

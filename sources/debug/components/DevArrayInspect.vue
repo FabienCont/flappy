@@ -58,7 +58,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .dev-array-inspect{
   display: flex;
   flex-direction: column;

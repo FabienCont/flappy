@@ -1,0 +1,7 @@
+[
+  {
+    "name":"generateSprites",
+    "scope":"previewSprites",
+    "components":["images"]
+  }
+]

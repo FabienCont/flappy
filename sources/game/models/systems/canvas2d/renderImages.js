@@ -8,6 +8,10 @@ const renderImages = function renderImages() {
 
     images = images.sort(sortImages);
 
+    if (camera.screen.opacity === 0) {
+      return;
+    }
+
     images.forEach((image) => {
       const {
         destination, frame, opacity, source, rotate,
@@ -21,11 +25,13 @@ const renderImages = function renderImages() {
         destination.height * camera.screen.scale(),
       );
 
-      if (opacity > 0
+      const opacityGlobal = opacity * camera.screen.opacity;
+
+      if (opacityGlobal > 0
             && isVisible === true) {
         const alpha = context.globalAlpha;
 
-        context.globalAlpha = opacity;
+        context.globalAlpha = opacityGlobal;
 
         const FIELD_OF_VIEW = camera.screen.width() * 1;
         const PROJECTION_CENTER_X = camera.screen.width() / 2; // X center of the canvas HTML

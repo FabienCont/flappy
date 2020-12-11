@@ -2,19 +2,19 @@
   <div @click.stop.prevent="" class="dev-primitive-inspect">
     <label v-if="name && typeof primitiveToInspect!=='module'">{{name}}:</label>
     <template v-if="typeof primitiveToInspect==='number'">
-      <input class="dev-primitive-inspect-input" :disabled="!isEditable" type="number" step="0.1" :value="primitiveToInspect"  @input="updateValueNumber">
+      <input :style="widthStyle" class="dev-primitive-inspect-input" :disabled="!isEditable" type="number" :step="step" :value="primitiveToInspect"  @input="updateValueNumber">
     </template>
     <template v-else-if="typeof primitiveToInspect==='string'">
-      <input class="dev-primitive-inspect-input" :disabled="!isEditable" type="text"  :value="primitiveToInspect"  @input="updateValue">
+      <input :style="widthStyle" class="dev-primitive-inspect-input" :disabled="!isEditable" type="text"  :value="primitiveToInspect"  @input="updateValue">
     </template>
     <template v-else-if="typeof primitiveToInspect==='boolean'">
-      <input class="dev-primitive-inspect-input" :disabled="!isEditable" type="checkbox" :value="primitiveToInspect"  @input="updateValue">
+      <input :style="widthStyle" class="dev-primitive-inspect-input" :disabled="!isEditable" type="checkbox" :value="primitiveToInspect"  @input="updateValue">
     </template>
     <template v-else-if="typeof primitiveToInspect==='function'">
-      <input class="dev-primitive-inspect-input" :disabled="false" type="text" :value="primitiveToInspect">
+      <input :style="widthStyle" class="dev-primitive-inspect-input" :disabled="false" type="text" :value="primitiveToInspect">
     </template>
     <template v-else-if="typeof primitiveToInspect==='module'">
-      <input class="dev-primitive-inspect-input" :disabled="false" type="text" :value="primitiveToInspect">
+      <input :style="widthStyle" class="dev-primitive-inspect-input" :disabled="false" type="text" :value="primitiveToInspect">
     </template>
   </div>
 </template>
@@ -26,12 +26,25 @@ export default {
     primitiveToInspect:null,
     isEditable:true,
     name:String,
-    depth:0
+    depth:0,
+    width:{
+      type:String,
+      default:"120"
+    },
+    step:{
+      type:String,
+      default:"1"
+    },
+  },
+  computed:{
+    widthStyle:function(){
+      return 'width:'+this.width+'px;';
+    }
   },
   methods:{
     updateValueNumber:function($event){
       var num=Number.parseFloat($event.target.value);
-      if(num){
+      if(!Number.isNaN(num)){
         console.log(num)
         this.$emit('update:primitiveToInspect', num);
       }
@@ -43,7 +56,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .dev-primitive-inspect{
 margin-left:0.5rem;
 }

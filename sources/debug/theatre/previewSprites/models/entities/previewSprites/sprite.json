@@ -1,0 +1,44 @@
+{
+    "name": "sprite",
+    "scope":"editAnimations",
+    "components": [{
+            "name": "camera",
+            "scope": "common"
+        },
+        {
+            "name": "position",
+            "scope": "common",
+            "params": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            }
+        },
+        {
+            "name": "images",
+            "scope": "common",
+            "params": {
+                "parts": [{
+                    "source": {
+                        "scope": "common",
+                        "file": "sprite"
+                    },
+                    "frames":{
+                      "$snippet":{
+                        "scope":"common",
+                        "name":"get-frames"
+                      }
+                    },
+                    "frame": 0,
+                    "destination": {
+                    "$snippet":{
+                      "scope":"common",
+                      "name":"get-destination"
+                    }
+                  }
+                }
+              ]
+            }
+        }
+    ]
+}

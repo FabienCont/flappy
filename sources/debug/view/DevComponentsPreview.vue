@@ -89,7 +89,7 @@ export default {
       this.elementCopy = Object.assign({}, this.elementCopy, JSON.parse(JSON.stringify(this.element)));
     },
     saveElement:function(){
-      this.$emit("saveModel",{scope:this.elementCopyScope,name:this.elementCopy.name,content:this.elementCopy});
+      this.$emit("save-model",{scope:this.elementCopyScope,name:this.elementCopy.name,content:this.elementCopy});
     },
     newParam:function(){
       this.elementCopy.params = Object.assign({}, this.elementCopy.params, {'newParam':{'_type':'string','_default':''}});

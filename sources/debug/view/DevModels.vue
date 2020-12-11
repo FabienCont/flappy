@@ -19,7 +19,7 @@
             <span class="dev-models-name" @click.stop.prevent="selectPreviewElement(keyType,keyScope,keyName)">
               {{keyName}}
             </span>
-            <dev-icon class="dev-models-name-delete" @click.stop.prevent="deleteComponent" :width="svgSize" :height="svgSize" iconName="delete"></dev-icon>
+            <dev-icon class="dev-models-name-delete" @click.stop.prevent="deleteElement" :width="svgSize" :height="svgSize" iconName="delete"></dev-icon>
           </div>
         </div>
       </div>
@@ -28,7 +28,7 @@
       <dev-separator/>
       <dev-js-preview  v-if="typePreview ==='snippets' ||typePreview ==='systems'" :element="elementPreview">
       </dev-js-preview>
-      <dev-components-preview @saveModel="childSaveModel" v-else-if="typePreview ==='components'" :elementScope="scopePreview" :element="elementPreview">
+      <dev-components-preview @save-model="childSaveModel" v-else-if="typePreview ==='components'" :elementScope="scopePreview" :element="elementPreview">
       </dev-components-preview>
       <dev-object-inspect v-else :name="namePreview" :depth="0" :objectToInspect="elementPreview">
       </dev-object-inspect>
@@ -70,7 +70,7 @@ export default {
       this.namePreview="newElement";
       this.elementPreview={name:"newElement",params:{}};
     },
-    deleteComponent:function(){
+    deleteElement:function(){
       //TODO:delete service
     },
     childSaveModel:function(objectToSend){

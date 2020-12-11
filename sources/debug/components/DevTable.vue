@@ -19,7 +19,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 
   @import 'debug/styles/_variables';
 

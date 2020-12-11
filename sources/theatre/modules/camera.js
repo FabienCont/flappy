@@ -1,6 +1,8 @@
 function Camera(name, type, screenSize, attr) {
   let scale = () => Math.min((screenSize.width / attr.width), (screenSize.height / attr.height));
   this.screen = {};
+  this.screen.opacity = typeof attr.opacity === 'number' ? attr.opacity : 1;
+
   switch (type) {
     case 'contain-frameless':
 
@@ -56,6 +58,12 @@ function Camera(name, type, screenSize, attr) {
     return this.dico;
   }
 
+  function getDicoElement(key) {
+    if (this.dico[key]) {
+      return this.dico[key];
+    } return [];
+  }
+
   function add(dicoType, element) {
     if (this.dico[dicoType] === undefined) {
       this.dico[dicoType] = [element];
@@ -102,6 +110,7 @@ function Camera(name, type, screenSize, attr) {
   this.look = look;
   this.visible = visible;
   this.getDico = getDico;
+  this.getDicoElement = getDicoElement;
   this.emptyDico = emptyDico;
 }
 

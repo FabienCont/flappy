@@ -1,6 +1,6 @@
-const preloadModels = function preloadModels() {
+const preloadModels = function preloadModels(ctx) {
   return new Promise((resolve) => {
-    const context = require.context('models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy');
+    const context = ctx || require.context('models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy');
 
     const promiseArray = [];
 

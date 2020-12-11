@@ -8,7 +8,7 @@ const renderImages = function () {
   /* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: false}}] */
   const context = this.context;
   Object.values(this.$cameras).forEach((camera) => {
-    let { images } = camera.getDico();
+    let images = camera.getDicoElement('images');
 
     const sortImages = (a, b) => a.destination.z - b.destination.z;
 

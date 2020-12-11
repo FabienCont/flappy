@@ -77,7 +77,7 @@ export default {
       activeTab:"models",
       isHide:false,
       tickStep:1,
-      panelWidth:'400px'
+      panelWidth:'500px'
     }
   },
   computed:{

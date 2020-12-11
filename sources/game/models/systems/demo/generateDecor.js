@@ -1,7 +1,7 @@
-import { generateEntities } from 'core/loadEntities.js';
+import { generateEntities } from 'core/loadEntities';
 
 function generateDecor(entities) {
-  const birdPosition = this.$world.entities.character.get('position');
+  const birdPosition = this.$infos.birdEntity.get('position');
   const maxPosBeyondBird = birdPosition.x + 128;
   const minPosition = birdPosition.x - 32;
   const entitiesName = ['top', 'bottom', 'background', 'water', 'pipeTop', 'pipeBottom', 'cloud'];
@@ -11,26 +11,25 @@ function generateDecor(entities) {
   }
 
   const decorEntities = {};
-  for (let i = 0; i < entitiesName.length; i++) {
+  for (let i = 0; i < entitiesName.length; i += 1) {
     const name = entitiesName[i];
     decorEntities[name] = {
-      model: this.models.entities.demo[name], width: 64, maxPosition: minPosition, maxId: 0, entities: [],
+      model: this.models.entities.demo[name], width: 64, maxPosition: minPosition, maxId: '', entities: [],
     };
   }
 
   decorEntities.cloud.width = 160;
 
-  Object.entries(entities).filter(([name, entity]) => {
-    const entityName = name.match(/^([a-zA-Z]+)/)[1];
+  Object.entries(entities).filter(([id, entity]) => {
+    const entityName = entity.name;
     const isOut = (entity.get('position').x + decorEntities[entityName].width) < minPosition;
     if (isOut) {
       this.$world.remove(entity);
     } else {
-      const entityId = name.match(/^[a-zA-Z]+([0-9]+)/)[1];
       decorEntities[entityName].entities.push(entity);
       if (decorEntities[entityName].maxPosition < (entity.get('position').x + decorEntities[entityName].width)) {
         decorEntities[entityName].maxPosition = entity.get('position').x + decorEntities[entityName].width;
-        decorEntities[entityName].maxId = parseInt(entityId) + 1;
+        decorEntities[entityName].maxId = id;
       }
     }
     return !isOut;
@@ -47,18 +46,21 @@ function generateDecor(entities) {
       const newEntities = generateEntities.call(this, [entityInfo.model()]);
       let newEntity = newEntities[0];
       if (this.$infos.started && (name === 'pipeTop' || name === 'pipeBottom')) {
-        if (!randomHeightDico[entityInfo.maxId]) {
-          randomHeightDico[entityInfo.maxId] = Math.random() * (55 - 12) + 12;
-        }
-        newEntity = randomizePipeInfo(newEntity, randomHeightDico[entityInfo.maxId], name);
+        const otherPipeName = name === 'pipeTop' ? 'pipeBottom' : 'pipeTop';
+        const otherPipeInfo = decorEntities[otherPipeName];
+        const randomHeight = Math.random() * (55 - 12) + 12;
+        newEntity = randomizePipeInfo(newEntity, randomHeight, name);
+        let newOtherPipe = generateEntities.call(this, [otherPipeInfo.model()])[0];
+        newOtherPipe = randomizePipeInfo(newOtherPipe, randomHeight, otherPipeName);
+        newOtherPipe.get('position').x = entityInfo.maxPosition;
+        this.$world.add(newOtherPipe);
+        otherPipeInfo.maxPosition += otherPipeInfo.width;
+        otherPipeInfo.maxId = newOtherPipe.id;
       }
-
-      newEntity.name += entityInfo.maxId;
       newEntity.get('position').x = entityInfo.maxPosition;
       this.$world.add(newEntity);
-
       entityInfo.maxPosition += entityInfo.width;
-      entityInfo.maxId += 1;
+      entityInfo.maxId = newEntity.id;
     }
   });
 }

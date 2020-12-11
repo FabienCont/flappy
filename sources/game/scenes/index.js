@@ -4,7 +4,7 @@ import * as demo from './demo/index.js';
 
 export {
 
-    loading,
+  loading,
 
-    demo
+  demo,
 };
