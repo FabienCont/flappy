@@ -13,16 +13,7 @@
         },
         {
             "name": "score",
-            "scope": "demo",
-            "params":{
-              "value":{
-                "$snippet":{
-                  "name":"set-best-score",
-                  "scope":"demo"
-                }
-              },
-              "isBestScore":true
-            }
+            "scope": "demo"
         },
         {
             "name": "camera",

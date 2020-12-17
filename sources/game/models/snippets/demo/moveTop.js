@@ -1,7 +1,7 @@
 import { createComponentFromModel } from 'core/loadEntities';
 
 export default function moveTop(entity) {
-  this.$infos.started = true;
+  this.$variables.started = true;
   const forces = {
     name: 'forces',
     scope: 'common',

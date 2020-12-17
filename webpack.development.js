@@ -3,9 +3,10 @@ const path = require('path');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const WebpackNotifierPlugin = require('webpack-notifier');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = merge(require('./webpack.common.js'), {
-  entry: ['./sources/debug/index.js'],
+  entry: { debug: './sources/debug/index.js' },
   module: {
     rules: [
       // ... other rules
@@ -51,13 +52,11 @@ module.exports = merge(require('./webpack.common.js'), {
     },
   },
   devServer: {
-
     clientLogLevel: 'warning',
     contentBase: path.resolve(__dirname, 'dist/'),
     hot: true,
     open: false,
     overlay: {
-
       warnings: true,
       errors: true,
     },

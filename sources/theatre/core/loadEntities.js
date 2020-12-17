@@ -133,7 +133,7 @@ const convertArrayToObject = (array, key) => {
   }), initialValue);
 };
 
-const getEntitiesScene = function () {
+const getEntitiesScene = function getEntitiesScene() {
   try {
     const currentScene = this.models.scenes[this.currentScene];
     if (currentScene && currentScene.entities) {
@@ -156,7 +156,7 @@ const setCachedEntity = function (entityRef, entityGenerated) {
   this.cachedEntities[entityRef.scope][entityRef.name] = cloneProto(entityGenerated);
 };
 
-const generateEntities = function (sceneEntities) {
+const generateEntities = function generateEntities(sceneEntities) {
   try {
     const entities = [];
     sceneEntities.forEach((entityRef) => {

@@ -3,9 +3,12 @@ import { loadSystems } from 'core/loadSystems';
 import { loadCameras } from 'core/loadCameras';
 import { loadEntities } from 'core/loadEntities';
 import { loadWorld } from 'core/loadWorld';
+import { loadControllers } from 'core/loadControllers';
 
 function start() {
-  console.log('start loading scene');
+  console.log(`start ${this.currentScene} scene`);
+
+  this.$controllers = loadControllers.call(this);
 
   this.$world = loadWorld.call(this);
   this.$cameras = loadCameras.call(this);

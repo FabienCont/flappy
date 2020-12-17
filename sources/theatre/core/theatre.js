@@ -1,4 +1,3 @@
-// import * as scenes from 'scenes/index.js';
 import { Canvas } from 'core/canvas';
 import { Loop } from 'core/loop';
 
@@ -128,10 +127,6 @@ function Theatre(config) {
 
   function update() {
     while (updates > 0) {
-      this.scene.update.call(this);
-
-      updates -= 1;
-
       if (restarting === true) {
         this.scene.start.call(this);
 
@@ -151,6 +146,10 @@ function Theatre(config) {
 
         continue;
       }
+
+      this.scene.update.call(this);
+
+      updates -= 1;
     }
   }
 

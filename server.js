@@ -7,6 +7,10 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const config = require('./webpack.development.js');
 
+const Obserser = require('./sources/editor/backend/services/observer');
+
+const { readdirSync } = fs;
+
 const app = express();
 // const port = 8080;
 
@@ -15,7 +19,7 @@ const devServerEnabled = true;
 if (devServerEnabled) {
   // reload=true:Enable auto reloading when changing JS files or content
   // timeout=1000:Time from disconnecting from server to reconnecting
-  config.entry.unshift('webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000');
+  config.entry.webpackHotMiddleware = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000';
 
   // Add HMR plugin
   // config.plugins.push(new webpack.HotModuleReplacementPlugin());
@@ -164,3 +168,78 @@ app.post('/api/models', jsonParser, (req, res) => {
     res.sendStatus(400);
   }
 });
+
+const gameFolder = 'sources/game/';
+const generateArbo = (source) => Object.assign({}, ...readdirSync(source, { withFileTypes: true })
+  .map((dirent) => {
+    const graph = {};
+    if (dirent.isDirectory()) {
+      graph[dirent.name] = {
+        type: 'folder',
+        content: generateArbo(`${source}/${dirent.name}`),
+      };
+      return graph;
+    }
+
+    const { mtime, ctime } = fs.statSync(`${source}/${dirent.name}`);
+    graph[dirent.name] = { mtime, ctime, type: 'file' };
+    return graph;
+  }));
+
+const arborescence = generateArbo(gameFolder);
+
+app.get('/api/arborescence', (req, res) => {
+  console.log('get Api Arborescence');
+  res.send(arborescence);
+});
+
+const obserser = new Obserser();
+
+const regex = new RegExp(/(?<=sources\\game\\)(.*)/, 'gm');
+
+obserser.on('file-added', (file) => {
+  const subPaths = regex.match(file.filePath)[0].split('/');
+  let arborescenceNode = arborescence;
+  subPaths.forEach((subPath, i) => {
+    if (typeof arborescenceNode[subPath] === 'object') {
+      arborescenceNode[subPath] = {};
+      arborescenceNode = arborescenceNode[subPath];
+    } else if (i === subPaths.length - 1) {
+      const { mtime, ctime } = fs.statSync(file.filePath);
+      arborescenceNode[subPath] = { mtime, ctime };
+    } else {
+      arborescenceNode = arborescenceNode[subPath];
+    }
+  });
+});
+
+obserser.on('file-change', (file) => {
+  const subPaths = regex.match(file.filePath)[0].split('/');
+  let arborescenceNode = arborescence;
+  subPaths.forEach((subPath, i) => {
+    if (typeof arborescenceNode[subPath] === 'object') {
+      arborescenceNode[subPath] = {};
+      arborescenceNode = arborescenceNode[subPath];
+    } else if (i === subPaths.length - 1) {
+      const { mtime, ctime } = fs.statSync(file.filePath);
+      arborescenceNode[subPath] = { mtime, ctime };
+    } else {
+      arborescenceNode = arborescenceNode[subPath];
+    }
+  });
+});
+
+obserser.on('file-deleted', (file) => {
+  // print error message to console
+  const subPaths = regex.match(file.filePath)[0].split('/');
+  let arborescenceNode = arborescence;
+  subPaths.forEach((subPath, i) => {
+    if (i === subPaths.length - 1) {
+      arborescenceNode = arborescenceNode[subPath];
+    } else {
+      delete arborescenceNode[subPath];
+    }
+  });
+});
+
+obserser.watchFolder(gameFolder);

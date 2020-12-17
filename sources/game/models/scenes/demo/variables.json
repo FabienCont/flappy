@@ -1,0 +1,10 @@
+{
+    "started":false,
+    "score":0,
+    "bestScore":{
+       "$snippet":{
+        "name":"set-best-score",
+        "scope":"demo"
+      }
+  }
+}

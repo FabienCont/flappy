@@ -1,6 +1,6 @@
 function setup() {
   // setup demo
-  console.log('setup demo scene');
+  console.log(`setup ${this.currentScene} scene`);
 }
 
 export { setup };

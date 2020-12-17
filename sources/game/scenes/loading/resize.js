@@ -1,6 +1,5 @@
 function resize() {
-
-    console.log('resize loading scene');
+  console.log(`resize ${this.currentScene} scene`);
 }
 
-export {resize};
+export { resize };

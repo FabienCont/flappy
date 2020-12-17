@@ -3,13 +3,17 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-
-  entry: ['./sources/index.js'],
+  entry: {
+    app: './sources/index.js',
+    editor: './sources/editor/frontend/index.js',
+  },
+  output: {
+    path: path.resolve(__dirname, 'dist/'),
+    filename: '[name].bundle.js',
+  },
   mode: 'none',
   module: {
-
     rules: [
-
       {
         test: /\.js$/,
         use: [
@@ -37,11 +41,6 @@ module.exports = {
       },
     ],
   },
-  output: {
-
-    path: path.resolve(__dirname, 'dist/'),
-    filename: 'index.js',
-  },
   resolve: {
 
     alias: {
@@ -53,6 +52,7 @@ module.exports = {
       scenes: path.resolve(__dirname, 'sources/game/scenes/'),
       systems: path.resolve(__dirname, 'sources/game/models/systems/'),
       debug: path.resolve(__dirname, 'sources/debug'),
+      editor: path.resolve(__dirname, 'sources/editor/'),
 
       core: path.resolve(__dirname, 'sources/theatre/core/'),
       modules: path.resolve(__dirname, 'sources/theatre/modules/'),
@@ -63,6 +63,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Output Management',
       template: 'index.html',
+      excludeChunks: ['editor'],
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Theatre editor',
+      template: 'editor.html',
+      filename: 'editor.html',
+      chunks: ['editor'],
     }),
   ],
 };

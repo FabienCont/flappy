@@ -1,12 +1,13 @@
 import { generateEntities } from 'core/loadEntities';
 
 function generateDecor(entities) {
-  const birdPosition = this.$infos.birdEntity.get('position');
+  const birdEntity = Object.values(this.$world.entities).find((entity) => entity.name === 'character');
+  const birdPosition = birdEntity.get('position');
   const maxPosBeyondBird = birdPosition.x + 128;
   const minPosition = birdPosition.x - 32;
   const entitiesName = ['top', 'bottom', 'background', 'water', 'pipeTop', 'pipeBottom', 'cloud'];
 
-  if (this.$infos.started) {
+  if (this.$variables.started) {
     entitiesName.push('checkpoint');
   }
 
@@ -35,7 +36,7 @@ function generateDecor(entities) {
     return !isOut;
   });
 
-  if (this.$infos.started && decorEntities.checkpoint.entities.length === 0) {
+  if (this.$variables.started && decorEntities.checkpoint.entities.length === 0) {
     const maxPosPipe = decorEntities.pipeTop.maxPosition;
     decorEntities.checkpoint.maxPosition = maxPosPipe;
   }
@@ -45,7 +46,7 @@ function generateDecor(entities) {
     while (maxPosBeyondBird > entityInfo.maxPosition) {
       const newEntities = generateEntities.call(this, [entityInfo.model()]);
       let newEntity = newEntities[0];
-      if (this.$infos.started && (name === 'pipeTop' || name === 'pipeBottom')) {
+      if (this.$variables.started && (name === 'pipeTop' || name === 'pipeBottom')) {
         const otherPipeName = name === 'pipeTop' ? 'pipeBottom' : 'pipeTop';
         const otherPipeInfo = decorEntities[otherPipeName];
         const randomHeight = Math.random() * (55 - 12) + 12;

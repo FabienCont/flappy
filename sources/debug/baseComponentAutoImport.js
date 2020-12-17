@@ -1,21 +1,20 @@
-import Vue from 'vue'
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
+import Vue from 'vue';
+import upperFirst from 'lodash/upperFirst';
+import camelCase from 'lodash/camelCase';
 
-const baseComponentAutoImport= function(){
-
+const baseComponentAutoImport = function () {
   const requireComponent = require.context(
     // Le chemin relatif du dossier composants
     './components',
     // Suivre ou non les sous-dossiers
     false,
     // L'expression régulière utilisée pour faire concorder les noms de fichiers de composant de base
-    /Dev[A-Z]\w+\.(vue|js)$/
+    /Dev[A-Z]\w+\.(vue|js)$/,
   );
 
-  requireComponent.keys().forEach(fileName => {
+  requireComponent.keys().forEach((fileName) => {
     // Récupérer la configuration du composant
-    const componentConfig = requireComponent(fileName)
+    const componentConfig = requireComponent(fileName);
 
     // Récupérer le nom du composant en PascalCase
     const componentName = upperFirst(
@@ -24,8 +23,8 @@ const baseComponentAutoImport= function(){
         fileName
           .split('/')
           .pop()
-          .replace(/\.\w+$/, '')
-      )
+          .replace(/\.\w+$/, ''),
+      ),
     );
 
     // Créer un composant global
@@ -34,9 +33,9 @@ const baseComponentAutoImport= function(){
       // Chercher les options du composant dans `.default`, qui
       // existera si le composant a été exporté avec `export default`,
       // sinon revenez à la racine du module.
-      componentConfig.default || componentConfig
-    )
+      componentConfig.default || componentConfig,
+    );
   });
-}
+};
 
-export {baseComponentAutoImport};
+export { baseComponentAutoImport };

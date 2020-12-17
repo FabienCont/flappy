@@ -1,5 +1,5 @@
 function destroy() {
-  console.log('destroy demo scene');
+  console.log(`destroy ${this.currentScene} scene`);
   console.log('-------');
 
   this.$controllers.destroy();
