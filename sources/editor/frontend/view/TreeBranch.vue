@@ -17,12 +17,11 @@
 
 <script>
 
-import { mapMutations } from 'vuex'
-import TreeBranch from "editor/frontend/view/TreeBranch.vue";
+import { mapMutations } from 'vuex';
 //check Ref
 export default {
   name: 'tree-branch',
-  components:{'tree-branch':TreeBranch},
+  components:{'tree-branch':() => import('editor/frontend/view/TreeBranch.vue')},
   data(){
     return{
       svgSize:"1.5em"

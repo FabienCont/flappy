@@ -1,7 +1,7 @@
 <template>
   <ul class="pane-header">
     <template v-for="(pane,index) in panes">
-      <tab v-bind:key="index" :isActive="index===activePane" :filePath="pane"></tab>
+      <tab v-bind:key="index" :isActive="index===activePane" :filePath="pane.path"></tab>
     </template>
   </ul>
 </template>

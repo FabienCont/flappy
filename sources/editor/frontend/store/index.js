@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import arborescence from './modules/arborescence';
 import panes from './modules/panes';
+import files from './modules/files';
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
   modules: {
     arborescence,
     panes,
+    files,
   },
   strict: debug,
 });

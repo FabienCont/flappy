@@ -28,7 +28,7 @@ if (devServerEnabled) {
 
   // Enable "webpack-dev-middleware"
   app.use(webpackDevMiddleware(compiler, {
-    noInfo: true,
+    writeToDisk: false,
     publicPath: '/',
   }));
 
@@ -53,12 +53,15 @@ app.get('/api/assets/:type/:scope/:name', (req, res) => {
   console.log(req.params);
   const { type } = req.params;
   const { scope } = req.params;
-  const { name } = req.params;
+  let { name } = req.params;
 
   if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
     try {
       if (type === 'images') {
-        const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}.png`).toString('base64');
+        if (name.indexOf('.') === -1) {
+          name += '.png';
+        }
+        const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}`).toString('base64');
         console.log('Got body:', req.params);
         // res.writeHead(200, {'Content-Type': 'image/png'});
         res.end(file);

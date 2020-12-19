@@ -1,9 +1,0 @@
-import images -> images.json
-import sprites -> sprites.json
-import animation -> animate.json
-
-render animation or images or shapes
-
-scenes flow -> scenesFlow.json
-
-commands list -> commands.json reference snippets

@@ -38,7 +38,7 @@ export default {
   },
   computed:{
     svgPath:function(){
-      return require("!!raw-loader!editor/frontend/assets/svg/"+this.iconName+".svg").default
+      return require("debug/assets/svg/"+this.iconName+".svg")
     },
     style:function(){
       var inlineStyle=""

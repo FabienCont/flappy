@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from 'editor/frontend/App.vue';
-import { baseComponentAutoImport } from './baseComponentAutoImport.js';
+import { baseComponentAutoImport } from './baseComponentAutoImport';
 import store from './store';
 
 baseComponentAutoImport();

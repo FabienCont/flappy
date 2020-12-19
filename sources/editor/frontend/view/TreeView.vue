@@ -7,7 +7,7 @@
 
 <script>
 
-import { mapMutations } from 'vuex';
+import { mapActions } from 'vuex'
 import TreeBranch from "editor/frontend/view/TreeBranch.vue";
 //check Ref
 export default {
@@ -19,18 +19,23 @@ export default {
     }
   },
   methods:{
-    ...mapMutations({
-      addPane:'panes/add' // map `this.add()` to `this.$store.dispatch('increment')`
+    ...mapActions({
+      openPane:'panes/open'
     }),
     childSelectFile:function({branch,path}){
       let fullPath=path.reverse().join("/");
-      this.addPane(fullPath);
+      this.openPane(fullPath);
     }
   }
 }
 </script>
 
 
+<style lang="scss" scoped>
+.tree-view{
+background:black;  
+}
+</style>
 <style lang="scss" scoped>
 @import "editor/frontend/styles/_variables";
 

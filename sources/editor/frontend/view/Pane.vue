@@ -1,16 +1,18 @@
 <template>
   <div class="pane">
     <PaneHeader :activePane="activePane" :panes="panes"></PaneHeader>
-    <component v-if="componentRef" v-bind:is="componentRef" :params="componentParams"></component>
+    <component :is="componentRef" :params="componentParams"></component>
   </div>
 </template>
 
 <script>
 import PaneHeader from "editor/frontend/view/PaneHeader.vue";
+import DevImagePreview from "editor/frontend/view/DevImagePreview.vue";
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'pane',
-  components:{PaneHeader},
+  components:{PaneHeader,DevImagePreview},
   data(){
     return {
       componentParams:{},
@@ -23,10 +25,16 @@ export default {
     },
     activePane(){
       return this.$store.state.panes.active;
-    }
+    },
+    ...mapGetters({
+      currentPane:"panes/currentPane"
+    })
   },
-  methods:{
-
+  watch:{
+    currentPane:function(val){
+      this.componentRef=val.component;
+      this.componentParams=val.params;
+    }
   }
 }
 </script>
