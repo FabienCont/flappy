@@ -6,18 +6,18 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = {
   entry: {
     app: {
-      import: './sources/index.js',
+      import: ['./sources/index.js'],
       dependOn: 'theatre',
     },
     editor: {
-      import: './sources/editor/frontend/index.js',
+      import: ['./sources/editor/frontend/index.js', 'webpack-hot-middleware/client'],
       dependOn: 'theatre',
     },
     theatre: './sources/theatre/core/theatre.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist/'),
-    filename: '[name].bundle.js',
+    filename: '[name]_bundle.js',
   },
   mode: 'none',
   module: {
@@ -90,15 +90,17 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: 'Game',
-      template: 'sources/game/index.html',
+      template: 'index.html',
       filename: 'index.html',
       excludeChunks: ['editor', 'debug'],
+      inject: true,
     }),
     new HtmlWebpackPlugin({
       title: 'Theatre editor',
       template: 'sources/editor/editor.html',
       filename: 'editor.html',
       excludeChunks: ['app', 'debug'],
+      inject: true,
     }),
   ],
 };

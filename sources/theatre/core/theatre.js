@@ -22,7 +22,7 @@ function Theatre(config) {
     width: container.offsetWidth,
   };
 
-  let canvas = null;
+  let canvas = null; test;
   let loading = null;
   let restarting = false;
   let updates = 0;

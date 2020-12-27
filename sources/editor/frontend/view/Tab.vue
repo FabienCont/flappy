@@ -2,14 +2,14 @@
   <li @click="activate" class="tab" :class="{'tab-active':isActive}">
     <span></span>
     <span class="tab-title">{{fileName}}</span>
-    <dev-icon @click.stop="closeTab" :width="svgSize" :height="svgSize" iconName="close"></dev-icon>
+    <dev-icon @click.stop="close" :width="svgSize" :height="svgSize" iconName="close"></dev-icon>
   </li>
 </template>
 
 <script>
 //check Ref
 
-import { mapMutations } from 'vuex';
+import { mapMutations,mapActions } from 'vuex';
 
 export default {
   name: 'tab',
@@ -24,15 +24,15 @@ export default {
     }
   },
   methods:{
-    ...mapMutations({
-      removeTab:'panes/remove',
-      activateTab:'panes/activate'
+    ...mapActions({
+      openTab:'panes/open',
+      closeTab:'panes/close'
     }),
-    closeTab:function(){
-      this.removeTab(this.filePath)
+    close:function(){
+      this.closeTab(this.filePath)
     },
     activate:function(){
-      this.activateTab(this.filePath)
+      this.openTab(this.filePath)
     }
   },
   props:{

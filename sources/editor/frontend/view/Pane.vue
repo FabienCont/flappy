@@ -1,22 +1,38 @@
 <template>
   <div class="pane">
     <PaneHeader :activePane="activePane" :panes="panes"></PaneHeader>
-    <component :is="componentRef" :params="componentParams"></component>
+    <component :is="componentRef" :params="componentParams" @edit-sprites="editSprites"></component>
   </div>
 </template>
 
 <script>
 import PaneHeader from "editor/frontend/view/PaneHeader.vue";
-import DevImagePreview from "editor/frontend/view/DevImagePreview.vue";
-import { mapGetters } from 'vuex'
+import DevImageEdit from "editor/frontend/view/DevImageEdit.vue";
+import { mapGetters,mapActions } from 'vuex'
 
 export default {
   name: 'pane',
-  components:{PaneHeader,DevImagePreview},
+  components:{PaneHeader,DevImageEdit},
   data(){
     return {
       componentParams:{},
       componentRef:null
+    }
+  },
+  methods:{
+    ...mapActions({
+      openPane:'panes/open'
+    }),
+    editSprites:function(scope,name){
+      let extension= name.match(/\.[0-9a-z]+$/i)[0];
+      this.selectPreviewElement("assets","sprites",scope,name.split(extension)[0]+".json");
+    },
+    editImages:function(scope,name){
+      this.selectPreviewElement("assets","images",scope,name);
+    },
+    selectPreviewElement(folder,type,scope,name){
+      let path=folder+'/'+type+'/'+scope+'/'+name;
+      this.openPane(path);
     }
   },
   computed:{
@@ -27,13 +43,20 @@ export default {
       return this.$store.state.panes.active;
     },
     ...mapGetters({
-      currentPane:"panes/currentPane"
-    })
+      currentPane:"panes/currentPane",
+      currentType:"panes/currentType",
+      currentFiles:"files/currentFiles"
+    }),
   },
   watch:{
-    currentPane:function(val){
-      this.componentRef=val.component;
-      this.componentParams=val.params;
+    currentFiles:function(val){
+      if(this.currentType==='images' && this.currentFiles.length>0){
+        this.componentRef=DevImageEdit;
+        this.componentParams=this.currentFiles[0];
+      }else if(this.currentFiles.length===0) {
+        this.componentRef=null;
+        this.componentParams={}
+      }
     }
   }
 }
@@ -44,7 +67,9 @@ export default {
 @import "editor/frontend/styles/_variables";
 
   .pane{
-    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    flex:1;
     background: $dev--color-color-dark;
   }
 </style>

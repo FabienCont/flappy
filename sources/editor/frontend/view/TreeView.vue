@@ -33,7 +33,7 @@ export default {
 
 <style lang="scss" scoped>
 .tree-view{
-background:black;  
+background:black;
 }
 </style>
 <style lang="scss" scoped>

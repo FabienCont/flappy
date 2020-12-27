@@ -17,6 +17,7 @@ module.exports = merge(require('./webpack.common.js'), {
     contentBase: path.resolve(__dirname, 'dist/'),
     hot: true,
     open: false,
+    poll: true,
     overlay: {
       warnings: true,
       errors: true,
@@ -33,6 +34,7 @@ module.exports = merge(require('./webpack.common.js'), {
       title: 'Game Debug',
       template: 'sources/debug/debug.html',
       filename: 'debug.html',
+      inject: true,
       excludeChunks: ['editor'],
     }),
   ],

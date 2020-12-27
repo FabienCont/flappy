@@ -3,21 +3,25 @@ import { getAsset } from 'editor/frontend/api/assets';
 // initial state
 const state = () => ({
   all: {},
+  active: [],
 });
 
 // actions
 const actions = {
   retrieve({ commit, state }, path) {
     const paths = path.split('/');
-    if (paths > 2) {
-      const fileName = paths[3];
+    if (paths.length > 2) {
       const scope = paths[2];
       const type = paths[1];
       const folder = paths[0];
       if (paths.length === 4) {
+        const fileName = paths[3];
         if (folder === 'assets') {
+          commit('cleanActiveFiles');
           getAsset(type, scope, fileName).then((content) => {
-            commit('setFile', { path, content });
+            commit('addFile', {
+              path, content,
+            });
           });
         }
       } else if (paths.length === 3) {
@@ -25,16 +29,26 @@ const actions = {
       }
     }
   },
+  inactive({ commit, state }) {
+    commit('cleanActiveFiles');
+  },
 };
 
 // mutations
 const mutations = {
-  setFile(state, file) {
-    state.all[file.path] = content;
+  addFile(state, { path, content }) {
+    state.all[path] = { content, path };
+    state.active.push(path);
+  },
+  cleanActiveFiles(state) {
+    state.active.splice(0);
   },
 };
+
 // getters
-const getters = {};
+const getters = {
+  currentFiles: (state) => state.active.map((filePath) => state.all[filePath]),
+};
 
 export default {
   namespaced: true,

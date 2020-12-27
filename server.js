@@ -19,7 +19,7 @@ const devServerEnabled = true;
 if (devServerEnabled) {
   // reload=true:Enable auto reloading when changing JS files or content
   // timeout=1000:Time from disconnecting from server to reconnecting
-  config.entry.webpackHotMiddleware = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000';
+  // config.entry.webpackHotMiddleware = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&name=editor';
 
   // Add HMR plugin
   // config.plugins.push(new webpack.HotModuleReplacementPlugin());

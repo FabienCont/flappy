@@ -1,4 +1,3 @@
-import DevImagePreview from 'editor/frontend/view/DevImagePreview.vue';
 import { getAsset } from 'editor/frontend/api/assets';
 
 // initial state
@@ -15,11 +14,19 @@ const actions = {
       const newPane = {
         path,
       };
-
       dispatch('files/retrieve', path, { root: true });
       commit('add', newPane);
     } else {
-      state.active = index;
+      dispatch('files/retrieve', path, { root: true });
+      commit('activate', path);
+    }
+  },
+  close({ commit, dispatch, state }, path) {
+    commit('remove', path);
+    if (state.all.length > 0) {
+      dispatch('files/retrieve', state.all[state.active].path, { root: true });
+    } else {
+      dispatch('files/inactive', { root: true });
     }
   },
 };
@@ -38,13 +45,22 @@ const mutations = {
     if (state.all.length <= state.active) state.active -= 1;
   },
   activate(state, path) {
-    state.active = state.all.indexOf(path);
+    state.active = state.all.map((pane) => pane.path).indexOf(path);
   },
-
 };
+
+const getTypeFromPath = (pane) => {
+  const paths = pane.path.split('/');
+  if (paths.length === 4) {
+    return paths[1];
+  }
+  return '';
+};
+
 // getters
 const getters = {
   currentPane: (state) => (state.all.length > 0 ? state.all[state.active] : null),
+  currentType: (state) => (state.all.length > 0 ? getTypeFromPath(state.all[state.active]) : ''),
 };
 
 export default {
