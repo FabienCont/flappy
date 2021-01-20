@@ -1,5 +1,6 @@
 function setup() {
-  console.log('setup loading scene');
+  // setup demo
+  this.state.redirect = false;
 }
 
 export { setup };

@@ -1,5 +1,6 @@
 const generateVariables = function generateVariables(sceneVariables) {
   const variables = {};
+
   try {
     Object.entries(sceneVariables).forEach(([name, value]) => {
       if (typeof value === 'object' && value.$snippet !== undefined) {
@@ -29,7 +30,9 @@ const getVariablesScene = function getVariablesScene() {
 
 const loadVariables = function loadVariables() {
   const sceneVariables = getVariablesScene.call(this);
-  return generateVariables.call(this, sceneVariables);
+  if(sceneVariables !== undefined){
+    return generateVariables.call(this, sceneVariables);
+  }
 };
 
 export { loadVariables };

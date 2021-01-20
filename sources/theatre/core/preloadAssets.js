@@ -5,6 +5,8 @@ const preloadAssets = function (ctx) {
     const promiseArray = [];
 
     this.assetsLoaded = [];
+    if(context.keys===undefined)resolve();
+
     context.keys().forEach((key) => {
       const promise = new Promise((resolve, reject) => {
         context(key).then((module) => {

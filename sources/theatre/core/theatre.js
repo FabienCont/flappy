@@ -13,7 +13,8 @@ function Theatre(config) {
   const sharp = config.sharp || false;
   const speed = config.speed || 1;
   const loadingTime = typeof config.loadingTime === 'number' ? config.loadingTime : 2000;
-  const { scenesCtx } = config;
+  const { scenarioCtx } = config;
+  const { hooksCtx }=config;
   const { assetsCtx } = config;
   const { modelsCtx } = config;
 
@@ -22,7 +23,7 @@ function Theatre(config) {
     width: container.offsetWidth,
   };
 
-  let canvas = null; test;
+  let canvas = null;
   let loading = null;
   let restarting = false;
   let updates = 0;
@@ -81,7 +82,7 @@ function Theatre(config) {
     this.loop = new Loop(forward.bind(this), framerate, speed);
     const promisePreloadAssets = preloadAssets.call(this, assetsCtx);
     const promisePreloadModels = preloadModels.call(this, modelsCtx);
-    preloadScenes.call(this, scenesCtx);
+    preloadScenes.call(this, scenarioCtx, hooksCtx);
 
     promisePreloadAssets.then(() => {
       this.preloading = false;

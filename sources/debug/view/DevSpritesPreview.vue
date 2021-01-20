@@ -88,13 +88,15 @@ export default {
     }
   },
   mounted(){
+    debugger
       let container =  this.$el.querySelector('.canvas-edit-anim');
       let canvasEditAnim = new Theatre({
         container,
         expose: false,
         sharp: true,
-        scenesCtx:require.context('debug/theatre/editAnimations/scenes/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'sync'),
-        assetsCtx:require.context('debug/theatre/editAnimations/assets/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
+        scenarioCtx: require.context('debug/theatre/editAnimations/scenes/', true, /^\.\/scenario\.json$/, 'sync'),
+        hooksCtx:require.context('debug/theatre/editAnimations/scenes/', true, /\.\/(\w+)\/(\w+)\.js$/, 'sync'),
+        assetsCtx:{},
         modelsCtx:require.context('debug/theatre/editAnimations/models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
         loadingTime:0,
         params:{

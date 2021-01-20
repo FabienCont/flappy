@@ -24,8 +24,9 @@ export default {
       container,
       expose: false,
       sharp: true,
-      scenesCtx:require.context('debug/theatre/previewSprites/scenes/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'sync'),
-      assetsCtx:require.context('debug/theatre/previewSprites/assets/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
+      scenarioCtx: require.context('debug/theatre/previewSprites/scenes/', true, /^\.\/scenario\.json$/, 'sync'),
+      hooksCtx:require.context('debug/theatre/previewSprites/scenes/', true, /\.\/(\w+)\/(\w+)\.js$/, 'sync'),
+      assetsCtx:{},
       modelsCtx:require.context('debug/theatre/previewSprites/models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
       loadingTime:0,
       params:this.params
