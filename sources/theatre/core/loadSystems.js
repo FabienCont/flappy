@@ -8,9 +8,10 @@ const updateSystems = function (sceneSystems) {
 const loadSystems = function () {
   try {
     const sceneModel = this.models.scenes[this.currentScene];
-    if (sceneModel !== undefined && sceneModel.systems != undefined && sceneModel.systems()) {
+    if (sceneModel !== undefined && sceneModel.systems !== undefined) {
       return sceneModel.systems();
-    } return [];
+    }
+    return [];
   } catch (err) {
     console.error(`no systems found for this scene :${this.currentScene}`);
   }

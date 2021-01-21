@@ -1,10 +1,10 @@
 function checkPreload() {
-  if (this.preloading === false && this.state.redirect === false) {
+  if (this.preloading === false && this.$variables.redirect === false) {
     setTimeout(() => {
       this.load('demo');
     }, this.loadingTime);
 
-    this.state.redirect = true;
+    this.$variables.redirect = true;
   }
 }
 

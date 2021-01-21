@@ -80,9 +80,9 @@ function Theatre(config) {
     this.delta = 0;
 
     this.loop = new Loop(forward.bind(this), framerate, speed);
+    preloadScenes.call(this, scenarioCtx, hooksCtx);
     const promisePreloadAssets = preloadAssets.call(this, assetsCtx);
     const promisePreloadModels = preloadModels.call(this, modelsCtx);
-    preloadScenes.call(this, scenarioCtx, hooksCtx);
 
     promisePreloadAssets.then(() => {
       this.preloading = false;

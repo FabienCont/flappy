@@ -136,9 +136,10 @@ const convertArrayToObject = (array, key) => {
 const getEntitiesScene = function getEntitiesScene() {
   try {
     const currentScene = this.models.scenes[this.currentScene];
-    if (currentScene && currentScene.entities) {
+    if (currentScene && currentScene.entities !== undefined) {
       return currentScene.entities();
     }
+    return [];
   } catch (err) {
     console.error(`no entities found for this scene :${this.currentScene}`);
   }

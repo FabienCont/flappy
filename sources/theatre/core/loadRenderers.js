@@ -1,7 +1,7 @@
 const loadRenderers = function getRenderers() {
   try {
     const sceneModel = this.models.scenes[this.currentScene];
-    if (sceneModel !== undefined && sceneModel.renderers !== undefined && sceneModel.renderers()) {
+    if (sceneModel !== undefined && sceneModel.renderers !== undefined) {
       return sceneModel.renderers();
     }
   } catch (err) {

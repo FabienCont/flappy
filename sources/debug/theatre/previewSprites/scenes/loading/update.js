@@ -1,11 +1,11 @@
 function update() {
   // console.log('update loading scene');
-  if (this.preloading === false && this.state.redirect === false) {
+  if (this.preloading === false && this.$variables.redirect === false) {
     setTimeout(() => {
       this.load('previewSprites');
     }, this.loadingTime);
 
-    this.state.redirect = true;
+    this.$variables.redirect = true;
   }
 }
 

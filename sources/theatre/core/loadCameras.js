@@ -39,9 +39,10 @@ const getCamera = function getSystem(cameraName) {
 const getCamerasScene = function getCamerasScene() {
   try {
     const currentScene = this.models.scenes[this.currentScene];
-    if (currentScene && currentScene.cameras) {
+    if (currentScene && currentScene.cameras !== undefined) {
       return currentScene.cameras();
     }
+    return [];
   } catch (err) {
     console.error(`no cameras found for this scene :${this.currentScene}`);
   }

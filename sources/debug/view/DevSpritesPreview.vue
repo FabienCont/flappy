@@ -88,7 +88,6 @@ export default {
     }
   },
   mounted(){
-    debugger
       let container =  this.$el.querySelector('.canvas-edit-anim');
       let canvasEditAnim = new Theatre({
         container,

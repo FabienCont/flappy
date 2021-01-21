@@ -1,4 +1,10 @@
 const preloadModels = function preloadModels(ctx) {
+
+  this.models.scenes = {};
+  Object.keys(this.scenes).forEach((scene) => {
+    this.models.scenes[scene] = {};
+  });
+
   return new Promise((resolve) => {
     const context = ctx || require.context('models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy');
 

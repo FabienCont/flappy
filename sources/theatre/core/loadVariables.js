@@ -20,9 +20,10 @@ const generateVariables = function generateVariables(sceneVariables) {
 const getVariablesScene = function getVariablesScene() {
   try {
     const currentScene = this.models.scenes[this.currentScene];
-    if (currentScene && currentScene.variables) {
+    if (currentScene && currentScene.variables !== undefined) {
       return currentScene.variables();
     }
+    return {};
   } catch (err) {
     console.error(`no variables found for this scene :${this.currentScene}`);
   }
