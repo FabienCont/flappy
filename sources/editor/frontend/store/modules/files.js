@@ -1,4 +1,5 @@
 import { getAsset } from 'editor/frontend/api/assets';
+import { getModels } from 'editor/frontend/api/models';
 
 // initial state
 const state = () => ({
@@ -19,6 +20,13 @@ const actions = {
         if (folder === 'assets') {
           commit('cleanActiveFiles');
           getAsset(type, scope, fileName).then((content) => {
+            commit('addFile', {
+              path, content,
+            });
+          });
+        }else if(folder === 'models'){
+          commit('cleanActiveFiles');
+          getModels(type, scope, fileName).then((content) => {
             commit('addFile', {
               path, content,
             });

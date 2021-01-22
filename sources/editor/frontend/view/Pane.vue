@@ -8,11 +8,13 @@
 <script>
 import PaneHeader from "editor/frontend/view/PaneHeader.vue";
 import DevImageEdit from "editor/frontend/view/DevImageEdit.vue";
+import DevSoundEdit from "editor/frontend/view/DevSoundEdit.vue";
+import DevJsEdit from "editor/frontend/view/DevJsEdit.vue"
 import { mapGetters,mapActions } from 'vuex'
 
 export default {
   name: 'pane',
-  components:{PaneHeader,DevImageEdit},
+  components:{PaneHeader,DevImageEdit,DevSoundEdit,DevJsEdit},
   data(){
     return {
       componentParams:{},
@@ -52,6 +54,12 @@ export default {
     currentFiles:function(val){
       if(this.currentType==='images' && this.currentFiles.length>0){
         this.componentRef=DevImageEdit;
+        this.componentParams=this.currentFiles[0];
+      }else if(this.currentType==='sounds' && this.currentFiles.length>0){
+        this.componentRef=DevSoundEdit;
+        this.componentParams=this.currentFiles[0];
+      }else if((this.currentType==='systems' ||this.currentType==='snippets') && this.currentFiles.length>0){
+        this.componentRef=DevJsEdit;
         this.componentParams=this.currentFiles[0];
       }else if(this.currentFiles.length===0) {
         this.componentRef=null;

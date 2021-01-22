@@ -1,5 +1,5 @@
 const express = require('express');
-
+const path = require('path');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -65,7 +65,11 @@ app.get('/api/assets/:type/:scope/:name', (req, res) => {
         console.log('Got body:', req.params);
         // res.writeHead(200, {'Content-Type': 'image/png'});
         res.end(file);
-      } else {
+      } else if(type ==='sounds'){
+        const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}`).toString('base64');
+        console.log('Got body:', req.params);
+        res.end(file);
+      }else {
         const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}.json`, 'utf-8');
         console.log('Got body:', req.params);
         res.end(file);
@@ -129,10 +133,14 @@ app.get('/api/models/:type/:scope/:name', (req, res) => {
   const { scope } = req.params;
   const { name } = req.params;
 
-  if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
-    const ext = (type === 'systems' || type === 'snippets') ? 'js' : 'json';
+  if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {    
+    if (name.indexOf('.') === -1 && (type === 'systems' || type === 'snippets')) {
+      name += '.js';
+    }else if (name.indexOf('.') === -1){
+      name += '.json';
+    }
     try {
-      const file = fs.readFileSync(`sources/game/models/${type}/${scope}/${name}.${ext}`, 'utf-8');
+      const file = fs.readFileSync(`sources/game/models/${type}/${scope}/${name}`, 'utf-8');
       console.log('Got body:', req.params);
       res.send(file);
     } catch (err) {
