@@ -18,7 +18,7 @@ export default {
 .detail-pane-container{
   padding-left:0.5rem;
   color: $dev--color-color-light;
-  border:1px solid  $dev--color-color0;
+  border-left:1px solid black;
   display: flex;
   flex-direction: column;
   flex:1;

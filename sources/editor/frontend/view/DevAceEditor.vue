@@ -1,24 +1,24 @@
 <template>
-  <div class="dev-js-edit">
+  <div class="dev-ace-edit">
     <main-pane-container>
-      <div class="dev-js-edit-container">
-        <pre id="dev-js-edit-preview"></pre>
+      <div class="dev-ace-edit-container">
+        <pre @keyup.delete="updateContentCopyValue()" @keydown.ctrl.83.prevent="saveElement()" @keyup.ctrl="updateContentCopyValue()" @input="updateContentCopyValue()" id="dev-ace-edit-preview"></pre>
       </div>
     </main-pane-container>
     <detail-pane-container>
       <h3>{{type}}</h3>
       <dev-input name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
       <dev-input name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
-      <div class="dev-preview-js-upload-content">
+      <div class="dev-preview-ace-upload-content">
          <span>Select a new file</span>
-         <dev-upload accept="image/png" @update-file="updateFile" ></dev-upload>
+         <!-- <dev-upload accept="image/png" @update-file="updateFile" ></dev-upload> -->
      </div>
      <div v-if="isElementModify">
-       <dev-button class="dev-preview-js-icon" @click="saveElement()">Save</dev-button>
-       <dev-button class="dev-preview-js-icon" @click="copyElement()">Cancel</dev-button>
+       <dev-button class="dev-preview-ace-icon" @click="saveElement()">Save</dev-button>
+       <dev-button class="dev-preview-ace-icon" @click="copyProps()">Cancel</dev-button>
      </div>
      <div v-else>
-       <dev-button class="dev-preview-js-icon" @click="deleteElement()">Delete</dev-button>
+       <dev-button class="dev-preview-ace-icon" @click="deleteElement()">Delete</dev-button>
      </div>
     </detail-pane-container>
   </div>
@@ -29,15 +29,15 @@
 import DetailPaneContainer from "editor/frontend/view/DetailPaneContainer.vue";
 import MainPaneContainer from "editor/frontend/view/MainPaneContainer.vue";
 import * as acemodule from 'ace-builds/src-noconflict/ace';
+import "ace-builds/webpack-resolver";
 
 export default {
-  name: 'DevJsEdit',
+  name: 'DevAceEditor',
   components:{
     DetailPaneContainer,MainPaneContainer
   },
   data(){
     return {
-       base64:'data:image/png;base64,',
       // svgSize:"1.7em",
        contentCopy:this.params.content,
        nameCopy:"",
@@ -55,18 +55,21 @@ export default {
     this.copyProps();
   },
   mounted(){
-    this.editor =  ace.edit("dev-js-edit-preview", {
-        theme: "ace/theme/monokai",
+    this.editor =  ace.edit("dev-ace-edit-preview", {
+        theme: "ace/theme/tomorrow_night",
         mode: "ace/mode/javascript",
-        maxLines: 100,
         wrap: false,
         autoScrollEditorIntoView: true
     });
-    this.editor.session.setValue(this.contentCopy)
+    this.editor.session.setValue(this.contentCopy);
+    this.editor.resize();
   },
   watch:{
     params:function(){
       this.copyProps();
+    },
+    contentCopy:function(val){
+      console.log(val)
     }
   },
   computed:{
@@ -87,22 +90,30 @@ export default {
     }
   },
   methods:{
+    updateContentCopyValue:function(){
+      this.contentCopy = this.editor.getSession().getValue();
+    },
     copyProps:function(){
+      this.nameCopy=this.name;
+      this.scopeCopy=this.scope;
       this.contentCopy = this.params.content;
-      this.nameCopy=this.name,
-      this.scopeCopy=this.scope
+      if(typeof this.editor!=='object' && this.editor!==null){
+        this.editor.session.setValue(this.contentCopy);
+      }
     },
     updateFile:function(file){
-      if(this.nameCopy==='')this.nameCopy=file.name.split(".png")[0];
+      if(this.nameCopy==='')this.nameCopy=file.name.split(".")[0];
       var reader = new FileReader();
        reader.onload = (e)=> {
-         this.elementCopy= e.target.result;
+         this.contentCopy= e.target.result;
        }
 
       reader.readAsDataURL(file); // convert to base64 string
     },
     saveElement:function(){
-      this.$emit("save-model",{scope:this.scopeCopy,name:this.nameCopy,content:this.elementCopy});
+      if(this.isElementModify){
+        this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.contentCopy});
+      }
     },
     deleteElement:function(){
       this.$emit("delete-model");
@@ -118,24 +129,39 @@ export default {
 
 @import 'debug/styles/_variables';
 
-.dev-js-edit{
+.dev-ace-edit{
   display: flex;
   flex:1;
   height: 100%;
 }
 
-.dev-js-edit-container{
-  display: flex;
-  flex:1;
-  justify-content: center;
-  align-items: center;
+.dev-ace-edit-container{
+  width:100%;
+  height:100%;
 }
 
-#dev-js-edit-preview{
-    width:300px;
-    max-width: 100%;
-    min-height: 50px;
-    border:1px solid $dev--color-color0;
+#dev-ace-edit-preview{
+    width:100%;
+    height:100%;
+    position: relative;
+    margin:0;
+}
+
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    border: 3px solid  transparent;
+    background:  $dev--color-color-light-fade;
+    background-clip: content-box;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb:active {
+border-radius: 0px;
+background:  $dev--color-color-light-fade;
 }
 
 </style>

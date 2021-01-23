@@ -1,5 +1,3 @@
-import { getAsset } from 'editor/frontend/api/assets';
-
 // initial state
 const state = () => ({
   all: [],
@@ -26,7 +24,7 @@ const actions = {
     if (state.all.length > 0) {
       dispatch('files/retrieve', state.all[state.active].path, { root: true });
     } else {
-      dispatch('files/inactive', { root: true });
+      dispatch('files/inactive', null, { root: true });
     }
   },
 };
@@ -49,10 +47,18 @@ const mutations = {
   },
 };
 
-const getTypeFromPath = (pane) => {
-  const paths = pane.path.split('/');
+const getTypeFromPath = (path) => {
+  const paths = path.path.split('/');
   if (paths.length === 4) {
     return paths[1];
+  }
+  return '';
+};
+
+const getFolderFromPath = (path) => {
+  const paths = path.path.split('/');
+  if (paths.length === 4) {
+    return paths[0];
   }
   return '';
 };
@@ -61,6 +67,7 @@ const getTypeFromPath = (pane) => {
 const getters = {
   currentPane: (state) => (state.all.length > 0 ? state.all[state.active] : null),
   currentType: (state) => (state.all.length > 0 ? getTypeFromPath(state.all[state.active]) : ''),
+  currentFolder: (state) => (state.all.length > 0 ? getFolderFromPath(state.all[state.active]) : ''),
 };
 
 export default {

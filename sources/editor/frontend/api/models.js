@@ -15,9 +15,6 @@ const postModels = function (type, scope, name, data) {
       };
 
       const objectToSend = {
-        type,
-        scope,
-        name,
         data,
       };
       xhr.send(JSON.stringify(objectToSend));
@@ -31,7 +28,7 @@ const getModels = function (type, scope, name) {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', `/api/models/${type}/${scope}/${name}`);
       // Envoie les informations du header adaptées avec la requête
-        xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onreadystatechange = function () { // Appelle une fonction au changement d'état.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
           const responseObj = xhr.response;

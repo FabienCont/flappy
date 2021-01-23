@@ -59,19 +59,19 @@ app.get('/api/assets/:type/:scope/:name', (req, res) => {
     try {
       if (type === 'images') {
         if (name.indexOf('.') === -1) {
-          name += '.png';
+          if (type === 'datasets' || type === 'sprites') {
+            name += '.json';
+          } else if (type === 'images') {
+            name += '.png';
+          }
         }
         const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}`).toString('base64');
-        console.log('Got body:', req.params);
-        // res.writeHead(200, {'Content-Type': 'image/png'});
         res.end(file);
-      } else if(type ==='sounds'){
+      } else if (type === 'sounds') {
         const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}`).toString('base64');
-        console.log('Got body:', req.params);
         res.end(file);
-      }else {
-        const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}.json`, 'utf-8');
-        console.log('Got body:', req.params);
+      } else {
+        const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}`, 'utf-8');
         res.end(file);
       }
     } catch (err) {
@@ -85,22 +85,30 @@ app.get('/api/assets/:type/:scope/:name', (req, res) => {
 });
 
 const jsonParser = bodyParser.json();
+
 app.post('/api/assets/:type/:scope/:name', jsonParser, (req, res) => {
   console.log('post Api Assets');
-
+  console.log('Got params:', req.params);
   const { type } = req.params;
   const { scope } = req.params;
   const { name } = req.params;
-  const { data } = req.body;
+  let { data } = req.body;
   let status = 200;
   if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string' && data) {
     try {
-      console.log('Got params:', req.params);
-      if (type === 'images' || type === 'spritesheets') {
+      if (name.indexOf('.') === -1) {
+        if (type === 'images') {
+          name += '.png';
+        } else if (type === 'datasets') {
+          name += '.json';
+          data = JSON.stringify(data, null, 2);
+        }
+      }
+      if (type === 'images' || type === 'sounds') {
         try {
           const binaryData = Buffer.from(data, 'base64');
           fs.mkdirSync(`sources/game/assets/${type}/${scope}/`, { recursive: true });
-          fs.writeFileSync(`sources/game/assets/${type}/${scope}/${name}.png`, binaryData, { encoding: 'base64' });
+          fs.writeFileSync(`sources/game/assets/${type}/${scope}/${name}`, binaryData, { encoding: 'base64' });
         } catch (err) {
           console.error('error writing file:', err);
           status = 400;
@@ -109,7 +117,7 @@ app.post('/api/assets/:type/:scope/:name', jsonParser, (req, res) => {
       } else {
         try {
           fs.mkdirSync(`sources/game/assets/${type}/${scope}/`, { recursive: true });
-          fs.writeFileSync(`sources/game/assets/${type}/${scope}/${name}.json`, JSON.stringify(data, null, 2));
+          fs.writeFileSync(`sources/game/assets/${type}/${scope}/${name}`, data);
         } catch (err) {
           console.error('error writing file:', err);
           status = 400;
@@ -133,49 +141,54 @@ app.get('/api/models/:type/:scope/:name', (req, res) => {
   const { scope } = req.params;
   const { name } = req.params;
 
-  if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {    
+  if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
     if (name.indexOf('.') === -1 && (type === 'systems' || type === 'snippets')) {
       name += '.js';
-    }else if (name.indexOf('.') === -1){
+    } else if (name.indexOf('.') === -1) {
       name += '.json';
     }
     try {
       const file = fs.readFileSync(`sources/game/models/${type}/${scope}/${name}`, 'utf-8');
-      console.log('Got body:', req.params);
       res.send(file);
     } catch (err) {
       console.error('error reading file:', err);
       res.sendStatus(400);
     }
   } else {
-    console.error('Got wrong parameters in body:', req.params);
+    console.error('Got wrong parameters in url:', req.params);
     res.sendStatus(400);
   }
 });
 
-app.post('/api/models', jsonParser, (req, res) => {
+app.post('/api/models/:type/:scope/:name', jsonParser, (req, res) => {
   console.log('post Api Models');
-  console.log(req.body);
-  const { type } = req.body;
-  const { scope } = req.body;
-  const { name } = req.body;
-  const { data } = req.body;
+  console.log(req.params);
+  const { type } = req.params;
+  const { scope } = req.params;
+  const { name } = req.params;
+  let { data } = req.body;
   if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string' && data) {
+    if (name.indexOf('.') === -1 && (type === 'systems' || type === 'snippets')) {
+      name += '.js';
+    } else if (name.indexOf('.') === -1) {
+      name += '.json';
+      data = JSON.stringify(data, null, 2);
+    }
     try {
-      fs.writeFileSync(`sources/game/models/${type}/${scope}/${name}.json`, JSON.stringify(data, null, 2));
+      fs.writeFileSync(`sources/game/models/${type}/${scope}/${name}`, data);
       console.log('Got body:', req.body);
       res.sendStatus(200);
     } catch (err) {
       try {
         fs.mkdirSync(`sources/game/models/${type}/${scope}/`, { recursive: true });
-        fs.writeFileSync(`sources/game/models/${type}/${scope}/${name}.json`, JSON.stringify(data, null, 2));
+        fs.writeFileSync(`sources/game/models/${type}/${scope}/${name}`, data);
       } catch (nestedErr) {
         console.error('error writing file:', nestedErr);
         res.sendStatus(400);
       }
     }
   } else {
-    console.error('Got wrong parameters in body:', req.body);
+    console.error('Got wrong parameters in url:', req.params);
     res.sendStatus(400);
   }
 });

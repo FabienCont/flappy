@@ -85,7 +85,7 @@ export default {
       this.scopeCopy=this.scope
     },
     updateFile:function(file){
-      if(this.nameCopy==='')this.nameCopy=file.name.split(".png")[0];
+      if(this.nameCopy==='')this.nameCopy=file.name.split(".")[0];
       var reader = new FileReader();
        reader.onload = (e)=> {
          this.elementCopy= e.target.result;

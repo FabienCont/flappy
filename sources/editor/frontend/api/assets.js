@@ -1,10 +1,14 @@
-const postAssets = function (type, scope, name, data) {
+const postAssets = function postAssets(type, scope, name, data) {
   return new Promise((resolve, reject) => {
     if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string' && data) {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `/api/assets/${type}/${scope}/${name}`, true);
       // Envoie les informations du header adaptées avec la requête
-      xhr.setRequestHeader('Content-Type', 'application/json');
+      if (type === 'images' || type === 'spritesheets') {
+        xhr.setRequestHeader('Content-Type', 'image/png');
+      } else {
+        xhr.setRequestHeader('Content-Type', 'application/json');
+      }
       xhr.onreadystatechange = function () { // Appelle une fonction au changement d'état.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
           // Requête finie, traitement ici.
@@ -15,9 +19,6 @@ const postAssets = function (type, scope, name, data) {
       };
 
       const objectToSend = {
-        type,
-        scope,
-        name,
         data,
       };
       xhr.send(JSON.stringify(objectToSend));
@@ -25,7 +26,7 @@ const postAssets = function (type, scope, name, data) {
   });
 };
 
-const getAsset = function (type, scope, name) {
+const getAsset = function getAsset(type, scope, name) {
   return new Promise((resolve, reject) => {
     if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
       const xhr = new XMLHttpRequest();

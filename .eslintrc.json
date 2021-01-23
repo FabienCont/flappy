@@ -18,8 +18,20 @@
     },
     "settings": {
       "import/resolver": {
-        "webpack":{
-            "config": "webpack.common.js"
+        "alias": {
+            "map": [
+              ["models", "./sources/game/models/"],
+              ["assets", "./sources/game/assets/"],
+              ["components", "./sources/game/models/components/"],
+              ["entities", "./sources/game/models/entities/"],
+              ["scenes", "./sources/game/scenes/"],
+              ["systems", "./sources/game/models/systems/"],
+              ["debug", "./sources/debug"],
+              ["editor", "./sources/editor/"],
+              ["core", "./sources/theatre/core/"],
+              ["modules", "./sources/theatre/modules/"]
+            ],
+            "extensions": [".ts", ".js", ".jsx", ".json"]
         }
       }
     }

@@ -49,7 +49,7 @@ background:black;
 ::-webkit-scrollbar-thumb {
       border-radius: 5px;
       border: 3px solid  $dev--color-color-dark;
-      background:  $dev--color-color-dark-fade;
+      background:  $dev--color-color-light-fade;
       background-clip: content-box;
   }
 ::-webkit-scrollbar {

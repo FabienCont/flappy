@@ -1,5 +1,5 @@
-import { getAsset } from 'editor/frontend/api/assets';
-import { getModels } from 'editor/frontend/api/models';
+import { getAsset, postAssets } from 'editor/frontend/api/assets';
+import { getModels, postModels } from 'editor/frontend/api/models';
 
 // initial state
 const state = () => ({
@@ -24,7 +24,7 @@ const actions = {
               path, content,
             });
           });
-        }else if(folder === 'models'){
+        } else if (folder === 'models') {
           commit('cleanActiveFiles');
           getModels(type, scope, fileName).then((content) => {
             commit('addFile', {
@@ -39,6 +39,32 @@ const actions = {
   },
   inactive({ commit, state }) {
     commit('cleanActiveFiles');
+  },
+  save({ commit, state }, { path, content }) {
+    const paths = path.split('/');
+    if (paths.length > 2) {
+      const type = paths[1];
+      const folder = paths[0];
+      if (paths.length === 4) {
+        const scope = paths[2];
+        const fileName = paths[3];
+        if (folder === 'assets') {
+          commit('cleanActiveFiles');
+          postAssets(type, scope, fileName, content).then((contentResult) => {
+            commit('addFile', {
+              path, content,
+            });
+          });
+        } else if (folder === 'models') {
+          commit('cleanActiveFiles');
+          postModels(type, scope, fileName, content).then((contentResult) => {
+            commit('addFile', {
+              path, content,
+            });
+          });
+        }
+      }
+    }
   },
 };
 
