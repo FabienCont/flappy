@@ -8,10 +8,10 @@
     <detail-pane-container>
       <h3>{{type}}</h3>
       <dev-input name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
-      <dev-input name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
+      <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
       <div class="dev-preview-ace-upload-content">
          <span>Select a new file</span>
-         <!-- <dev-upload accept="image/png" @update-file="updateFile" ></dev-upload> -->
+         <dev-upload accept="*" @update-file="updateFile" ></dev-upload>
      </div>
      <div v-if="isElementModify">
        <dev-button class="dev-preview-ace-icon" @click="saveElement()">Save</dev-button>
@@ -77,13 +77,27 @@ export default {
       return this.params.path.split('/');
     },
     type:function(){
-      return this.paths[1]
+      if(this.paths.length>2){
+        return this.paths[1]
+      }
+      return null;
     },
     name:function(){
-      return this.paths[3]
+      if(this.paths.length===4){
+        return this.paths[3];
+      }
+      else if(this.paths.length===3){
+        return this.paths[2];
+      }
+      else if(this.paths.length===2){
+        return this.paths[1];
+      }
     },
     scope:function(){
-      return this.paths[2]
+      if(this.paths.length>3){
+        return this.paths[2]
+      }
+      return null;
     },
     isElementModify:function(){
       return this.params.content!==this.contentCopy || this.scopeCopy!==this.scope || this.nameCopy!==this.name;

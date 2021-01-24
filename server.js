@@ -48,6 +48,153 @@ app.get('/alive', (req, res) => {
   res.send('Alive!');
 });
 
+const getFile = function getFile(folder, type, scope, name) {
+  if (type === 'images' || type === 'sounds') {
+    return fs.readFileSync(`sources/game/${folder}/${type}/${scope}/${name}`).toString('base64');
+  }
+  return fs.readFileSync(`sources/game/${folder}/${type}/${scope}/${name}`, 'utf-8');
+};
+
+const writeFile = function writeFile(folder, type, scope, name, data) {
+  const options = {};
+  let dataToWrite = data;
+  if (type === 'images' || type === 'sounds') {
+    dataToWrite = Buffer.from(data, 'base64');
+    options.encoding = 'base64';
+  }
+  fs.mkdirSync(`sources/game/${folder}/${type}/${scope}/`, { recursive: true });
+  fs.writeFileSync(`sources/game/${folder}/${type}/${scope}/${name}`, dataToWrite, options);
+};
+
+app.get('/api/files/:folder/:name', (req, res) => {
+  console.log('get Api Files');
+  console.log(req.params);
+  const { folder } = req.params;
+  const { name } = req.params;
+
+  if (typeof folder === 'string' && typeof name === 'string') {
+    try {
+      const file = getFile(folder, '', '', name);
+      res.end(file);
+    } catch (err) {
+      console.error('error reading file:', err);
+      res.sendStatus(400);
+    }
+  } else {
+    console.error('Got wrong parameters in body:', req.params);
+    res.sendStatus(400);
+  }
+});
+
+app.get('/api/files/:folder/:type/:name', (req, res) => {
+  console.log('get Api Files');
+  console.log(req.params);
+  const { folder } = req.params;
+  const { type } = req.params;
+  const { name } = req.params;
+
+  if (typeof folder === 'string' && typeof type === 'string' && typeof name === 'string') {
+    try {
+      const file = getFile(folder, type, '', name);
+      res.end(file);
+    } catch (err) {
+      console.error('error reading file:', err);
+      res.sendStatus(400);
+    }
+  } else {
+    console.error('Got wrong parameters in body:', req.params);
+    res.sendStatus(400);
+  }
+});
+
+app.get('/api/files/:folder/:type/:scope/:name', (req, res) => {
+  console.log('get Api Files');
+  console.log(req.params);
+  const { folder } = req.params;
+  const { type } = req.params;
+  const { scope } = req.params;
+  const { name } = req.params;
+
+  if (typeof folder === 'string' && typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
+    try {
+      const file = getFile(folder, type, scope, name);
+      res.end(file);
+    } catch (err) {
+      console.error('error reading file:', err);
+      res.sendStatus(400);
+    }
+  } else {
+    console.error('Got wrong parameters in body:', req.params);
+    res.sendStatus(400);
+  }
+});
+
+app.post('/api/files/:folder/:name', (req, res) => {
+  console.log('post Api Files');
+  console.log('Got params:', req.params);
+
+  const { folder } = req.params;
+  const { name } = req.params;
+  const { data } = req.body;
+  if (typeof folder === 'string' && typeof name === 'string' && data) {
+    try {
+      writeFile(folder, '', '', name, data);
+      res.end();
+    } catch (err) {
+      console.error('error writing file:', err);
+      res.sendStatus(400);
+    }
+  } else {
+    console.error('Got wrong parameters in body:', req.body);
+    res.sendStatus(400);
+  }
+});
+
+app.post('/api/files/:folder/:type/:name', (req, res) => {
+  console.log('post Api Files');
+  console.log('Got params:', req.params);
+
+  const { folder } = req.params;
+  const { type } = req.params;
+  const { name } = req.params;
+  const { data } = req.body;
+  if (typeof folder === 'string' && typeof type === 'string' && typeof name === 'string' && data) {
+    try {
+      writeFile(folder, type, '', name, data);
+      res.end();
+    } catch (err) {
+      console.error('error writing file:', err);
+      res.sendStatus(400);
+    }
+  } else {
+    console.error('Got wrong parameters in body:', req.body);
+    res.sendStatus(400);
+  }
+});
+
+app.post('/api/files/:folder/:type/:scope/:name', (req, res) => {
+  console.log('post Api Files');
+  console.log('Got params:', req.params);
+
+  const { folder } = req.params;
+  const { type } = req.params;
+  const { scope } = req.params;
+  const { name } = req.params;
+  const { data } = req.body;
+  if (typeof folder === 'string' && typeof type === 'string' && typeof scope === 'string' && typeof name === 'string' && data) {
+    try {
+      writeFile(folder, type, scope, name, data);
+      res.end();
+    } catch (err) {
+      console.error('error writing file:', err);
+      res.sendStatus(400);
+    }
+  } else {
+    console.error('Got wrong parameters in body:', req.body);
+    res.sendStatus(400);
+  }
+});
+
 app.get('/api/assets/:type/:scope/:name', (req, res) => {
   console.log('get Api Assets');
   console.log(req.params);
@@ -57,14 +204,14 @@ app.get('/api/assets/:type/:scope/:name', (req, res) => {
 
   if (typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
     try {
-      if (type === 'images') {
-        if (name.indexOf('.') === -1) {
-          if (type === 'datasets' || type === 'sprites') {
-            name += '.json';
-          } else if (type === 'images') {
-            name += '.png';
-          }
+      if (name.indexOf('.') === -1) {
+        if (type === 'datasets' || type === 'sprites') {
+          name += '.json';
+        } else if (type === 'images') {
+          name += '.png';
         }
+      }
+      if (type === 'images') {
         const file = fs.readFileSync(`sources/game/assets/${type}/${scope}/${name}`).toString('base64');
         res.end(file);
       } else if (type === 'sounds') {

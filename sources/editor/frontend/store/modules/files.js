@@ -1,6 +1,4 @@
-import { getAsset, postAssets } from 'editor/frontend/api/assets';
-import { getModels, postModels } from 'editor/frontend/api/models';
-
+import { getFile, postFile } from 'editor/frontend/api/files';
 // initial state
 const state = () => ({
   all: {},
@@ -11,60 +9,56 @@ const state = () => ({
 const actions = {
   retrieve({ commit, state }, path) {
     const paths = path.split('/');
-    if (paths.length > 2) {
-      const scope = paths[2];
-      const type = paths[1];
-      const folder = paths[0];
-      if (paths.length === 4) {
-        const fileName = paths[3];
-        if (folder === 'assets') {
-          commit('cleanActiveFiles');
-          getAsset(type, scope, fileName).then((content) => {
-            commit('addFile', {
-              path, content,
-            });
-          });
-        } else if (folder === 'models') {
-          commit('cleanActiveFiles');
-          getModels(type, scope, fileName).then((content) => {
-            commit('addFile', {
-              path, content,
-            });
-          });
-        }
-      } else if (paths.length === 3) {
-        // TODO: get All files from arbo
-      }
+    const folder = paths[0];
+    let type = '';
+    let scope = '';
+    let fileName = '';
+    if (paths.length === 4) {
+      type = paths[1];
+      scope = paths[2];
+      fileName = paths[3];
+    } else if (paths.length === 3) {
+      type = paths[1];
+      fileName = paths[2];
+    } else if (paths.length === 2) {
+      fileName = paths[1];
+    } else {
+      throw new Error('wrong path format');
     }
+    commit('cleanActiveFiles');
+    getFile(folder, type, scope, fileName).then((content) => {
+      commit('addFile', {
+        path, content,
+      });
+    });
   },
   inactive({ commit, state }) {
     commit('cleanActiveFiles');
   },
   save({ commit, state }, { path, content }) {
     const paths = path.split('/');
-    if (paths.length > 2) {
-      const type = paths[1];
-      const folder = paths[0];
-      if (paths.length === 4) {
-        const scope = paths[2];
-        const fileName = paths[3];
-        if (folder === 'assets') {
-          commit('cleanActiveFiles');
-          postAssets(type, scope, fileName, content).then((contentResult) => {
-            commit('addFile', {
-              path, content,
-            });
-          });
-        } else if (folder === 'models') {
-          commit('cleanActiveFiles');
-          postModels(type, scope, fileName, content).then((contentResult) => {
-            commit('addFile', {
-              path, content,
-            });
-          });
-        }
-      }
+    const folder = paths[0];
+    let type = '';
+    let scope = '';
+    let fileName = '';
+    if (paths.length === 4) {
+      type = paths[1];
+      scope = paths[2];
+      fileName = paths[3];
+    } else if (paths.length === 3) {
+      type = paths[1];
+      fileName = paths[2];
+    } else if (paths.length === 2) {
+      fileName = paths[1];
+    } else {
+      throw new Error('wrong path format');
     }
+    commit('cleanActiveFiles');
+    postFile(folder, type, scope, fileName, content).then(() => {
+      commit('addFile', {
+        path, content,
+      });
+    });
   },
 };
 

@@ -49,7 +49,7 @@ const mutations = {
 
 const getTypeFromPath = (path) => {
   const paths = path.path.split('/');
-  if (paths.length === 4) {
+  if (paths.length > 2) {
     return paths[1];
   }
   return '';
@@ -57,10 +57,7 @@ const getTypeFromPath = (path) => {
 
 const getFolderFromPath = (path) => {
   const paths = path.path.split('/');
-  if (paths.length === 4) {
-    return paths[0];
-  }
-  return '';
+  return paths[0];
 };
 
 // getters

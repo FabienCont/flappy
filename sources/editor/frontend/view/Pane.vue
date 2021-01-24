@@ -8,13 +8,14 @@
 <script>
 import PaneHeader from "editor/frontend/view/PaneHeader.vue";
 import DevImageEdit from "editor/frontend/view/DevImageEdit.vue";
+import DevSpritesEdit from "editor/frontend/view/DevImageEdit.vue";
 import DevSoundEdit from "editor/frontend/view/DevSoundEdit.vue";
 import DevAceEditor from "editor/frontend/view/DevAceEditor.vue"
 import { mapGetters,mapActions } from 'vuex'
 
 export default {
   name: 'pane',
-  components:{PaneHeader,DevImageEdit,DevSoundEdit,DevAceEditor},
+  components:{PaneHeader,DevImageEdit,DevSoundEdit,DevAceEditor,DevSpritesEdit},
   data(){
     return {
       componentParams:{},
@@ -64,7 +65,10 @@ export default {
       }else if(this.currentType==='sounds' && this.currentFiles.length>0){
         this.componentRef=DevSoundEdit;
         this.componentParams=this.currentFiles[0];
-      }else if((this.currentFolder==='scenes' || this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets'|| this.currentType==='scenes' || this.currentType==='entities' || this.currentType==='component') && this.currentFiles.length>0){
+      }else if(this.currentType==='sprites' && this.currentFiles.length===2){
+        this.componentRef=DevSpritesEdit;
+        this.componentParams=this.currentFiles;
+      }else if((this.currentFolder==='scenes' || this.currentType==='scenes'|| this.currentType==='entities'||this.currentType==='components'|| this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets'|| this.currentType==='scenes' || this.currentType==='entities' || this.currentType==='component') && this.currentFiles.length>0){
         this.componentRef=DevAceEditor;
         this.componentParams=this.currentFiles[0];
       }else if(this.currentFiles.length===0) {
