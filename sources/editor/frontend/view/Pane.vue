@@ -89,5 +89,10 @@ export default {
     flex-direction: column;
     flex:1;
     background: $dev--color-color-dark;
+    min-width: 0;
+    min-height: 0;
+    overflow: visible;
+    position:relative;
+    flex-grow: 1;
   }
 </style>

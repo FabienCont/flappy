@@ -58,7 +58,7 @@ export default {
 .app-body{
   display: flex;
   flex-grow: 1;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 </style>

@@ -42,9 +42,10 @@ background:black;
   .tree-view{
     background: $dev--color-color-dark;
     height: 100%;
-    width:400px;
+    width:370px;
     border-right:1px solid $dev--color-color-darker;
     overflow-y: auto;
+    flex-shrink: 0;
   }
 ::-webkit-scrollbar-thumb {
       border-radius: 5px;

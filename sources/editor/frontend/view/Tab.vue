@@ -48,14 +48,15 @@ export default {
 
   .tab{
     list-style: none;
-    display: flex ;
+    display: flex;
+    flex: 1 1 0;
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem;
     color: $dev--color-color0;
     font-size: $dev--font-size-m;
     cursor:pointer;
-    width:200px;
+    max-width:200px;
     border:1px solid $dev--color-color-darker;
     background: $dev--color-color-dark;
   }
