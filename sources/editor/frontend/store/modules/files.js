@@ -7,7 +7,7 @@ const state = () => ({
 
 // actions
 const actions = {
-  retrieve({ commit, state }, path) {
+  retrieve({ commit, state, rootGetters }, path) {
     const paths = path.split('/');
     const folder = paths[0];
     let type = '';
@@ -25,12 +25,31 @@ const actions = {
     } else {
       throw new Error('wrong path format');
     }
-    commit('cleanActiveFiles');
-    getFile(folder, type, scope, fileName).then((content) => {
-      commit('addFile', {
-        path, content,
+
+    if (type === 'sprites' && paths.length === 4) {
+      //      dispatch('files/inactive', null, { root: true });
+
+      const pngFileName = rootGetters['arborescence/getImageFromSprites'](scope, fileName);
+      const pngPath = [folder, 'images', scope, pngFileName].join('/');
+      commit('cleanActiveFiles');
+      getFile(folder, type, scope, fileName).then((content) => {
+        commit('addFile', {
+          path, content,
+        });
       });
-    });
+      getFile(folder, 'images', scope, pngFileName).then((content) => {
+        commit('addFile', {
+          path: pngPath, content,
+        });
+      });
+    } else {
+      commit('cleanActiveFiles');
+      getFile(folder, type, scope, fileName).then((content) => {
+        commit('addFile', {
+          path, content,
+        });
+      });
+    }
   },
   inactive({ commit, state }) {
     commit('cleanActiveFiles');

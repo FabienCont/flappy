@@ -1,5 +1,4 @@
 const preloadModels = function preloadModels(ctx) {
-
   this.models.scenes = {};
   Object.keys(this.scenes).forEach((scene) => {
     this.models.scenes[scene] = {};

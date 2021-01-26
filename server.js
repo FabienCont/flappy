@@ -75,7 +75,7 @@ app.get('/api/files/:folder/:name', (req, res) => {
   if (typeof folder === 'string' && typeof name === 'string') {
     try {
       const file = getFile(folder, '', '', name);
-      res.end(file);
+      res.send(file);
     } catch (err) {
       console.error('error reading file:', err);
       res.sendStatus(400);
@@ -96,7 +96,7 @@ app.get('/api/files/:folder/:type/:name', (req, res) => {
   if (typeof folder === 'string' && typeof type === 'string' && typeof name === 'string') {
     try {
       const file = getFile(folder, type, '', name);
-      res.end(file);
+      res.send(file);
     } catch (err) {
       console.error('error reading file:', err);
       res.sendStatus(400);
@@ -118,7 +118,7 @@ app.get('/api/files/:folder/:type/:scope/:name', (req, res) => {
   if (typeof folder === 'string' && typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
     try {
       const file = getFile(folder, type, scope, name);
-      res.end(file);
+      res.send(file);
     } catch (err) {
       console.error('error reading file:', err);
       res.sendStatus(400);

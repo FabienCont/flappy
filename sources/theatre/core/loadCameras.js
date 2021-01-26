@@ -40,7 +40,7 @@ const getCamerasScene = function getCamerasScene() {
   try {
     const currentScene = this.models.scenes[this.currentScene];
     if (currentScene && currentScene.cameras !== undefined) {
-      return currentScene.cameras();
+      return JSON.parse(JSON.stringify(currentScene.cameras()));
     }
     return [];
   } catch (err) {

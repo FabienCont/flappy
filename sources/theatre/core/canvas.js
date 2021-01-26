@@ -1,6 +1,4 @@
-import { generateUUID } from 'core/uuidv4';
-
-function Canvas(type, identifier, width, height, pixelated = false) {
+function Canvas(type, identifier, uuid, width, height, pixelated = false) {
   const element = document.createElement('canvas');
   const context = element.getContext(type);
 
@@ -39,7 +37,6 @@ function Canvas(type, identifier, width, height, pixelated = false) {
     context.imageSmoothingEnabled = false;
   }
 
-  const uuid = generateUUID();
   element.setAttribute('id', `${identifier}_${uuid}`);
   element.addEventListener('mousedown', focus);
 

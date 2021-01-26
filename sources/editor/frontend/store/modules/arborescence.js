@@ -24,7 +24,17 @@ const mutations = {
   },
 };
 // getters
-const getters = {};
+const getters = {
+  getImageFromSprites: (state) => (scope, fileName) => {
+    const nameToFind = fileName.split('.json')[0];
+    return Object.keys(state.all.assets.content.images.content[scope].content).find((name) => {
+      if (name.split('.')[0] === nameToFind) {
+        return true;
+      }
+      return false;
+    });
+  },
+};
 
 export default {
   namespaced: true,

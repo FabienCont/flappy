@@ -1,21 +1,21 @@
 <template>
   <div class="pane">
     <PaneHeader :activePane="activePane" :panes="panes"></PaneHeader>
-    <component :is="componentRef" :params="componentParams" @edit-sprites="editSprites" @save="save"></component>
+    <component :is="componentRef" :params="componentParams" @edit-image="editImage" @edit-sprites="editSprites" @save="save"></component>
   </div>
 </template>
 
 <script>
 import PaneHeader from "editor/frontend/view/PaneHeader.vue";
 import DevImageEdit from "editor/frontend/view/DevImageEdit.vue";
-import DevSpritesEdit from "editor/frontend/view/DevImageEdit.vue";
+import DevSpriteEdit from "editor/frontend/view/DevSpriteEdit.vue";
 import DevSoundEdit from "editor/frontend/view/DevSoundEdit.vue";
 import DevAceEditor from "editor/frontend/view/DevAceEditor.vue"
 import { mapGetters,mapActions } from 'vuex'
 
 export default {
   name: 'pane',
-  components:{PaneHeader,DevImageEdit,DevSoundEdit,DevAceEditor,DevSpritesEdit},
+  components:{PaneHeader,DevImageEdit,DevSoundEdit,DevAceEditor,DevSpriteEdit},
   data(){
     return {
       componentParams:{},
@@ -35,7 +35,7 @@ export default {
       let extension= name.match(/\.[0-9a-z]+$/i)[0];
       this.selectPreviewElement("assets","sprites",scope,name.split(extension)[0]+".json");
     },
-    editImages:function(scope,name){
+    editImage:function(scope,name){
       this.selectPreviewElement("assets","images",scope,name);
     },
     selectPreviewElement(folder,type,scope,name){
@@ -66,7 +66,7 @@ export default {
         this.componentRef=DevSoundEdit;
         this.componentParams=this.currentFiles[0];
       }else if(this.currentType==='sprites' && this.currentFiles.length===2){
-        this.componentRef=DevSpritesEdit;
+        this.componentRef=DevSpriteEdit;
         this.componentParams=this.currentFiles;
       }else if((this.currentFolder==='scenes' || this.currentType==='scenes'|| this.currentType==='entities'||this.currentType==='components'|| this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets'|| this.currentType==='scenes' || this.currentType==='entities' || this.currentType==='component') && this.currentFiles.length>0){
         this.componentRef=DevAceEditor;

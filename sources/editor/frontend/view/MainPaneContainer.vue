@@ -18,6 +18,5 @@ export default {
 .main-pane-container{
  display: flex;
   flex:2;
-  height: 100%;
 }
 </style>

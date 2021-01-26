@@ -29,8 +29,8 @@ export default {
 
   .pane-header{
     display: flex;
-    overflow: auto;
     width:100%;
+    min-height: 2rem;
     margin:0;
     padding:0;
     box-shadow: inset 0 -1px 0 $dev--color-color-darker;

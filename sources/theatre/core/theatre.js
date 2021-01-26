@@ -1,5 +1,6 @@
 import { Canvas } from 'core/canvas';
 import { Loop } from 'core/loop';
+import { generateUUID } from 'core/uuidv4';
 
 import { preloadAssets } from 'core/preloadAssets';
 import { preloadModels } from 'core/preloadModels';
@@ -14,7 +15,7 @@ function Theatre(config) {
   const speed = config.speed || 1;
   const loadingTime = typeof config.loadingTime === 'number' ? config.loadingTime : 2000;
   const { scenarioCtx } = config;
-  const { hooksCtx }=config;
+  const { hooksCtx } = config;
   const { assetsCtx } = config;
   const { modelsCtx } = config;
 
@@ -53,7 +54,7 @@ function Theatre(config) {
   function initialize() {
     const type = '2d';
 
-    canvas = new Canvas(type, 'theatre', this.size.width, this.size.height, sharp);
+    canvas = new Canvas(type, 'theatre', this.uuid, this.size.width, this.size.height, sharp);
 
     this.cleanCanvas = () => {};
 
@@ -154,6 +155,13 @@ function Theatre(config) {
     }
   }
 
+  function destroy() {
+    console.log(`destroy theatre instance ${this.uuid}`);
+    if (this.scene && this.scene.destroy) this.scene.destroy.call(this);
+    this.loop.destroy();
+    delete this;
+  }
+
   this.playing = true;
   this.preloading = true;
   this.currentScene = 'loading';
@@ -168,8 +176,10 @@ function Theatre(config) {
   this.play = play;
   this.restart = restart;
   this.tick = tick;
+  this.destroy = destroy;
   this.cameras = {};
   this.params = config.params || {};
+  this.uuid = generateUUID();
 
   initialize.call(this, config);
 

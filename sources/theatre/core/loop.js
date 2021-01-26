@@ -2,6 +2,7 @@ function Loop(handler, framerate = 60, speed = 1) {
   let elapsedTime = 0;
   let lastUpdate = null;
   let paused = false;
+  let reqAnimationFrame = requestAnimationFrame;
 
   function update() {
     const currentUpdate = performance.now();
@@ -32,7 +33,7 @@ function Loop(handler, framerate = 60, speed = 1) {
     }
 
     // call user's update handler on each available frame
-    requestAnimationFrame(this.update.bind(this));
+    reqAnimationFrame(this.update.bind(this));
 
     lastUpdate = currentUpdate;
   }
@@ -47,11 +48,16 @@ function Loop(handler, framerate = 60, speed = 1) {
 
   function tick(times = 1) {
     // call user's update handler on each available frame
-    requestAnimationFrame(() => {
+    reqAnimationFrame(() => {
       while (times--) {
         handler(1000 / this.framerate);
       }
     });
+  }
+
+  function destroy() {
+    handler = () => {};
+    reqAnimationFrame = () => {};
   }
 
   this.framerate = framerate;
@@ -61,6 +67,7 @@ function Loop(handler, framerate = 60, speed = 1) {
   this.play = play;
   this.tick = tick;
   this.update = update;
+  this.destroy = destroy;
 }
 
 // exports current module as an object
