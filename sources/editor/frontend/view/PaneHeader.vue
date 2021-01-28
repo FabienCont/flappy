@@ -78,9 +78,8 @@ export default {
 @import "editor/frontend/styles/_variables";
 
   .pane-header{
-    display: flex;
-    max-width:100%;
-    min-height: 2rem;
+    display: block;
+    width:100%;
     box-shadow: inset 0 -1px 0 $dev--color-color-darker;
   }
 

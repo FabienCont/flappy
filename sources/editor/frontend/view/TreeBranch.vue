@@ -76,13 +76,13 @@ export default {
   .tree-sub-branch-folder{
     display: flex;
     align-items: center;
-    cursor:pointer
+    cursor:pointer;
   }
   .tree-sub-branch-icon{
     margin-right:0.2rem;
   }
   .tree-sub-branch-file{
     margin-left: 15px;
-    cursor:pointer
+    cursor:pointer;
   }
 </style>

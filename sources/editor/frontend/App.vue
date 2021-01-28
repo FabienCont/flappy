@@ -49,16 +49,20 @@ export default {
 @import "editor/frontend/styles/_variables";
 
 .app{
-  font-family:  Menlo, Consolas, DejaVu Sans Mono, monospace;
-  height: 100vh;
+  font-family: Menlo, Consolas, DejaVu Sans Mono, monospace;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .app-body{
   display: flex;
-  flex-grow: 1;
-  overflow: hidden;
+  flex: 1;
+  overflow: auto;
+}
+
+.app-footer,.app-header{
+
 }
 
 </style>

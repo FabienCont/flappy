@@ -159,6 +159,12 @@ function Theatre(config) {
     console.log(`destroy theatre instance ${this.uuid}`);
     if (this.scene && this.scene.destroy) this.scene.destroy.call(this);
     this.loop.destroy();
+    /*
+      scenarioCtx
+      hooksCtx
+      assetsCtx
+      modelsCtx
+    */
     delete this;
   }
 

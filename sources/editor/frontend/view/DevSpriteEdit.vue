@@ -17,8 +17,8 @@
        <dev-button class="dev-preview-img-icon" @click="editImage()">Edit Image</dev-button>
        <dev-button class="dev-preview-img-icon" @click="deleteElement()">Delete</dev-button>
      </div>
-     <!-- <dev-sprites-grids :image="image" :grids="this.spritesFile.content">
-     </dev-sprites-grids> -->
+     <dev-sprites-grids :image="image" :grids="this.spritesFile.content">
+     </dev-sprites-grids>
     </detail-pane-container>
   </div>
 </template>
@@ -137,8 +137,9 @@ export default {
 
 .dev-sprite-edit{
   display: flex;
-  flex:1;
   height: 100%;
+  flex: 1;
+  overflow: auto;  
 }
 
 .dev-sprite-edit-container{

@@ -28,6 +28,7 @@ export default {
   .footer-app{
     display: block;
     height: 30px;
+    width:100%;
     background: $dev--color-color-dark;
     color: $dev--color-color-light;
     border-top:1px solid $dev--color-color-darker;

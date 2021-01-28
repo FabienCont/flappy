@@ -58,6 +58,8 @@ function Loop(handler, framerate = 60, speed = 1) {
   function destroy() {
     handler = () => {};
     reqAnimationFrame = () => {};
+    // ref reqAnimationFrame
+    // cancelAnimationFrame
   }
 
   this.framerate = framerate;

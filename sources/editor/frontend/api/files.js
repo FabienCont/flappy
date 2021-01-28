@@ -54,7 +54,7 @@ const getFile = function getFile(folder, type, scope, name) {
           }
           resolve(responseObj);
         } else if (this.readyState === XMLHttpRequest.DONE) {
-          reject();
+          reject(this.status);
         }
       };
       xhr.send();

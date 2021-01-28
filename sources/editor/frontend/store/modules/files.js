@@ -36,6 +36,12 @@ const actions = {
         commit('addFile', {
           path, content,
         });
+      }, (err) => {
+        if (err === 404) {
+          commit('addFile', {
+            path, content: [],
+          });
+        }
       });
       getFile(folder, 'images', scope, pngFileName).then((content) => {
         commit('addFile', {

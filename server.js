@@ -48,11 +48,41 @@ app.get('/alive', (req, res) => {
   res.send('Alive!');
 });
 
+const gameFolder = 'sources/game/';
+const generateArbo = (source) => Object.assign({}, ...readdirSync(source, { withFileTypes: true })
+  .map((dirent) => {
+    const graph = {};
+    if (dirent.isDirectory()) {
+      graph[dirent.name] = {
+        type: 'folder',
+        content: generateArbo(`${source}/${dirent.name}`),
+      };
+      return graph;
+    }
+
+    const { mtime, ctime } = fs.statSync(`${source}/${dirent.name}`);
+    graph[dirent.name] = { mtime, ctime, type: 'file' };
+    return graph;
+  }));
+
+const arborescence = generateArbo(gameFolder);
+
+const checkFileExist = function checkFileExist(folder, type, scope, name) {
+  try {
+    if (arborescence[folder].content[type].content[scope].content[name]) {
+      return true;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
+};
+
 const getFile = function getFile(folder, type, scope, name) {
   if (type === 'images' || type === 'sounds') {
-    return fs.readFileSync(`sources/game/${folder}/${type}/${scope}/${name}`).toString('base64');
+    return fs.readFileSync(`${gameFolder}${folder}/${type}/${scope}/${name}`).toString('base64');
   }
-  return fs.readFileSync(`sources/game/${folder}/${type}/${scope}/${name}`, 'utf-8');
+  return fs.readFileSync(`${gameFolder}${folder}/${type}/${scope}/${name}`, 'utf-8');
 };
 
 const writeFile = function writeFile(folder, type, scope, name, data) {
@@ -62,8 +92,8 @@ const writeFile = function writeFile(folder, type, scope, name, data) {
     dataToWrite = Buffer.from(data, 'base64');
     options.encoding = 'base64';
   }
-  fs.mkdirSync(`sources/game/${folder}/${type}/${scope}/`, { recursive: true });
-  fs.writeFileSync(`sources/game/${folder}/${type}/${scope}/${name}`, dataToWrite, options);
+  fs.mkdirSync(`${gameFolder}${folder}/${type}/${scope}/`, { recursive: true });
+  fs.writeFileSync(`${gameFolder}${folder}/${type}/${scope}/${name}`, dataToWrite, options);
 };
 
 app.get('/api/files/:folder/:name', (req, res) => {
@@ -71,11 +101,17 @@ app.get('/api/files/:folder/:name', (req, res) => {
   console.log(req.params);
   const { folder } = req.params;
   const { name } = req.params;
+  const type = '';
+  const scope = '';
 
   if (typeof folder === 'string' && typeof name === 'string') {
     try {
-      const file = getFile(folder, '', '', name);
-      res.send(file);
+      if (checkFileExist(folder, type, scope, name)) {
+        const file = getFile(folder, type, scope, name);
+        res.send(file);
+      } else {
+        res.sendStatus(404);
+      }
     } catch (err) {
       console.error('error reading file:', err);
       res.sendStatus(400);
@@ -92,11 +128,16 @@ app.get('/api/files/:folder/:type/:name', (req, res) => {
   const { folder } = req.params;
   const { type } = req.params;
   const { name } = req.params;
+  const scope = '';
 
   if (typeof folder === 'string' && typeof type === 'string' && typeof name === 'string') {
     try {
-      const file = getFile(folder, type, '', name);
-      res.send(file);
+      if (checkFileExist(folder, type, scope, name)) {
+        const file = getFile(folder, type, scope, name);
+        res.send(file);
+      } else {
+        res.sendStatus(404);
+      }
     } catch (err) {
       console.error('error reading file:', err);
       res.sendStatus(400);
@@ -117,8 +158,12 @@ app.get('/api/files/:folder/:type/:scope/:name', (req, res) => {
 
   if (typeof folder === 'string' && typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
     try {
-      const file = getFile(folder, type, scope, name);
-      res.send(file);
+      if (checkFileExist(folder, type, scope, name)) {
+        const file = getFile(folder, type, scope, name);
+        res.send(file);
+      } else {
+        res.sendStatus(404);
+      }
     } catch (err) {
       console.error('error reading file:', err);
       res.sendStatus(400);
@@ -339,25 +384,6 @@ app.post('/api/models/:type/:scope/:name', jsonParser, (req, res) => {
     res.sendStatus(400);
   }
 });
-
-const gameFolder = 'sources/game/';
-const generateArbo = (source) => Object.assign({}, ...readdirSync(source, { withFileTypes: true })
-  .map((dirent) => {
-    const graph = {};
-    if (dirent.isDirectory()) {
-      graph[dirent.name] = {
-        type: 'folder',
-        content: generateArbo(`${source}/${dirent.name}`),
-      };
-      return graph;
-    }
-
-    const { mtime, ctime } = fs.statSync(`${source}/${dirent.name}`);
-    graph[dirent.name] = { mtime, ctime, type: 'file' };
-    return graph;
-  }));
-
-const arborescence = generateArbo(gameFolder);
 
 app.get('/api/arborescence', (req, res) => {
   console.log('get Api Arborescence');
