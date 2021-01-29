@@ -11,7 +11,7 @@ const generateVariables = function generateVariables(sceneVariables) {
       }
     });
   } catch (err) {
-    console.error(err);
+    this.logger.error(err);
   }
 
   return variables;
@@ -25,13 +25,13 @@ const getVariablesScene = function getVariablesScene() {
     }
     return {};
   } catch (err) {
-    console.error(`no variables found for this scene :${this.currentScene}`);
+    this.logger.error(`no variables found for this scene :${this.currentScene}`);
   }
 };
 
 const loadVariables = function loadVariables() {
   const sceneVariables = getVariablesScene.call(this);
-  if(sceneVariables !== undefined){
+  if (sceneVariables !== undefined) {
     return generateVariables.call(this, sceneVariables);
   }
 };

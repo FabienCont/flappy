@@ -1,4 +1,4 @@
-function Canvas(type, identifier, uuid, width, height, pixelated = false) {
+function Canvas(type, identifier, uuid, width, height, logger, pixelated = false) {
   const element = document.createElement('canvas');
   const context = element.getContext(type);
 
@@ -42,6 +42,7 @@ function Canvas(type, identifier, uuid, width, height, pixelated = false) {
 
   resize(width, height);
 
+  this.logger = logger;
   this.context = context;
   this.element = element;
   this.focus = focus;

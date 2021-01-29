@@ -13,7 +13,7 @@ const loadSystems = function () {
     }
     return [];
   } catch (err) {
-    console.error(`no systems found for this scene :${this.currentScene}`);
+    this.logger.error(`no systems found for this scene :${this.currentScene}`);
   }
 };
 const getSystem = function (systemName, systemScope) {

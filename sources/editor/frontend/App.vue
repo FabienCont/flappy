@@ -43,7 +43,17 @@ export default {
   }
 }
 </script>
+<style>
 
+.flex{
+    display: flex;
+}
+
+.align-center{
+  align-items: center;
+}
+
+</style>
 <style lang="scss" scoped>
 
 @import "editor/frontend/styles/_variables";

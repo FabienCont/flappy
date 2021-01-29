@@ -5,20 +5,21 @@
       </div>
     </main-pane-container>
     <detail-pane-container>
-      <h3>{{type}}</h3>
-      <dev-input name='name' type="string" @update:inputValue="newVal=>name=newVal" :isEditable="false" :inputValue="name"></dev-input>
-      <dev-input name='scope' type="string" @update:inputValue="newVal=>scope=newVal" :isEditable="false" :inputValue="scope"></dev-input>
-     <div v-if="isElementModify">
-       <dev-button class="dev-preview-img-icon" @click="saveElement()">Save</dev-button>
-       <dev-button class="dev-preview-img-icon" @click="copyElement()">Cancel</dev-button>
-       <dev-button class="dev-preview-img-icon" @click="editImage()">Edit Image</dev-button>
-     </div>
-     <div v-else>
-       <dev-button class="dev-preview-img-icon" @click="editImage()">Edit Image</dev-button>
-       <dev-button class="dev-preview-img-icon" @click="deleteElement()">Delete</dev-button>
-     </div>
-     <dev-sprites-grids :image="image" :grids="this.spritesFile.content">
-     </dev-sprites-grids>
+        <h3>{{type}}</h3>
+        <dev-input name='name' type="string" @update:inputValue="newVal=>name=newVal" :isEditable="false" :inputValue="name"></dev-input>
+        <dev-input name='scope' type="string" @update:inputValue="newVal=>scope=newVal" :isEditable="false" :inputValue="scope"></dev-input>
+       <div class="flex" v-if="isElementModify">
+         <dev-button class="dev-preview-img-icon" @click="saveElement()">Save</dev-button>
+         <dev-button class="dev-preview-img-icon" @click="cancelModif()">Cancel</dev-button>
+         <dev-button class="dev-preview-img-icon" @click="editImage()">Edit Image</dev-button>
+       </div>
+       <div class="flex" v-else>
+         <dev-button class="dev-preview-img-icon" @click="editImage()">Edit Image</dev-button>
+         <dev-button class="dev-preview-img-icon" @click="deleteElement()">Delete</dev-button>
+       </div>
+       <dev-separator></dev-separator>
+       <dev-sprites-grids :image="image" :grids="this.gridsCopy" :reset="reset" @reset-done="resetDone" @update-sprite-file="updateCurrentGrids">
+       </dev-sprites-grids>
     </detail-pane-container>
   </div>
 </template>
@@ -38,9 +39,11 @@ export default {
   data(){
     return {
        base64:'data:image/png;base64,',
-       contentCopy:null,
+       gridsCopy:null,
+       currentGridsValue:null,
        canvasContainer:null,
-       theatreInstance:null
+       theatreInstance:null,
+       reset:false
     }
   },
   props: {
@@ -109,15 +112,25 @@ export default {
       return this.paths[2]
     },
     isElementModify:function(){
-      return this.spritesFile.content!==this.contentCopy
+      return JSON.stringify(this.spritesFile.content)!==JSON.stringify(this.currentGridsValue)
     }
   },
   methods:{
+    resetDone:function(){
+      this.reset=false;
+    },
+    updateCurrentGrids:function(gridsCopy){
+      this.currentGridsValue=JSON.parse(JSON.stringify(gridsCopy));
+    },
     copyProps:function(){
-      this.contentCopy = this.spritesFile.content;
+      this.gridsCopy = JSON.parse(JSON.stringify(this.spritesFile.content));
+      this.currentGridsValue=JSON.parse(JSON.stringify(this.spritesFile.content));
+    },
+    cancelModif:function(){
+      this.reset=true;
     },
     saveElement:function(){
-      this.$emit("save-model",{scope:this.scope,name:this.name,content:this.contentCopy});
+      this.$emit("save",{type:this.type,scope:this.scope,name:this.name,content:this.currentGridsValue});
     },
     deleteElement:function(){
       this.$emit("delete-model");
@@ -139,7 +152,7 @@ export default {
   display: flex;
   height: 100%;
   flex: 1;
-  overflow: auto;  
+  overflow: auto;
 }
 
 .dev-sprite-edit-container{

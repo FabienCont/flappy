@@ -1,5 +1,5 @@
 function update() {
-  // console.log('update loading scene');
+  // this.logger.log('update loading scene');
   if (this.preloading === false && this.$variables.redirect === false) {
     setTimeout(() => {
       this.load('previewSprites');

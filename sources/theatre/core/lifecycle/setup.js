@@ -1,5 +1,5 @@
 function setup() {
-  console.log(`setup ${this.currentScene} scene`);
+  this.logger.log(`setup ${this.currentScene} scene`);
 }
 
 export { setup };

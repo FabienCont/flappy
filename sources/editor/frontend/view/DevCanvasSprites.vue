@@ -29,7 +29,8 @@ export default {
       assetsCtx:{},
       modelsCtx:require.context('debug/theatre/previewSprites/models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
       loadingTime:0,
-      params:this.params
+      params:this.params,
+      focus:false
     });
   },
   props: {

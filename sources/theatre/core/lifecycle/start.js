@@ -7,7 +7,7 @@ import { loadSystems } from 'core/loadSystems';
 import { loadVariables } from 'core/loadVariables';
 
 function start() {
-  console.log(`start ${this.currentScene} scene`);
+  this.logger.log(`start ${this.currentScene} scene`);
 
   this.$controllers = loadControllers.call(this);
 

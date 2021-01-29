@@ -1,6 +1,6 @@
 function setup() {
   // setup demo
-  console.log('setup edit animations scene');
+  this.logger.log('setup edit animations scene');
 
   const imageGetter = () => this.params.sprite;
   if (!this.assets.images) this.assets.images = {};

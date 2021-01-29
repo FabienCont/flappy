@@ -25,11 +25,11 @@ export default {
     },
     width: {
       type: [Number, String],
-      default: "2em"
+      default: "1.3rem"
     },
     height: {
       type: [Number, String],
-      default: "2em"
+      default: "1.3rem"
     },
     iconColor: {
       type: String,
@@ -54,19 +54,24 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "editor/frontend/styles/_variables";
   /* -----
   SVG Icons - svgicons.sparkk.fr
   ----- */
   .dev-icon path,
   .dev-icon polygon,
   .dev-icon rect {
-    fill: #4691f6;
+    fill: $dev--color-color2;
   }
 
   .dev-icon circle {
-    stroke: #4691f6;
+    stroke: $dev--color-color2;
     stroke-width: 1;
+  }
+
+  .dev-icon{
+    cursor: pointer;
   }
 
 </style>

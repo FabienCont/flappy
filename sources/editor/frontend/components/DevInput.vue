@@ -41,5 +41,6 @@ export default {
 }
 .dev-input{
   width: 6rem;
+  margin :0.2rem;
 }
 </style>

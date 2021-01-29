@@ -78,9 +78,9 @@ const actions = {
     } else {
       throw new Error('wrong path format');
     }
-    commit('cleanActiveFiles');
+
     postFile(folder, type, scope, fileName, content).then(() => {
-      commit('addFile', {
+      commit('replaceFile', {
         path, content,
       });
     });
@@ -89,6 +89,10 @@ const actions = {
 
 // mutations
 const mutations = {
+  replaceFile(state, { path, content }) {
+    this.$app.$set(state.all, path, { content, path });
+    state.all = { ...state.all };
+  },
   addFile(state, { path, content }) {
     state.all[path] = { content, path };
     state.active.push(path);

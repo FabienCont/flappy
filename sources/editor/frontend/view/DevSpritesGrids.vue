@@ -1,44 +1,49 @@
 <template lang="html">
-  <div>
+  <div class="dev-sprites-grids-container">
     <dev-button @click="addGrid()">Add Grid</dev-button>
     <div v-if="gridsCopy.length===0">
       empty grid
     </div>
-    <div v-else v-for="(grid , indexGrid)  in gridsCopy" :key="indexGrid">
-      <div @click="changeGridFocus(indexGrid)" class='dev-preview-anim-grid-name'>
-        <dev-icon :iconName="getTypeIcon(indexGrid)"></dev-icon>
-        <h4>grid {{indexGrid}} {'x':{{grid.x}},'y':{{grid.y}},'width':{{grid.width}},'height':{{grid.height}},'columns':{{grid.columns}},'rows':{{grid.rows}}}</h4>
+    <div v-for="(grid , indexGrid)  in gridsCopy" :key="indexGrid">
+      <div class='dev-sprites-grid'>
+        <dev-icon @click="changeGridFocus(indexGrid)" :iconName="getGridTypeIcon(indexGrid)"></dev-icon>
+        <h4 class="dev-sprites-grid-title">GRID {{indexGrid}}</h4>
         <dev-icon @click.prevent="deleteGrid(indexGrid)" iconName="delete"></dev-icon>
       </div>
       <div v-if='gridFocus===indexGrid'>
-        <dev-input type="number" name="x" :isEditable="true" :inputValue="grid.x" @update:inputValue="newVal => grid.x = newVal"></dev-input>
-        <dev-input type="number" name="y" :isEditable="true" :inputValue="grid.y" @update:inputValue="newVal => grid.y= newVal"></dev-input>
-        <dev-input type="number" name="width" :isEditable="true" :inputValue="grid.width" @update:inputValue="newVal => grid.width= newVal"></dev-input>
-        <dev-input type="number" name="height" :isEditable="true" :inputValue="grid.height" @update:inputValue="newVal => grid.height= newVal"></dev-input>
-        <dev-input type="number" name="columns" :isEditable="true" :inputValue="grid.columns" @update:inputValue="newVal =>  grid.columns= newVal"></dev-input>
-        <dev-input type="number" name="rows" :isEditable="true" :inputValue="grid.rows" @update:inputValue="newVal => grid.rows = newVal"></dev-input>
-        Animations:
-        <div>
+        <dev-input type="number" name="x" :isEditable="true" :inputValue="grid.x" @update:inputValue="newVal => gridsCopy[indexGrid].x = newVal"></dev-input>
+        <dev-input type="number" name="y" :isEditable="true" :inputValue="grid.y" @update:inputValue="newVal => gridsCopy[indexGrid].y= newVal"></dev-input>
+        <dev-input type="number" name="width" :isEditable="true" :inputValue="grid.width" @update:inputValue="newVal => gridsCopy[indexGrid].width= newVal"></dev-input>
+        <dev-input type="number" name="height" :isEditable="true" :inputValue="grid.height" @update:inputValue="newVal => gridsCopy[indexGrid].height= newVal"></dev-input>
+        <dev-input type="number" name="columns" :isEditable="true" :inputValue="grid.columns" @update:inputValue="newVal =>  gridsCopy[indexGrid].columns= newVal"></dev-input>
+        <dev-input type="number" name="rows" :isEditable="true" :inputValue="grid.rows" @update:inputValue="newVal => gridsCopy[indexGrid].rows = newVal"></dev-input>
+        Sprites:
+        <div class="flex" >
           <dev-button @click="addAnimation(grid)">Add</dev-button>
           <dev-button @click="splitAll(grid)">Split by Images</dev-button>
           <dev-button @click="createAnimByRow(grid)">Animate by row</dev-button>
           <dev-button @click="createAnimByColumn(grid)">Animate by column</dev-button>
         </div>
         <div v-if="grid.animations.length===0">
-        no animations
+        no sprites
         </div>
-        <div v-else v-for="(animation , indexAnim)  in grid.animations" :key="indexAnim">
-          <h4>animation {{indexAnim}}</h4>
-          <dev-input type="number" width="50" name="framerate" :isEditable="true" :inputValue="animation.framerate" @update:inputValue="newVal => animations.framerate= newVal"></dev-input>
+        <div v-for="(animation , indexAnim)  in grid.animations" :key="indexAnim">
+          <div class="flex align-center">
+            <dev-icon @click="changeSpriteFocus(indexAnim)" :iconName="getSpriteTypeIcon(indexAnim)"></dev-icon>
+            <h4 class="dev-sprite-title">sprite {{indexAnim}} :</h4>
+          </div>
           <dev-canvas-sprites v-if='animation.frames.length!==0' :animation="calculatedAnimations[indexGrid][indexAnim]" :image="image"></dev-canvas-sprites>
-          frames :
-          <dev-button @click="addFrame(grid,animation)">Add</dev-button>
-          <div class="frame-preview" v-for="(frame , index)  in animation.frames" :key="index">
-            {{index}}:
-            <dev-input type="number" width="50" name="x" :isEditable="true" :inputValue="frame.x" @update:inputValue="newVal => frame.x = newVal"></dev-input>
-            <dev-input type="number" width="50" name="y" :isEditable="true" :inputValue="frame.y" @update:inputValue="newVal => frame.y= newVal"></dev-input>
-            <dev-input type="number" width="50" name="width" :isEditable="true" :inputValue="frame.width" @update:inputValue="newVal => frame.width= newVal"></dev-input>
-            <dev-input type="number" width="50" name="height" :isEditable="true" :inputValue="frame.height" @update:inputValue="newVal => frame.height= newVal"></dev-input>
+          <div v-if='spriteFocus===indexAnim'>
+            <dev-input v-if="animation.frames.length>1 " type="number" name="framerate" :isEditable="true" :inputValue="animation.framerate" @update:inputValue="newVal => animation.framerate= newVal"></dev-input>
+            frames :
+            <dev-button @click="addFrame(grid,animation)">Add</dev-button>
+            <div class="flex" v-for="(frame , index)  in animation.frames" :key="index">
+              {{index}}:
+              <dev-input type="number" name="x" :isEditable="true" :inputValue="frame.x" @update:inputValue="newVal => frame.x = newVal"></dev-input>
+              <dev-input type="number" name="y" :isEditable="true" :inputValue="frame.y" @update:inputValue="newVal => frame.y= newVal"></dev-input>
+              <dev-input type="number" name="width" :isEditable="true" :inputValue="frame.width" @update:inputValue="newVal => frame.width= newVal"></dev-input>
+              <dev-input type="number" name="height" :isEditable="true" :inputValue="frame.height" @update:inputValue="newVal => frame.height= newVal"></dev-input>
+            </div>
           </div>
         </div>
       </div>
@@ -58,24 +63,38 @@ export default {
        base64:'data:image/png;base64,',
        nameCopy:"",
        scopeCopy:"",
-       gridFocus:0,
-       gridsCopy:this.grids
+       gridFocus:-1,
+       spriteFocus:-1,
+       gridsCopy:JSON.parse(JSON.stringify(this.grids))
     }
   },
   props: {
     grids:Array,
-    image:HTMLImageElement
+    image:HTMLImageElement,
+    reset:Boolean
   },
-  methods:{
-    getTypeIcon:function(index){
-      if(this.gridFocus!==index){
-        return 'right';
-      }else return 'bottom';
+  watch:{
+    reset:function(val){
+      if(val){
+        this.gridsCopy=JSON.parse(JSON.stringify(this.grids));
+        if(this.gridFocus>=this.gridsCopy.length){
+          this.gridFocus=-1;
+          this.spriteFocus=-1;
+        }else if(this.spriteFocus>= this.gridsCopy[this.gridFocus].animations.length){
+          this.spriteFocus=-1;
+        }
+        this.$emit('reset-done');
+      }
     },
+    gridsCopy:{
+      deep:true,
+      handler:function(val){
+        this.$emit('update-sprite-file',val);
+      }
+    }
   },
   computed:{
     calculatedAnimations:function(){
-      console.log('trigger')
       let calculatedAnimations=[]
       this.gridsCopy.forEach((grid, i) => {
         let gridArray=[]
@@ -92,9 +111,140 @@ export default {
       });
       return calculatedAnimations;
     },
+  },
+  methods:{
+    deleteGrid:function(index){
+      this.gridsCopy.splice(index, 1);
+      if(this.gridFocus===index){
+        this.gridFocus=-1;
+      }else if(this.gridFocus>0 && this.gridFocus>index){
+        this.gridFocus=-1;
+      }
+    },
+    addFrame:function(grid,animation){
+      let frame ={
+          "x":0,
+          "y":0,
+          "width":grid.width,
+          "height":grid.height
+      }
+      animation.frames.push(frame);
+    },
+    addAnimation:function(grid){
+      let animation ={
+        "frames":[{
+          "x":0,
+          "y":0,
+          "width":grid.width,
+          "height":grid.height
+        }],
+        "framerate":8,
+      }
+      grid.animations.push(animation);
+    },
+    splitAll:function(grid){
+      for(let c =0;c<grid.columns;c++){
+        for(let r =0;r<grid.rows;r++){
+          let animation ={
+            "frames":[{
+              "x":grid.x+grid.width*c,
+              "y":grid.y+grid.height*r,
+              "width":grid.width,
+              "height":grid.height
+            }],
+            "framerate":8,
+          }
+          grid.animations.push(animation);
+        }
+      }
+    },
+    createAnimByRow:function(grid){
+      for(let r =0;r<grid.rows;r++){
+        let animation ={
+          "frames":[],
+          "framerate":8,
+        }
+        for(let c =0;c<grid.columns;c++){
+          let frame ={
+              "x":grid.x+grid.width*c,
+              "y":grid.y+grid.height*r,
+              "width":grid.width,
+              "height":grid.height
+            }
+            animation.frames.push(frame);
+        }
+        grid.animations.push(animation);
+      }
+    },
+    createAnimByColumn:function(grid){
+      for(let c =0;c<grid.columns;c++){
+        let animation ={
+          "frames":[],
+          "framerate":8,
+        }
+        for(let r =0;r<grid.rows;r++){
+          let frame ={
+              "x":grid.x+grid.width*c,
+              "y":grid.y+grid.height*r,
+              "width":grid.width,
+              "height":grid.height
+            }
+            animation.frames.push(frame);
+        }
+        grid.animations.push(animation);
+      }
+    },
+    changeGridFocus:function(index){
+      if(this.gridFocus===index){
+        this.gridFocus=-1;
+        this.spriteFocus=-1;
+      }else this.gridFocus=index;
+    },
+    changeSpriteFocus:function(index){
+      if(this.spriteFocus===index){
+        this.spriteFocus=-1;
+      }else this.spriteFocus=index;
+    },
+    getGridTypeIcon:function(index){
+      if(this.gridFocus!==index){
+        return 'right';
+      }else return 'bottom';
+    },
+    getSpriteTypeIcon:function(index){
+      if(this.spriteFocus!==index){
+        return 'right';
+      }else return 'bottom';
+    },
+    addGrid:function(){
+      let grid={"x":0,"y":0,"columns":2,"rows":2,"width":this.image.naturalWidth/2,"height":this.image.naturalHeight/2,"animations":[]};
+      this.$set(grid, 'animations', [])
+      this.gridsCopy.push(grid);
+      this.gridFocus=this.gridsCopy.length-1;
+    },
   }
 }
 </script>
 
 <style lang="css" scoped>
+
+.dev-sprites-grids-container{
+  margin-bottom: 1rem;
+}
+
+.dev-sprites-grid{
+  display: flex;
+  align-items: center;
+}
+
+.dev-sprites-grid-title{
+  display: inline-block;
+  margin:1rem;
+}
+
+.dev-sprite-title{
+  display: inline-block;
+  margin:1rem;
+}
+
+
 </style>

@@ -5,7 +5,7 @@ const preloadAssets = function (ctx) {
     const promiseArray = [];
 
     this.assetsLoaded = [];
-    if(context.keys===undefined)resolve();
+    if (context.keys === undefined)resolve();
 
     context.keys().forEach((key) => {
       const promise = new Promise((resolve, reject) => {
@@ -57,7 +57,7 @@ const preloadAssets = function (ctx) {
 function loadAsset(key, module) {
   // creates a promise for current asset preloading
   return new Promise((resolve, reject) => {
-    console.log('load assets or reload');
+    this.logger.log('load assets or reload');
 
     const [type, scope, name] = key.match(/(?!\.\/|\/)(.+?)(?=(?:\.[^\.\/]+$)|\/)/g);
 

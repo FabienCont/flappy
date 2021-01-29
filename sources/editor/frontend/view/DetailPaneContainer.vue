@@ -23,6 +23,6 @@ export default {
   flex-direction: column;
   flex:1;
   position: relative;
-  overflow-y: auto;
+  overflow: auto;
 }
 </style>

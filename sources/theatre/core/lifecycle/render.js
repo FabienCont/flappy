@@ -2,7 +2,7 @@ import { updateRenderers } from 'core/loadRenderers';
 // import { draw, createSquare } from 'core/webGL';
 
 function render() {
-  // console.log('render loading scene');
+  // this.logger.log('render loading scene');
 
   this.cleanCanvas();
 

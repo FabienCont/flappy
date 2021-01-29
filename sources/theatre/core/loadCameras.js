@@ -19,7 +19,7 @@ const generateCameras = function generateCameras(sceneCameras) {
       cameras[cam.name] = new Camera(cam.name, cam.type, this.size, cam.params);
     });
   } catch (err) {
-    console.error(err);
+    this.logger.error(err);
   }
 
   return cameras;
@@ -44,7 +44,7 @@ const getCamerasScene = function getCamerasScene() {
     }
     return [];
   } catch (err) {
-    console.error(`no cameras found for this scene :${this.currentScene}`);
+    this.logger.error(`no cameras found for this scene :${this.currentScene}`);
   }
 };
 

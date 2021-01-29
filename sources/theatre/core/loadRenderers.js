@@ -5,7 +5,7 @@ const loadRenderers = function getRenderers() {
       return sceneModel.renderers();
     }
   } catch (err) {
-    console.error(`no renderers found for this scene :${this.currentScene}`);
+    this.logger.error(`no renderers found for this scene :${this.currentScene}`);
   }
   return [];
 };

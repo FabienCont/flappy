@@ -1,6 +1,6 @@
 function destroy() {
-  console.log(`destroy ${this.currentScene} scene`);
-  console.log('-------');
+  this.logger.log(`destroy ${this.currentScene} scene`);
+  this.logger.log('-------');
 
   this.$controllers.destroy();
 

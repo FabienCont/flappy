@@ -1,5 +1,6 @@
 import { Canvas } from 'core/canvas';
 import { Loop } from 'core/loop';
+import Logger from 'core/logger';
 import { generateUUID } from 'core/uuidv4';
 
 import { preloadAssets } from 'core/preloadAssets';
@@ -18,6 +19,8 @@ function Theatre(config) {
   const { hooksCtx } = config;
   const { assetsCtx } = config;
   const { modelsCtx } = config;
+  const focus = typeof config.focus === 'boolean' ? config.focus : true;
+  const silentLog = typeof config.focus === 'boolean' ? config.focus : false;
 
   const size = {
     height: container.offsetHeight,
@@ -52,9 +55,11 @@ function Theatre(config) {
   }
 
   function initialize() {
+    this.logger = new Logger(this.silentLog);
+
     const type = '2d';
 
-    canvas = new Canvas(type, 'theatre', this.uuid, this.size.width, this.size.height, sharp);
+    canvas = new Canvas(type, 'theatre', this.uuid, this.size.width, this.size.height, this.logger, sharp);
 
     this.cleanCanvas = () => {};
 
@@ -70,8 +75,9 @@ function Theatre(config) {
     }
 
     container.appendChild(canvas.element);
-
-    canvas.focus();
+    if (focus) {
+      canvas.focus();
+    }
 
     this.context = canvas.context;
     this.container = container;
@@ -80,7 +86,7 @@ function Theatre(config) {
     this.assets = {};
     this.delta = 0;
 
-    this.loop = new Loop(forward.bind(this), framerate, speed);
+    this.loop = new Loop(forward.bind(this), this.logger, framerate, speed);
     preloadScenes.call(this, scenarioCtx, hooksCtx);
     const promisePreloadAssets = preloadAssets.call(this, assetsCtx);
     const promisePreloadModels = preloadModels.call(this, modelsCtx);
@@ -156,7 +162,7 @@ function Theatre(config) {
   }
 
   function destroy() {
-    console.log(`destroy theatre instance ${this.uuid}`);
+    this.logger.log(`destroy theatre instance ${this.uuid}`);
     if (this.scene && this.scene.destroy) this.scene.destroy.call(this);
     this.loop.destroy();
     /*
@@ -186,6 +192,8 @@ function Theatre(config) {
   this.cameras = {};
   this.params = config.params || {};
   this.uuid = generateUUID();
+  this.silentLog = silentLog;
+  this.logger = {};
 
   initialize.call(this, config);
 

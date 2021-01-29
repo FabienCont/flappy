@@ -6,7 +6,7 @@ import { loadCameras } from 'core/loadCameras';
 import { loadSystems } from 'core/loadSystems';
 
 function start() {
-  console.log('start edit animations scene');
+  this.logger.log('start edit animations scene');
 
   this.$controllers = loadControllers.call(this);
 

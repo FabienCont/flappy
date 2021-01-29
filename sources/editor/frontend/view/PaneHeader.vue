@@ -1,13 +1,15 @@
 <template>
   <div class="pane-header">
-    <ul ref="container" class="pane-header-center">
-      <tab v-for="(pane,index) in panes" :key="index" :isActive="index===activePane" :filePath="pane.path"></tab>
-    </ul>
-    <div v-show="isScrollable" class="pane-header-right">
-      <dev-icon :class="{active:(interval&&isLeft)}" class="pane-header-icon" @mousedown="start(true)" @touchstart="start(true)" @mouseleave="stop" @mouseup="stop" @touchend="stop" @touchcancel="stop"
-        :width="svgSize" :height="svgSize" iconName="left"></dev-icon>
-      <dev-icon :class="{active:(interval&&!isLeft)}" class="pane-header-icon" @mousedown="start(false)" @touchstart="start(false)" @mouseleave="stop" @mouseup="stop"  @touchend="stop" @touchcancel="stop"
-        :width="svgSize" :height="svgSize" iconName="right"></dev-icon>
+    <div class="pane-header-content">
+      <ul ref="container" class="pane-header-center">
+        <tab v-for="(pane,index) in panes" :key="index" :isActive="index===activePane" :filePath="pane.path"></tab>
+      </ul>
+      <div v-show="isScrollable" class="pane-header-right">
+        <dev-icon :class="{active:(interval&&isLeft)}" class="pane-header-icon" @mousedown="start(true)" @touchstart="start(true)" @mouseleave="stop" @mouseup="stop" @touchend="stop" @touchcancel="stop"
+          :width="svgSize" :height="svgSize" iconName="left"></dev-icon>
+        <dev-icon :class="{active:(interval&&!isLeft)}" class="pane-header-icon" @mousedown="start(false)" @touchstart="start(false)" @mouseleave="stop" @mouseup="stop"  @touchend="stop" @touchcancel="stop"
+          :width="svgSize" :height="svgSize" iconName="right"></dev-icon>
+      </div>
     </div>
   </div>
 </template>
@@ -81,6 +83,10 @@ export default {
     display: block;
     width:100%;
     box-shadow: inset 0 -1px 0 $dev--color-color-darker;
+  }
+
+  .pane-header-content{
+      display: flex;
   }
 
   .pane-header-center{

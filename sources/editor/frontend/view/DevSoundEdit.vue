@@ -17,11 +17,11 @@
          <span>Select a new file</span>
          <dev-upload accept="audio/mpeg" @update-file="updateFile" ></dev-upload>
      </div>
-     <div v-if="isElementModify">
+     <div class="flex" v-if="isElementModify">
        <dev-button class="dev-preview-sound-icon" @click="saveElement()">Save</dev-button>
        <dev-button class="dev-preview-sound-icon" @click="copyElement()">Cancel</dev-button>
      </div>
-     <div v-else>
+     <div class="flex" v-else>
        <dev-button class="dev-preview-sound-icon" @click="deleteElement()">Delete</dev-button>
      </div>
     </detail-pane-container>
@@ -98,7 +98,7 @@ export default {
     },
     saveElement:function(){
       if(this.elementCopy.startsWith(this.base64))this.elementCopy=this.elementCopy.split(this.base64)[1];
-      this.$emit("save-model",{scope:this.scopeCopy,name:this.nameCopy,content:this.elementCopy});
+      this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.elementCopy});
     },
     deleteElement:function(){
       this.$emit("delete-model");

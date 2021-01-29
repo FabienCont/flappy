@@ -1,13 +1,13 @@
 <template>
   <div class="tree-view">
     <span class="tree-view-header">Project</span>
-    <tree-branch @select-file="childSelectFile" :branch="arborescence"></tree-branch>
+    <tree-branch @select-file="childSelectFile" parentPath='' :currentPath="currentPath" :branch="arborescence"></tree-branch>
   </div>
 </template>
 
 <script>
 
-import { mapActions } from 'vuex'
+import { mapActions,mapGetters } from 'vuex'
 import TreeBranch from "editor/frontend/view/TreeBranch.vue";
 //check Ref
 export default {
@@ -16,17 +16,24 @@ export default {
   computed:{
     arborescence () {
       return this.$store.state.arborescence.all
+    },
+    currentPath (){
+      let currentPane=this.currentPane()
+      return currentPane?currentPane.path:'';
     }
   },
   methods:{
     ...mapActions({
       openPane:'panes/open'
     }),
+    ...mapGetters({
+      currentPane:"panes/currentPane",
+    }),
     childSelectFile:function({branch,path}){
       let fullPath=path.reverse().join("/");
       this.openPane(fullPath);
     }
-  }
+  },
 }
 </script>
 

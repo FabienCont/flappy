@@ -1,4 +1,4 @@
-function Loop(handler, framerate = 60, speed = 1) {
+function Loop(handler, logger, framerate = 60, speed = 1) {
   let elapsedTime = 0;
   let lastUpdate = null;
   let paused = false;
@@ -17,7 +17,7 @@ function Loop(handler, framerate = 60, speed = 1) {
             && paused === false) {
         // define elapsed time since last user's update handler matching timeframe and speed
         if (elapsedTime >= 5000) {
-          console.log('droped', elapsedTime);
+          this.logger.log('droped', elapsedTime);
 
           // define elapsed time since last user's update handler matching timeframe and speed
           elapsedTime -= elapsedTime;
@@ -65,6 +65,7 @@ function Loop(handler, framerate = 60, speed = 1) {
   this.framerate = framerate;
   this.speed = speed;
 
+  this.logger = logger;
   this.pause = pause;
   this.play = play;
   this.tick = tick;

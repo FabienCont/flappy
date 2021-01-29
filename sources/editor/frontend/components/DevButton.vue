@@ -12,15 +12,29 @@ export default {
 
 <style scoped lang="scss">
 
-  @import 'debug/styles/_variables';
+@import "editor/frontend/styles/_variables";
 
   .dev-button{
     border: none;
-    background-color: $dev--color-color0;
+    background-color: $dev--color-color2;
     color:$dev--color-color-light;
-    padding: 0.3rem 0.7rem;
-    text-align: center;
+    padding: 0.35rem 0.8rem;
+    justify-content: center;
+    align-items: center;
     text-decoration: none;
-    display: inline-block;
+    display: flex;
+    margin :0.3rem;
+    border-radius: 2px;
+    cursor: pointer;
   }
+
+  :hover.dev-button{
+    background-color: $dev--color-color2-light;
+  }
+
+  :disabled.dev-button{
+    background-color: $dev--color-color2-fade;
+    cursor: not-allowed;
+  }
+
 </style>

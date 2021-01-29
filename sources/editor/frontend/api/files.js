@@ -26,7 +26,7 @@ const postFile = function postFile(folder, type, scope, name, data) {
       };
 
       const objectToSend = {
-        data,
+        data: typeof data !== 'string' ? JSON.stringify(data) : data,
       };
       xhr.send(JSON.stringify(objectToSend));
     } else reject();

@@ -61,6 +61,11 @@ export default {
     background: $dev--color-color-dark;
   }
 
+  :hover.tab{
+    color: $dev--color-color-light;
+    background:  $dev--color-color-dark-fade;
+  }
+
   .tab-active{
     color: $dev--color-color-light;
     background:  $dev--color-color-dark-fade;

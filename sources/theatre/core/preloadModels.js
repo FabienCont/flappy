@@ -60,7 +60,7 @@ const preloadModels = function preloadModels(ctx) {
 function loadModel(key, module) {
   // creates a promise for current asset preloading
   return new Promise((resolve, reject) => {
-    console.log('load models or reload');
+    this.logger.log('load models or reload');
 
     const [type, scope, name] = key.match(/(?!\.\/|\/)(.+?)(?=(?:\.[^\.\/]+$)|\/)/g);
 

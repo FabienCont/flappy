@@ -96,6 +96,8 @@ const writeFile = function writeFile(folder, type, scope, name, data) {
   fs.writeFileSync(`${gameFolder}${folder}/${type}/${scope}/${name}`, dataToWrite, options);
 };
 
+const jsonParser = bodyParser.json();
+
 app.get('/api/files/:folder/:name', (req, res) => {
   console.log('get Api Files');
   console.log(req.params);
@@ -174,7 +176,7 @@ app.get('/api/files/:folder/:type/:scope/:name', (req, res) => {
   }
 });
 
-app.post('/api/files/:folder/:name', (req, res) => {
+app.post('/api/files/:folder/:name', jsonParser, (req, res) => {
   console.log('post Api Files');
   console.log('Got params:', req.params);
 
@@ -195,7 +197,7 @@ app.post('/api/files/:folder/:name', (req, res) => {
   }
 });
 
-app.post('/api/files/:folder/:type/:name', (req, res) => {
+app.post('/api/files/:folder/:type/:name', jsonParser, (req, res) => {
   console.log('post Api Files');
   console.log('Got params:', req.params);
 
@@ -217,7 +219,7 @@ app.post('/api/files/:folder/:type/:name', (req, res) => {
   }
 });
 
-app.post('/api/files/:folder/:type/:scope/:name', (req, res) => {
+app.post('/api/files/:folder/:type/:scope/:name', jsonParser, (req, res) => {
   console.log('post Api Files');
   console.log('Got params:', req.params);
 
@@ -275,8 +277,6 @@ app.get('/api/assets/:type/:scope/:name', (req, res) => {
     res.sendStatus(400);
   }
 });
-
-const jsonParser = bodyParser.json();
 
 app.post('/api/assets/:type/:scope/:name', jsonParser, (req, res) => {
   console.log('post Api Assets');
@@ -392,9 +392,8 @@ app.get('/api/arborescence', (req, res) => {
 
 const obserser = new Obserser();
 
-const regex = new RegExp(/(?<=sources\\game\\)(.*)/, 'gm');
-
 obserser.on('file-added', (file) => {
+  const regex = new RegExp(/(?<=sources\\game\\)(.*)/, 'gm');
   const subPaths = regex.match(file.filePath)[0].split('/');
   let arborescenceNode = arborescence;
   subPaths.forEach((subPath, i) => {
@@ -411,6 +410,7 @@ obserser.on('file-added', (file) => {
 });
 
 obserser.on('file-change', (file) => {
+  const regex = new RegExp(/(?<=sources\\game\\)(.*)/, 'gm');
   const subPaths = regex.match(file.filePath)[0].split('/');
   let arborescenceNode = arborescence;
   subPaths.forEach((subPath, i) => {
@@ -428,6 +428,7 @@ obserser.on('file-change', (file) => {
 
 obserser.on('file-deleted', (file) => {
   // print error message to console
+  const regex = new RegExp(/(?<=sources\\game\\)(.*)/, 'gm');
   const subPaths = regex.match(file.filePath)[0].split('/');
   let arborescenceNode = arborescence;
   subPaths.forEach((subPath, i) => {
