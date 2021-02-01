@@ -69,11 +69,19 @@ const arborescence = generateArbo(gameFolder);
 
 const checkFileExist = function checkFileExist(folder, type, scope, name) {
   try {
-    if (arborescence[folder].content[type].content[scope].content[name]) {
+    let filePath = arborescence[folder].content;
+    if (type !== '') {
+      filePath = filePath[type].content;
+    }
+    if (scope !== '') {
+      filePath = filePath[scope].content;
+    }
+    if (filePath[name]) {
       return true;
     }
   } catch (err) {
     console.log(err);
+    return false;
   }
   return false;
 };
@@ -94,6 +102,21 @@ const writeFile = function writeFile(folder, type, scope, name, data) {
   }
   fs.mkdirSync(`${gameFolder}${folder}/${type}/${scope}/`, { recursive: true });
   fs.writeFileSync(`${gameFolder}${folder}/${type}/${scope}/${name}`, dataToWrite, options);
+  const { mtime, ctime } = fs.statSync(`${gameFolder}${folder}/${type}/${scope}/${name}`);
+  arborescence[folder].content[type].content[scope].content[name] = { mtime, ctime, type: 'file' };
+};
+
+const deleteFile = function deleteFile(folder, type, scope, name) {
+  fs.unlink(`${gameFolder}${folder}/${type}/${scope}/${name}`, (err) => {
+    if (err) {
+      console.error(err);
+      throw err;
+    }
+
+    // file removed
+  });
+  delete arborescence[folder].content[type].content[scope].content[name];
+  return true;
 };
 
 const jsonParser = bodyParser.json();
@@ -238,6 +261,84 @@ app.post('/api/files/:folder/:type/:scope/:name', jsonParser, (req, res) => {
     }
   } else {
     console.error('Got wrong parameters in body:', req.body);
+    res.sendStatus(400);
+  }
+});
+
+app.delete('/api/files/:folder/:name', (req, res) => {
+  console.log('delete Api Files');
+  console.log('Got params:', req.params);
+
+  const { folder } = req.params;
+  const { name } = req.params;
+  const type = '';
+  const scope = '';
+  if (typeof folder === 'string' && typeof name === 'string') {
+    try {
+      if (checkFileExist(folder, type, scope, name)) {
+        deleteFile(folder, type, scope, name);
+        res.end();
+      } else {
+        return res.sendStatus(404);
+      }
+    } catch (err) {
+      console.error('error deleting file:', err);
+      res.sendStatus(500);
+    }
+  } else {
+    console.error('Got wrong parameters in params:', req.params);
+    res.sendStatus(400);
+  }
+});
+
+app.delete('/api/files/:folder/:type/:name', (req, res) => {
+  console.log('delete Api Files');
+  console.log('Got params:', req.params);
+
+  const { folder } = req.params;
+  const { type } = req.params;
+  const { name } = req.params;
+  const scope = '';
+  if (typeof folder === 'string' && typeof type === 'string' && typeof name === 'string') {
+    try {
+      if (checkFileExist(folder, type, scope, name)) {
+        deleteFile(folder, type, scope, name);
+        res.end();
+      } else {
+        return res.sendStatus(404);
+      }
+    } catch (err) {
+      console.error('error deleting file:', err);
+      res.sendStatus(500);
+    }
+  } else {
+    console.error('Got wrong parameters in params:', req.params);
+    res.sendStatus(400);
+  }
+});
+
+app.delete('/api/files/:folder/:type/:scope/:name', (req, res) => {
+  console.log('delete Api Files');
+  console.log('Got params:', req.params);
+
+  const { folder } = req.params;
+  const { type } = req.params;
+  const { scope } = req.params;
+  const { name } = req.params;
+  if (typeof folder === 'string' && typeof type === 'string' && typeof scope === 'string' && typeof name === 'string') {
+    try {
+      if (checkFileExist(folder, type, scope, name)) {
+        deleteFile(folder, type, scope, name);
+        res.end();
+      } else {
+        return res.sendStatus(404);
+      }
+    } catch (err) {
+      console.error('error deleting file:', err);
+      res.sendStatus(500);
+    }
+  } else {
+    console.error('Got wrong parameters in params:', req.params);
     res.sendStatus(400);
   }
 });

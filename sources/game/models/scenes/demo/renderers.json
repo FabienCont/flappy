@@ -5,6 +5,16 @@
       "components":["inputs"]
     },
     {
+      "name":"sprites",
+      "scope":"common",
+      "components":["sprites"]
+    },
+    {
+      "name":"animate",
+      "scope":"common",
+      "components":["sprites"]
+    },
+    {
       "name":"spritesheets",
       "scope":"common",
       "components":["images"]

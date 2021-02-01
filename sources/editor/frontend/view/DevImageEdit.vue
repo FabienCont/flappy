@@ -98,7 +98,7 @@ export default {
       this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.elementCopy});
     },
     deleteElement:function(){
-      this.$emit("delete-model");
+      this.$emit("delete-elem",{type:this.type,scope:this.scope,name:this.name});
     },
     editSprites:function(){
       this.$emit("edit-sprites",this.scopeCopy,this.nameCopy);

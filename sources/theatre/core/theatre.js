@@ -194,6 +194,7 @@ function Theatre(config) {
   this.uuid = generateUUID();
   this.silentLog = silentLog;
   this.logger = {};
+  this.sprites = {};
 
   initialize.call(this, config);
 

@@ -1,4 +1,4 @@
 export default function (entity) {
   entity.remove('forces');
-  console.log('character.forces.ending', 'new forces');
+  console.log('character.forces.ending', 'neew forces');
 }

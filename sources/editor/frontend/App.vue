@@ -34,11 +34,11 @@ export default {
     FooterApp
   },
   created(){
-    this.getAllArborescence();
+    this.retrieveAllArborescence();
   },
   methods:{
     ...mapActions({
-      getAllArborescence:'arborescence/getAllArborescence' // map `this.add()` to `this.$store.dispatch('increment')`
+      retrieveAllArborescence:'arborescence/retrieveAllArborescence' // map `this.add()` to `this.$store.dispatch('increment')`
     })
   }
 }

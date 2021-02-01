@@ -25,7 +25,6 @@
         "_default":{},
         "_type":"dico",
         "_dico": {
-          "_default":null,
           "_type":"snippet",
           "scope": {
             "_default":"common",

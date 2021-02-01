@@ -1,7 +1,7 @@
 <template>
   <div class="pane">
     <PaneHeader :activePane="activePane" :panes="panes"></PaneHeader>
-    <component :is="componentRef" :params="componentParams" @edit-image="editImage" @edit-sprites="editSprites" @save="save"></component>
+    <component :is="componentRef" :params="componentParams" @edit-image="editImage" @edit-sprites="editSprites" @delete-elem="deleteElem" @save="save"></component>
   </div>
 </template>
 
@@ -25,8 +25,13 @@ export default {
   methods:{
     ...mapActions({
       openPane:'panes/open',
-      saveFile:'files/save'
+      saveFile:'files/save',
+      deleteFile:'files/delete'
     }),
+    deleteElem:function({type,scope,name,content}){
+      let path=this.currentFolder+'/'+type+'/'+scope+'/'+name;
+      this.deleteFile({path})
+    },
     save:function({type,scope,name,content}){
       let path=this.currentFolder+'/'+type+'/'+scope+'/'+name;
       this.saveFile({path,content})

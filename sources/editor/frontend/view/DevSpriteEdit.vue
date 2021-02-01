@@ -133,7 +133,7 @@ export default {
       this.$emit("save",{type:this.type,scope:this.scope,name:this.name,content:this.currentGridsValue});
     },
     deleteElement:function(){
-      this.$emit("delete-model");
+      this.$emit("delete-elem",{type:this.type,scope:this.scope,name:this.name});
     },
     editImage:function(){
       let paths = this.params[this.imageFileIndex].path.split('/');

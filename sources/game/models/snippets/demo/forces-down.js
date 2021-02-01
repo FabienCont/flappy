@@ -24,7 +24,6 @@ export default function forcesDown(entity) {
           name: 'rotation-limit',
         },
         elapsed: 0,
-        ending: null,
       }],
     },
   };

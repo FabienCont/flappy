@@ -31,9 +31,7 @@
                     "scope": "demo",
                     "name": "ease-linear"
                 },
-                "ending":null,
-                "elapsed": 0,
-                "handling": null
+                "elapsed": 0
             }]
         }
     },

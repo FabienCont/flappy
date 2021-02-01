@@ -39,8 +39,8 @@ const createNewParamsFromModel = function (paramsModel, params, deep = 0) {
       const modelNewParam = paramsModel[keyModel];
       const valueParam = params[keyModel];
 
-      if (valueParam == undefined) {
-        if (modelNewParam._default == undefined) {
+      if (valueParam === undefined) {
+        if (modelNewParam._default === undefined) {
           throw `error missing parameter :${keyModel}`;
         } else {
           let defaultValue = JSON.parse(JSON.stringify(modelNewParam._default));
@@ -85,7 +85,7 @@ const createNewParamsFromModel = function (paramsModel, params, deep = 0) {
         const modelNewParamKeys = Object.keys(modelNewParam).filter((key) => !key.startsWith('_'));
         for (var c = 0; c < modelNewParamKeys.length; c++) {
           const modelNewParamKey = modelNewParamKeys[c];
-          const valueParamOfKey = valueParam[modelNewParamKey] ? valueParam[modelNewParamKey] : {};
+          const valueParamOfKey = valueParam[modelNewParamKey] ? valueParam[modelNewParamKey] : undefined;
           const newParamObject = createNewParamsFromModel.call(this, { [modelNewParamKey]: modelNewParam[modelNewParamKey] }, { [modelNewParamKey]: valueParamOfKey });
           newParams[keyModel][modelNewParamKey] = newParamObject[modelNewParamKey];
         }
@@ -158,8 +158,8 @@ const setCachedEntity = function (entityRef, entityGenerated) {
 };
 
 const generateEntities = function generateEntities(sceneEntities) {
+  const entities = [];
   try {
-    const entities = [];
     sceneEntities.forEach((entityRef) => {
       // let newEntity=getCachedEntity.call(this,entityRef);
       let newEntity = null;
@@ -170,14 +170,16 @@ const generateEntities = function generateEntities(sceneEntities) {
         const newEntityComponents = mergeDeep(componentsModel, componentsOverride);
         newEntity = generateEntityModel.call(this, { name: entityDef.name, components: Object.values(newEntityComponents) });
         newEntity = new Entity(newEntity.name, newEntity.components);
+        // new Entity at this point should not have snippet executed
         // setCachedEntity.call(this, entityRef, newEntity);
       }
+      // should execute snippet for the entity here
       entities.push(newEntity);
     });
-    return entities;
   } catch (err) {
     console.error(err);
   }
+  return entities;
 };
 
 const generateEntityModel = function (entityModelOverride) {

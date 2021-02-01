@@ -1,4 +1,4 @@
-import { getFile, postFile } from 'editor/frontend/api/files';
+import { getFile, postFile, deleteFile } from 'editor/frontend/api/files';
 // initial state
 const state = () => ({
   all: {},
@@ -60,7 +60,7 @@ const actions = {
   inactive({ commit, state }) {
     commit('cleanActiveFiles');
   },
-  save({ commit, state }, { path, content }) {
+  save({ commit, state, dispatch }, { path, content }) {
     const paths = path.split('/');
     const folder = paths[0];
     let type = '';
@@ -80,8 +80,36 @@ const actions = {
     }
 
     postFile(folder, type, scope, fileName, content).then(() => {
-      commit('replaceFile', {
+      dispatch('arborescence/addElement', { path }, { root: true });
+      commit('saveFile', {
         path, content,
+      });
+    });
+  },
+  delete({ commit, dispatch, state }, { path }) {
+    const paths = path.split('/');
+    const folder = paths[0];
+    let type = '';
+    let scope = '';
+    let fileName = '';
+    if (paths.length === 4) {
+      type = paths[1];
+      scope = paths[2];
+      fileName = paths[3];
+    } else if (paths.length === 3) {
+      type = paths[1];
+      fileName = paths[2];
+    } else if (paths.length === 2) {
+      fileName = paths[1];
+    } else {
+      throw new Error('wrong path format');
+    }
+
+    deleteFile(folder, type, scope, fileName).then(() => {
+      dispatch('panes/close', path, { root: true });
+      dispatch('arborescence/deleteElement', path, { root: true });
+      commit('deleteFile', {
+        path,
       });
     });
   },
@@ -89,7 +117,10 @@ const actions = {
 
 // mutations
 const mutations = {
-  replaceFile(state, { path, content }) {
+  deleteFile(state, { path }) {
+    this.$app.$delete(state.all, path);
+  },
+  saveFile(state, { path, content }) {
     this.$app.$set(state.all, path, { content, path });
     state.all = { ...state.all };
   },

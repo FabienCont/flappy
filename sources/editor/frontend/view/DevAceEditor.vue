@@ -130,7 +130,7 @@ export default {
       }
     },
     deleteElement:function(){
-      this.$emit("delete-model");
+      this.$emit("delete-elem",{type:this.type,scope:this.scope,name:this.name});
     },
     editSprites:function(){
       this.$emit("edit-sprites",this.scopeCopy,this.nameCopy);
