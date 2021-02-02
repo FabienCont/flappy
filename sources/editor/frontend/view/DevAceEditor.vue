@@ -111,7 +111,7 @@ export default {
       this.nameCopy=this.name;
       this.scopeCopy=this.scope;
       this.contentCopy = this.params.content;
-      if(typeof this.editor!=='object' && this.editor!==null){
+      if(this.editor!==undefined && this.editor!==null){
         this.editor.session.setValue(this.contentCopy);
       }
     },

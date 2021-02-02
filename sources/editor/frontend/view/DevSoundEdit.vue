@@ -2,7 +2,7 @@
   <div class="dev-sound-edit">
     <main-pane-container>
       <div class="dev-sound-edit-container">
-        <audio controls>
+        <audio v-if="src!==''" controls>
           <source :src="src" type="audio/ogg">
           <source :src="src" type="audio/mpeg">
         Your browser does not support the audio element.

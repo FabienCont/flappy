@@ -1,4 +1,6 @@
 import { getFile, postFile, deleteFile } from 'editor/frontend/api/files';
+import { cutFilePath } from 'editor/frontend/utils/path';
+
 // initial state
 const state = () => ({
   all: {},
@@ -7,24 +9,16 @@ const state = () => ({
 
 // actions
 const actions = {
+  newFile({ commit, state, dispatch }, { path, content }) {
+    commit('cleanActiveFiles');
+    commit('createFile', {
+      path, content,
+    });
+  },
   retrieve({ commit, state, rootGetters }, path) {
-    const paths = path.split('/');
-    const folder = paths[0];
-    let type = '';
-    let scope = '';
-    let fileName = '';
-    if (paths.length === 4) {
-      type = paths[1];
-      scope = paths[2];
-      fileName = paths[3];
-    } else if (paths.length === 3) {
-      type = paths[1];
-      fileName = paths[2];
-    } else if (paths.length === 2) {
-      fileName = paths[1];
-    } else {
-      throw new Error('wrong path format');
-    }
+    const {
+      paths, folder, type, scope, fileName,
+    } = cutFilePath(path);
 
     if (type === 'sprites' && paths.length === 4) {
       //      dispatch('files/inactive', null, { root: true });
@@ -61,23 +55,9 @@ const actions = {
     commit('cleanActiveFiles');
   },
   save({ commit, state, dispatch }, { path, content }) {
-    const paths = path.split('/');
-    const folder = paths[0];
-    let type = '';
-    let scope = '';
-    let fileName = '';
-    if (paths.length === 4) {
-      type = paths[1];
-      scope = paths[2];
-      fileName = paths[3];
-    } else if (paths.length === 3) {
-      type = paths[1];
-      fileName = paths[2];
-    } else if (paths.length === 2) {
-      fileName = paths[1];
-    } else {
-      throw new Error('wrong path format');
-    }
+    const {
+      paths, folder, type, scope, fileName,
+    } = cutFilePath(path);
 
     postFile(folder, type, scope, fileName, content).then(() => {
       dispatch('arborescence/addElement', { path }, { root: true });
@@ -87,23 +67,9 @@ const actions = {
     });
   },
   delete({ commit, dispatch, state }, { path }) {
-    const paths = path.split('/');
-    const folder = paths[0];
-    let type = '';
-    let scope = '';
-    let fileName = '';
-    if (paths.length === 4) {
-      type = paths[1];
-      scope = paths[2];
-      fileName = paths[3];
-    } else if (paths.length === 3) {
-      type = paths[1];
-      fileName = paths[2];
-    } else if (paths.length === 2) {
-      fileName = paths[1];
-    } else {
-      throw new Error('wrong path format');
-    }
+    const {
+      paths, folder, type, scope, fileName,
+    } = cutFilePath(path);
 
     deleteFile(folder, type, scope, fileName).then(() => {
       dispatch('panes/close', path, { root: true });
@@ -124,11 +90,20 @@ const mutations = {
     this.$app.$set(state.all, path, { content, path });
     state.all = { ...state.all };
   },
+  createFile(state, { path, content }) {
+    state.all[path] = { content, path, temp: true };
+    state.active.push(path);
+  },
   addFile(state, { path, content }) {
     state.all[path] = { content, path };
     state.active.push(path);
   },
   cleanActiveFiles(state) {
+    state.active.forEach((path, i) => {
+      if (state.all[path].temp) {
+        delete state.all[path];
+      }
+    });
     state.active.splice(0);
   },
 };

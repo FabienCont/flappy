@@ -1,7 +1,8 @@
+import { createFilePath } from 'editor/frontend/utils/path';
+
 const createApiPath = function createApiPath(folder, type, scope, name) {
-  const typePath = type === '' ? '' : `${type}/`;
-  const scopePath = scope === '' ? '' : `${scope}/`;
-  return `/api/files/${folder}/${typePath}${scopePath}${name}`;
+  const path = createFilePath(folder, type, scope, name);
+  return `/api/files/${path}`;
 };
 
 const postFile = function postFile(folder, type, scope, name, data) {

@@ -5,6 +5,7 @@
         <span @click.prevent="toggleOpen(value)" class="tree-sub-branch-folder">
           <dev-icon class="tree-sub-branch-icon" :width="svgSize" :height="svgSize" :iconName="getTypeIcon(value)"></dev-icon>
           <span :class="{ active: isActive(name)}">{{name}}</span>
+          <dev-icon v-if='isAddable(name)' @click.stop="newFile(name)" class="tree-sub-branch-icon" :width="svgSize" :height="svgSize" iconName="add"></dev-icon>
         </span>
         <tree-branch @select-file="childSelectFile" v-show="value.isOpen" :parentPath="branchParentPath(name)" :currentPath="currentPath" :branch="value.content" />
       </template>
@@ -17,7 +18,8 @@
 
 <script>
 
-import { mapMutations } from 'vuex';
+import { mapMutations,mapActions } from 'vuex';
+import {isAddable} from 'editor/frontend/utils/folderType';
 //check Ref
 export default {
   name: 'tree-branch',
@@ -33,9 +35,20 @@ export default {
     parentPath:String
   },
   methods:{
+    ...mapActions({
+      openNewFile:'panes/openNewFile' // map `this.add()` to `this.$store.dispatch('increment')`
+    }),
     ...mapMutations({
       toggleOpenElement:'arborescence/toggleOpenElement' // map `this.add()` to `this.$store.dispatch('increment')`
     }),
+    isAddable:function(name){
+      if(this.parentPath.split('/').length===1)
+      return isAddable(name)
+      return false;
+    },
+    newFile:function(name){
+      this.openNewFile(this.parentPath+'/'+name);
+    },
     isFirstLevel:function(){
       return this.parentPath==='';
     },

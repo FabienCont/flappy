@@ -1,11 +1,37 @@
 // initial state
+import { cutFolderPath, createFilePath } from 'editor/frontend/utils/path';
+import { isAddable, getDefaultExt, getDefaultContent } from 'editor/frontend/utils/folderType';
+
 const state = () => ({
   all: [],
   active: 0,
 });
 
+const removeInactiveTempFile = function removeInactiveTempFile(state) {
+  if (state.all[state.active] && state.all[state.active].temp) {
+    this.$app.$delete(state.all, state.active);
+  }
+};
+
 // actions
 const actions = {
+  openNewFile({ commit, dispatch, state }, path) {
+    let {
+      paths, folder, type, scope,
+    } = cutFolderPath(path);
+    scope = scope === '' ? 'common' : scope;
+    const ext = getDefaultExt(type);
+    const newPath = createFilePath(folder, type, scope, `newFile.${ext}`);
+    const index = state.all.findIndex((pane) => pane.path === path);
+    if (index === -1 && paths.length === 2 && isAddable(type)) {
+      const newPane = {
+        path: newPath, temp: true,
+      };
+      const content = getDefaultContent(type);
+      dispatch('files/newFile', { path: newPath, content }, { root: true });
+      commit('add', newPane);
+    }
+  },
   open({ commit, dispatch, state }, path) {
     const index = state.all.findIndex((pane) => pane.path === path);
     if (index === -1) {
@@ -31,10 +57,8 @@ const actions = {
 
 // mutations
 const mutations = {
-  setAllPanes(state, all) {
-    state.all = arborescence;
-  },
   add(state, newPane) {
+    removeInactiveTempFile.call(this, state);
     const length = state.all.push(newPane);
     state.active = length - 1;
   },
@@ -43,6 +67,7 @@ const mutations = {
     if (state.all.length <= state.active) state.active -= 1;
   },
   activate(state, path) {
+    removeInactiveTempFile.call(this, state);
     state.active = state.all.map((pane) => pane.path).indexOf(path);
   },
 };
