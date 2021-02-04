@@ -6,8 +6,8 @@
     </main-pane-container>
     <detail-pane-container>
         <h3>{{type}}</h3>
-        <dev-input name='name' type="string" @update:inputValue="newVal=>name=newVal" :isEditable="false" :inputValue="name"></dev-input>
-        <dev-input name='scope' type="string" @update:inputValue="newVal=>scope=newVal" :isEditable="false" :inputValue="scope"></dev-input>
+        <dev-input name='name' type="string" :full='true' @update:inputValue="newVal=>name=newVal" :isEditable="false" :inputValue="name"></dev-input>
+        <dev-input name='scope' type="string" :full='true' @update:inputValue="newVal=>scope=newVal" :isEditable="false" :inputValue="scope"></dev-input>
        <div class="flex" v-if="isElementModify">
          <dev-button class="dev-preview-img-icon" @click="saveElement()">Save</dev-button>
          <dev-button class="dev-preview-img-icon" @click="cancelModif()">Cancel</dev-button>
@@ -146,7 +146,7 @@ export default {
 
 <style lang="scss">
 
-@import 'debug/styles/_variables';
+@import "editor/frontend/styles/_variables";
 
 .dev-sprite-edit{
   display: flex;

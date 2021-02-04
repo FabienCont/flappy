@@ -10,12 +10,13 @@ import PaneHeader from "editor/frontend/view/PaneHeader.vue";
 import DevImageEdit from "editor/frontend/view/DevImageEdit.vue";
 import DevSpriteEdit from "editor/frontend/view/DevSpriteEdit.vue";
 import DevSoundEdit from "editor/frontend/view/DevSoundEdit.vue";
-import DevAceEditor from "editor/frontend/view/DevAceEditor.vue"
+import DevAceEditor from "editor/frontend/view/DevAceEditor.vue";
+import DevComponentEdit from "editor/frontend/view/DevComponentEdit.vue";
 import { mapGetters,mapActions } from 'vuex'
 
 export default {
   name: 'pane',
-  components:{PaneHeader,DevImageEdit,DevSoundEdit,DevAceEditor,DevSpriteEdit},
+  components:{PaneHeader,DevImageEdit,DevSoundEdit,DevAceEditor,DevSpriteEdit,DevComponentEdit},
   data(){
     return {
       componentParams:{},
@@ -73,8 +74,11 @@ export default {
       }else if(this.currentType==='sprites' && this.currentFiles.length===2){
         this.componentRef=DevSpriteEdit;
         this.componentParams=this.currentFiles;
-      }else if((this.currentFolder==='scenes' || this.currentType==='scenes'|| this.currentType==='entities'||this.currentType==='components'|| this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets'|| this.currentType==='scenes' || this.currentType==='entities' || this.currentType==='component') && this.currentFiles.length>0){
+      }else if((this.currentFolder==='scenes' || this.currentType==='scenes'|| this.currentType==='entities'|| this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets'|| this.currentType==='scenes' || this.currentType==='entities' || this.currentType==='component') && this.currentFiles.length>0){
         this.componentRef=DevAceEditor;
+        this.componentParams=this.currentFiles[0];
+      }else if(this.currentType==='components' && this.currentFiles.length===1){
+        this.componentRef=DevComponentEdit;
         this.componentParams=this.currentFiles[0];
       }else if(this.currentFiles.length===0) {
         this.componentRef=null;

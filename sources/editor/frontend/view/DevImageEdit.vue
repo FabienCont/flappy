@@ -7,8 +7,8 @@
     </main-pane-container>
     <detail-pane-container>
       <h3>{{type}}</h3>
-      <dev-input name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
-      <dev-input name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
+      <dev-input name='name' type="string" :full='true' @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
+      <dev-input name='scope' type="string" :full='true' @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
       <div class="dev-preview-img-upload-content">
          <span>Select a new file</span>
          <dev-upload accept="image/png" @update-file="updateFile" ></dev-upload>
@@ -109,7 +109,7 @@ export default {
 
 <style lang="scss">
 
-@import 'debug/styles/_variables';
+@import "editor/frontend/styles/_variables";
 
 .dev-image-edit{
   display: flex;

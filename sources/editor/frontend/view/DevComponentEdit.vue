@@ -1,20 +1,26 @@
 <template>
-  <div class="dev-ace-edit">
+  <div class="dev-component-edit">
     <main-pane-container>
-      <div class="dev-ace-edit-container">
-        <pre @keyup.delete="updateContentCopyValue()" @keydown.ctrl.83.prevent="saveElement()" @keyup.ctrl="updateContentCopyValue()" @input="updateContentCopyValue()" id="dev-ace-edit-preview"></pre>
+      <div class="dev-component-container">
+        <h3>{{this.contentCopy.name}} :</h3>
+        <ul class="dev-component-list">
+          <li v-for='([key,value] , indexParam)  in componentParams' :key="indexParam" class="dev-component-params">
+            <dev-component-param-edit :name="key" :value="value" >
+            </dev-component-param-edit>
+          </li>
+        </ul>
       </div>
     </main-pane-container>
     <detail-pane-container>
       <h3>{{type}}</h3>
-      <dev-input name='name' type="string" :full='true' @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
-      <dev-input v-show='scope!==null' name='scope' type="string" :full='true' @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
+      <dev-input name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
+      <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
      <div v-if="isElementModify">
-       <dev-button class="dev-preview-ace-icon" @click="saveElement()">Save</dev-button>
-       <dev-button class="dev-preview-ace-icon" @click="copyProps()">Cancel</dev-button>
+       <dev-button class="dev-component-icon" @click="saveElement()">Save</dev-button>
+       <dev-button class="dev-component-icon" @click="copyProps()">Cancel</dev-button>
      </div>
      <div v-else>
-       <dev-button class="dev-preview-ace-icon" @click="deleteElement()">Delete</dev-button>
+       <dev-button class="dev-component-icon" @click="deleteElement()">Delete</dev-button>
      </div>
     </detail-pane-container>
   </div>
@@ -24,13 +30,12 @@
 
 import DetailPaneContainer from "editor/frontend/view/DetailPaneContainer.vue";
 import MainPaneContainer from "editor/frontend/view/MainPaneContainer.vue";
-import * as acemodule from 'ace-builds/src-noconflict/ace';
-import "ace-builds/webpack-resolver";
+import DevComponentParamEdit from "editor/frontend/view/DevComponentParamEdit.vue";
 
 export default {
-  name: 'DevAceEditor',
+  name: 'dev-component-edit',
   components:{
-    DetailPaneContainer,MainPaneContainer
+    DetailPaneContainer,MainPaneContainer,'dev-component-param-edit':DevComponentParamEdit
   },
   data(){
     return {
@@ -50,25 +55,25 @@ export default {
   created(){
     this.copyProps();
   },
-  mounted(){
-    this.editor =  ace.edit("dev-ace-edit-preview", {
-        theme: "ace/theme/tomorrow_night",
-        mode: "ace/mode/javascript",
-        wrap: false,
-        autoScrollEditorIntoView: true
-    });
-    this.editor.session.setValue(this.contentCopy);
-    this.editor.resize();
-  },
   watch:{
     params:function(){
       this.copyProps();
     },
     contentCopy:function(val){
       console.log(val)
+    },
+    nameCopy:function(val){
+      if(this.contentCopy && this.contentCopy.name){
+        this.contentCopy.name=val.split('.')[0];
+      }
     }
   },
   computed:{
+    componentParams:function(){
+      if(this.contentCopy.params && this.contentCopy){
+        return Object.entries(this.contentCopy.params);
+      }else return []
+    },
     paths:function(){
       return this.params.path.split('/');
     },
@@ -107,9 +112,6 @@ export default {
       this.nameCopy=this.name;
       this.scopeCopy=this.scope;
       this.contentCopy = this.params.content;
-      if(this.editor!==undefined && this.editor!==null){
-        this.editor.session.setValue(this.contentCopy);
-      }
     },
     updateFile:function(file){
       if(this.nameCopy==='')this.nameCopy=file.name.split(".")[0];
@@ -139,39 +141,27 @@ export default {
 
 @import "editor/frontend/styles/_variables";
 
-.dev-ace-edit{
+.dev-component-edit{
   display: flex;
   flex:1;
   height: 100%;
+  color:$dev--color-color-light;
 }
-
-.dev-ace-edit-container{
-  width:100%;
-  height:100%;
+.dev-component-container{
+  padding-left: 1rem;
 }
-
-#dev-ace-edit-preview{
-    width:100%;
-    height:100%;
-    position: relative;
-    margin:0;
+.dev-component-list{
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
-
-
-::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    border: 3px solid  transparent;
-    background:  $dev--color-color-light-fade;
-    background-clip: content-box;
+.dev-component-params{
+  display: flex;
 }
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+.dev-component-params-value{
+  display: flex;
+  flex-direction: column;
 }
-
-::-webkit-scrollbar-thumb:active {
-border-radius: 0px;
-background:  $dev--color-color-light-fade;
-}
-
 </style>

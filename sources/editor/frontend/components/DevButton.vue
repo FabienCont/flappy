@@ -16,7 +16,7 @@ export default {
 
   .dev-button{
     border: none;
-    background-color: $dev--color-color2;
+    background-color: $dev--color-color3;
     color:$dev--color-color-light;
     padding: 0.35rem 0.8rem;
     justify-content: center;
@@ -29,11 +29,11 @@ export default {
   }
 
   :hover.dev-button{
-    background-color: $dev--color-color2-light;
+    background-color: $dev--color-color3-light;
   }
 
   :disabled.dev-button{
-    background-color: $dev--color-color2-fade;
+    background-color: $dev--color-color3-fade;
     cursor: not-allowed;
   }
 

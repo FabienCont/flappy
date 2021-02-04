@@ -53,6 +53,14 @@ export default {
   align-items: center;
 }
 
+.justify-around{
+  justify-content: space-around;
+}
+
+.justify-between{
+  justify-content: space-between;
+}
+
 </style>
 <style lang="scss" scoped>
 

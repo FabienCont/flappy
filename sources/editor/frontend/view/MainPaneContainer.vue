@@ -13,10 +13,13 @@ export default {
 
 <style lang="scss">
 
-@import 'debug/styles/_variables';
+@import "editor/frontend/styles/_variables";
 
 .main-pane-container{
- display: flex;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: auto;
   flex:2;
 }
 </style>

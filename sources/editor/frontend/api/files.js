@@ -50,7 +50,7 @@ const getFile = function getFile(folder, type, scope, name) {
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
           const responseObj = xhr.response;
           // Requête finie, traitement ici.
-          if (name.indexOf('.json') !== -1 && type === 'sprites') {
+          if (name.indexOf('.json') !== -1 && (type === 'sprites' || type === 'components')) {
             resolve(JSON.parse(responseObj));
           }
           resolve(responseObj);

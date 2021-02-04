@@ -13,7 +13,7 @@ export default {
 
 <style lang="scss">
 
-@import 'debug/styles/_variables';
+@import "editor/frontend/styles/_variables";
 
 .detail-pane-container{
   padding-left:0.5rem;

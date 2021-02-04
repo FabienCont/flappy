@@ -7,18 +7,21 @@
     <div v-for="(grid , indexGrid)  in gridsCopy" :key="indexGrid">
       <div class='dev-sprites-grid'>
         <dev-icon @click="changeGridFocus(indexGrid)" :iconName="getGridTypeIcon(indexGrid)"></dev-icon>
-        <h4 class="dev-sprites-grid-title">{{grid.alias!=''?grid.alias:grid+" "+indexGrid}}</h4>
+        <dev-input class="dev-sprites-grid-title" type="string" name="alias" :isEditable="true" :inputValue="grid.alias" @update:inputValue="newVal => gridsCopy[indexGrid].alias = newVal"></dev-input>
         <dev-icon @click.prevent="deleteGrid(indexGrid)" iconName="delete"></dev-icon>
       </div>
       <div v-if='gridFocus===indexGrid'>
-        <dev-input type="number" name="x" :isEditable="true" :inputValue="grid.x" @update:inputValue="newVal => gridsCopy[indexGrid].x = newVal"></dev-input>
-        <dev-input type="number" name="y" :isEditable="true" :inputValue="grid.y" @update:inputValue="newVal => gridsCopy[indexGrid].y= newVal"></dev-input>
-        <dev-input type="number" name="width" :isEditable="true" :inputValue="grid.width" @update:inputValue="newVal => gridsCopy[indexGrid].width= newVal"></dev-input>
-        <dev-input type="number" name="height" :isEditable="true" :inputValue="grid.height" @update:inputValue="newVal => gridsCopy[indexGrid].height= newVal"></dev-input>
-        <dev-input type="number" name="columns" :isEditable="true" :inputValue="grid.columns" @update:inputValue="newVal =>  gridsCopy[indexGrid].columns= newVal"></dev-input>
-        <dev-input type="number" name="rows" :isEditable="true" :inputValue="grid.rows" @update:inputValue="newVal => gridsCopy[indexGrid].rows = newVal"></dev-input>
-        <dev-input type="string" name="alias" :isEditable="true" :inputValue="grid.alias" @update:inputValue="newVal => gridsCopy[indexGrid].alias = newVal"></dev-input>
-        Sprites:
+        <div class="flex">
+          <dev-input type="number" name="x" :isEditable="true" :inputValue="grid.x" @update:inputValue="newVal => gridsCopy[indexGrid].x = newVal"></dev-input>
+          <dev-input type="number" name="y" :isEditable="true" :inputValue="grid.y" @update:inputValue="newVal => gridsCopy[indexGrid].y= newVal"></dev-input>
+          <dev-input type="number" name="width" :isEditable="true" :inputValue="grid.width" @update:inputValue="newVal => gridsCopy[indexGrid].width= newVal"></dev-input>
+          <dev-input type="number" name="height" :isEditable="true" :inputValue="grid.height" @update:inputValue="newVal => gridsCopy[indexGrid].height= newVal"></dev-input>
+        </div>
+        <div class="flex">
+          <dev-input type="number" name="columns" :isEditable="true" :inputValue="grid.columns" @update:inputValue="newVal =>  gridsCopy[indexGrid].columns= newVal"></dev-input>
+          <dev-input type="number" name="rows" :isEditable="true" :inputValue="grid.rows" @update:inputValue="newVal => gridsCopy[indexGrid].rows = newVal"></dev-input>
+        </div>
+        <h4>Sprites:</h4>
         <div class="flex" >
           <dev-button @click="addAnimation(grid)">Add</dev-button>
           <dev-button @click="splitAll(grid)">Split by Images</dev-button>
@@ -32,16 +35,15 @@
         <div v-for="(animation , indexAnim)  in grid.animations" :key="indexAnim">
           <div class="flex align-center">
             <dev-icon @click="changeSpriteFocus(indexAnim)" :iconName="getSpriteTypeIcon(indexAnim)"></dev-icon>
-            <h4 class="dev-sprite-title">{{animation.alias}} :</h4>
+            <dev-input class="dev-sprite-title" type="string" name="alias" :isEditable="true" :inputValue="animation.alias" @update:inputValue="newVal => animation.alias = newVal"></dev-input>
           </div>
           <dev-canvas-sprites v-if='animation.frames.length!==0' :animation="calculatedAnimations[indexGrid][indexAnim]" :image="image"></dev-canvas-sprites>
           <div v-if='spriteFocus===indexAnim'>
-            <dev-input type="string" name="alias" :isEditable="true" :inputValue="animation.alias" @update:inputValue="newVal => animation.alias = newVal"></dev-input>
             <dev-input v-if="animation.frames.length>1 " type="number" name="framerate" :isEditable="true" :inputValue="animation.framerate" @update:inputValue="newVal => animation.framerate= newVal"></dev-input>
             frames :
             <dev-button @click="addFrame(grid,animation)">Add</dev-button>
-            <div class="flex" v-for="(frame , index)  in animation.frames" :key="index">
-              {{index}}:
+            <div class="flex align-center" v-for="(frame , index)  in animation.frames" :key="index">
+              <span class="sprite-frame-index">{{index}}</span>
               <dev-input type="number" name="x" :isEditable="true" :inputValue="frame.x" @update:inputValue="newVal => frame.x = newVal"></dev-input>
               <dev-input type="number" name="y" :isEditable="true" :inputValue="frame.y" @update:inputValue="newVal => frame.y= newVal"></dev-input>
               <dev-input type="number" name="width" :isEditable="true" :inputValue="frame.width" @update:inputValue="newVal => frame.width= newVal"></dev-input>
@@ -270,6 +272,11 @@ export default {
 .dev-sprite-title{
   display: inline-block;
   margin:1rem;
+}
+
+.sprite-frame-index{
+  margin-right:0.7rem;
+  margin-top: 1rem;
 }
 
 
