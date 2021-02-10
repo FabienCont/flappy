@@ -3,7 +3,6 @@
     <main-pane-container>
       <div class="dev-component-container">
         <h3>{{this.contentCopy.name}} :</h3>
-        {{componentParams}}
         <dev-button @click.stop="addParam()">Add param</dev-button>
         <ul class="dev-component-list">
           <li v-for='([key,value] , indexParam)  in componentParams' :key="indexParam" class="dev-component-params">
@@ -115,9 +114,9 @@ export default {
       let parent=this.contentCopy.params;
       path.forEach((name, i) => {
         if(i !== path.length-1){
-          if(param[name]['_type']==='dico')
-          param=param[name]['_dico'];
-          param=param[name]['_object'];
+          if(param[name]['_type']==='dico'){
+            param=param[name]['_dico'];
+          }else param=param[name]['_object'];
           parent=param;
         }else{
           param=param[name];
@@ -125,7 +124,7 @@ export default {
       });
       return {param,parent};
     },
-    deleteParam:function({path}){
+    deleteParam:function(path){
       let {parent,param}=this.findParamOrigin(path);
       this.$delete(parent,path[0]);
     },

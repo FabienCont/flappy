@@ -59,6 +59,16 @@ const getters = {
       return false;
     });
   },
+  snippetDico: (state) => {
+    const snippetDico = {};
+    Object.entries(state.all.models.content.snippets.content).forEach(([scope, value]) => {
+      Object.entries(value.content).forEach(([filename, info]) => {
+        if (!snippetDico[scope]) snippetDico[scope] = {};
+        snippetDico[scope][filename] = info;
+      });
+    });
+    return snippetDico;
+  },
 };
 
 export default {
