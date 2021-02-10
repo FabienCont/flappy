@@ -6,9 +6,9 @@
     </div>
     <div v-for="(grid , indexGrid)  in gridsCopy" :key="indexGrid">
       <div class='dev-sprites-grid'>
-        <dev-icon @click="changeGridFocus(indexGrid)" :iconName="getGridTypeIcon(indexGrid)"></dev-icon>
+        <dev-icon :width="svgSize" :height="svgSize" @click="changeGridFocus(indexGrid)" :iconName="getGridTypeIcon(indexGrid)"></dev-icon>
         <dev-input class="dev-sprites-grid-title" type="string" name="alias" :isEditable="true" :inputValue="grid.alias" @update:inputValue="newVal => gridsCopy[indexGrid].alias = newVal"></dev-input>
-        <dev-icon @click.prevent="deleteGrid(indexGrid)" iconName="delete"></dev-icon>
+        <dev-icon :width="svgSize" :height="svgSize" @click.prevent="deleteGrid(indexGrid)" iconName="delete"></dev-icon>
       </div>
       <div v-if='gridFocus===indexGrid'>
         <div class="flex">
@@ -30,17 +30,17 @@
           <dev-button @click="deleteSpritesInGrid(grid)">Delete All sprites</dev-button>
         </div>
         <div v-if="grid.animations.length===0">
-        no sprites
+        No sprites
         </div>
         <div v-for="(animation , indexAnim)  in grid.animations" :key="indexAnim">
           <div class="flex align-center">
-            <dev-icon @click="changeSpriteFocus(indexAnim)" :iconName="getSpriteTypeIcon(indexAnim)"></dev-icon>
+            <dev-icon :width="svgSize" :height="svgSize" @click="changeSpriteFocus(indexAnim)" :iconName="getSpriteTypeIcon(indexAnim)"></dev-icon>
             <dev-input class="dev-sprite-title" type="string" name="alias" :isEditable="true" :inputValue="animation.alias" @update:inputValue="newVal => animation.alias = newVal"></dev-input>
           </div>
           <dev-canvas-sprites v-if='animation.frames.length!==0' :animation="calculatedAnimations[indexGrid][indexAnim]" :image="image"></dev-canvas-sprites>
           <div v-if='spriteFocus===indexAnim'>
-            <dev-input v-if="animation.frames.length>1 " type="number" name="framerate" :isEditable="true" :inputValue="animation.framerate" @update:inputValue="newVal => animation.framerate= newVal"></dev-input>
-            frames :
+            <dev-input style="margin-bottom:0.6rem;" v-if="animation.frames.length>1 " type="number" name="framerate" :isEditable="true" :inputValue="animation.framerate" @update:inputValue="newVal => animation.framerate= newVal"></dev-input>
+            Frames :
             <dev-button @click="addFrame(grid,animation)">Add</dev-button>
             <div class="flex align-center" v-for="(frame , index)  in animation.frames" :key="index">
               <span class="sprite-frame-index">{{index}}</span>
@@ -67,6 +67,7 @@ export default {
   data(){
     return {
        base64:'data:image/png;base64,',
+       svgSize:"2rem",
        nameCopy:"",
        scopeCopy:"",
        gridFocus:-1,

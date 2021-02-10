@@ -1,28 +1,18 @@
 <template>
-  <div class="dev-component-edit">
+  <div class="dev-entity">
     <main-pane-container>
-      <div class="dev-component-container">
-        <h3>{{this.contentCopy.name}} :</h3>
-        {{componentParams}}
-        <dev-button @click.stop="addParam()">Add param</dev-button>
-        <ul class="dev-component-list">
-          <li v-for='([key,value] , indexParam)  in componentParams' :key="indexParam" class="dev-component-params">
-            <dev-component-param-edit @rename-param="childRenameParam" @del-param="deleteParam" @update-value="childUpdateValue" :name="key" :value="value" >
-            </dev-component-param-edit>
-          </li>
-        </ul>
-      </div>
+
     </main-pane-container>
     <detail-pane-container>
       <h3>{{type}}</h3>
       <dev-input  name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
       <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
      <div v-if="isElementModify">
-       <dev-button class="dev-component-icon" @click="saveElement()">Save</dev-button>
-       <dev-button class="dev-component-icon" @click="copyProps()">Cancel</dev-button>
+       <dev-button class="dev-entity-icon" @click="saveElement()">Save</dev-button>
+       <dev-button class="dev-entity-icon" @click="copyProps()">Cancel</dev-button>
      </div>
      <div v-else>
-       <dev-button class="dev-component-icon" @click="deleteElement()">Delete</dev-button>
+       <dev-button class="dev-entity-icon" @click="deleteElement()">Delete</dev-button>
      </div>
     </detail-pane-container>
   </div>
@@ -32,20 +22,16 @@
 
 import DetailPaneContainer from "editor/frontend/view/DetailPaneContainer.vue";
 import MainPaneContainer from "editor/frontend/view/MainPaneContainer.vue";
-import DevComponentParamEdit from "editor/frontend/view/DevComponentParamEdit.vue";
 
 export default {
-  name: 'dev-component-edit',
+  name: 'dev-entity',
   components:{
-    DetailPaneContainer,MainPaneContainer,'dev-component-param-edit':DevComponentParamEdit
+    DetailPaneContainer,MainPaneContainer
   },
   data(){
     return {
-       svgSize:"1.5rem",
-       contentCopy:{
-         name:'newComponent',
-         params:{}
-       },
+      // svgSize:"1.7em",
+       contentCopy:this.params.content,
        nameCopy:"",
        scopeCopy:"",
        editor:null
@@ -74,11 +60,6 @@ export default {
     }
   },
   computed:{
-    componentParams:function(){
-      if(this.contentCopy.params && this.contentCopy){
-        return Object.entries(this.contentCopy.params);
-      }else return []
-    },
     paths:function(){
       return this.params.path.split('/');
     },
@@ -106,49 +87,17 @@ export default {
       return null;
     },
     isElementModify:function(){
-      return JSON.stringify(this.params.content)!==JSON.stringify(this.contentCopy) || this.scopeCopy!==this.scope || this.nameCopy!==this.name;
+      return this.params.content!==this.contentCopy || this.scopeCopy!==this.scope || this.nameCopy!==this.name;
     }
   },
   methods:{
-    findParamOrigin:function(path){
-      let param=this.contentCopy.params;
-      let parent=this.contentCopy.params;
-      path.forEach((name, i) => {
-        if(i !== path.length-1){
-          if(param[name]['_type']==='dico')
-          param=param[name]['_dico'];
-          param=param[name]['_object'];
-          parent=param;
-        }else{
-          param=param[name];
-        }
-      });
-      return {param,parent};
-    },
-    deleteParam:function({path}){
-      let {parent,param}=this.findParamOrigin(path);
-      this.$delete(parent,path[0]);
-    },
-    childRenameParam:function({newKey,oldKey,path}){
-      let {parent}=this.findParamOrigin(path);
-      if(!parent[newKey]){
-        let newParam=Object.assign(parent, {[newKey]: parent[oldKey] })
-        this.$delete(parent,oldKey);
-      }
-    },
-    childUpdateValue:function({key,value,path}){
-      let {param}=this.findParamOrigin(path);
-      this.$set(param,key, value);
-    },
-    addParam:function(){
-      let newParam={'_type':'number','_default':0}
-      if(!this.contentCopy.params['newParam'])
-      this.contentCopy.params=Object.assign({}, this.contentCopy.params,{newParam});
+    updateContentCopyValue:function(){
+      this.contentCopy = this.editor.getSession().getValue();
     },
     copyProps:function(){
       this.nameCopy=this.name;
       this.scopeCopy=this.scope;
-      this.contentCopy=JSON.parse(JSON.stringify(this.params.content));
+      this.contentCopy = this.params.content;
     },
     updateFile:function(file){
       if(this.nameCopy==='')this.nameCopy=file.name.split(".")[0];
@@ -178,26 +127,26 @@ export default {
 
 @import "editor/frontend/styles/_variables";
 
-.dev-component-edit{
+.dev-entity-edit{
   display: flex;
   flex:1;
   height: 100%;
   color:$dev--color-color-light;
 }
-.dev-component-container{
+.dev-entity-container{
   padding-left: 1rem;
 }
-.dev-component-list{
+.dev-entity-list{
     display: flex;
     flex-direction: column;
     list-style: none;
     padding: 0;
     margin: 0;
 }
-.dev-component-params{
+.dev-entity-params{
   display: flex;
 }
-.dev-component-params-value{
+.dev-entity-params-value{
   display: flex;
   flex-direction: column;
 }

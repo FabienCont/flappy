@@ -1,18 +1,6 @@
 <template>
-  <svg v-on="$listeners" :style="style" class="dev-icon" xmlns="http://www.w3.org/2000/svg"
-  :width="width"
-  :height="height"
-  viewBox="0 0 20 20"
-  :aria-labelledby="iconName"
-  role="presentation"
->
-  <title
-    :id="iconName"
-    lang="en"
-  >{{ iconName }} icon</title>
-  <g v-html="svgPath" :fill="iconColor">
-  </g>
-</svg>
+  <div class="dev-icon" v-on="$listeners" v-html="svgPath" :style="style" :width="width" :height="height">
+  </div>
 </template>
 
 <script>
@@ -25,20 +13,28 @@ export default {
     },
     width: {
       type: [Number, String],
-      default: "1.3rem"
+      default: "100%"
     },
     height: {
       type: [Number, String],
-      default: "1.3rem"
+      default: "100%"
     },
     iconColor: {
       type: String,
       default: 'currentColor'
     }
   },
+  mounted(){
+    //this.$el.firstChild.setAttribute('fill', this.iconColor);
+  },
+  watch:{
+    iconColor:function(val){
+      //this.$el.firstChild.setAttribute('fill', val);
+    }
+  },
   computed:{
     svgPath:function(){
-      return require("debug/assets/svg/"+this.iconName+".svg")
+      return require("editor/frontend/assets/svg/"+this.iconName+".svg")
     },
     style:function(){
       var inlineStyle=""
@@ -59,19 +55,27 @@ export default {
   /* -----
   SVG Icons - svgicons.sparkk.fr
   ----- */
+  .dev-icon{
+      cursor: pointer;
+      display: inline-block;
+  }
+
+.dev-icon:hover  path,
+  .dev-icon:hover  polygon,
+  .dev-icon:hover  rect{
+    fill: $dev--color-color1-fade;
+}
+
   .dev-icon path,
   .dev-icon polygon,
   .dev-icon rect {
-    fill: $dev--color-color2;
+    fill: $dev--color-color1;
   }
 
   .dev-icon circle {
-    stroke: $dev--color-color2;
+    stroke: $dev--color-color0;
     stroke-width: 1;
   }
 
-  .dev-icon{
-    cursor: pointer;
-  }
 
 </style>

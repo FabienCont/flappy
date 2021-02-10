@@ -4,6 +4,7 @@
       <template v-if="value.type==='folder'">
         <span @click.prevent="toggleOpen(value)" class="tree-sub-branch-folder">
           <dev-icon class="tree-sub-branch-icon" :width="svgSize" :height="svgSize" :iconName="getTypeIcon(value)"></dev-icon>
+          <dev-icon class="tree-sub-branch-icon" :width="svgSize" :height="svgSize" iconName="folder"></dev-icon>
           <span :class="{ active: isActive(name)}">{{name}}</span>
           <dev-icon v-if='isAddable(name)' @click.stop="newFile(name)" class="tree-sub-branch-icon" :width="svgSize" :height="svgSize" iconName="add"></dev-icon>
         </span>

@@ -1,7 +1,7 @@
 <template>
   <div class="dev-checkbox-container" :class="{'fill':value!=='' }">
-    <input class="dev-checkbox" type="checkbox" :id="id" :value="value" @input="updateValue">
-    <label class="dev-label" :for="id">{{label}}</label>
+    <input class="dev-checkbox" name="label" type="checkbox" :value="val" v-model="checked" @change="updateValue">
+    <label class="dev-label" for="label">{{label}}</label>
   </div>
 </template>
 
@@ -9,11 +9,11 @@
 export default {
   name: 'DevCheckbox',
   props:{
-    id: {
-      type: String,
+    value:{
+      type: Array,
       required: true
     },
-    value:{
+    val:{
       type: String,
       required: true
     },
@@ -21,9 +21,20 @@ export default {
       type: String,
       required: true
     }
-  },methods:{
-    updateValue:function($event){
-      this.$emit('update:inputValue', $event.target.value);
+  },
+  computed: {
+	  checked: {
+      get () {
+        return this.value
+      },
+      set (val) {
+        this.checkedProxy = val
+      }
+    }
+  },
+  methods:{
+    updateValue:function(){
+      this.$emit('input', this.checkedProxy);
     }
   }
 }
@@ -90,8 +101,10 @@ export default {
   .dev-label {
     position: relative;
     cursor: pointer;
+    font-weight: normal;
     padding: 0 0.25em 0;
     user-select: none;
+    font-size: 0.8rem;
     &::before {
       position: absolute;
       content: "";

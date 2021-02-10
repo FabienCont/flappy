@@ -1,5 +1,6 @@
 <template>
-  <div class="dev-select-container" :class="{'dev-noborder':!border, open: open,'fill':selected!=='' }" :tabindex="tabindex" @blur="open = false">
+  <div class="dev-select-container" :class="{'dev-select-inline':inline,'dev-noborder':!border, open: open,'fill':selected!=='' }" :tabindex="tabindex" @blur="open = false">
+    <label v-if="label && inline" class="select-label-inline">{{ label }}:</label>
     <div class="dev-select">
       <div class="dev-selected" @click="open = !open">
        {{ selected }}
@@ -19,7 +20,7 @@
         </div>
       </div>
   		<span class="select-bar"></span>
-  		<label class="select-label">  {{ label }}</label>
+  		<label v-if="label && !inline" class="select-label">  {{ label }}</label>
     </div>
   </div>
 </template>
@@ -38,9 +39,9 @@ export default {
       default: ''
     },
     border:{
-      type: Number,
+      type: Boolean,
       required: false,
-      deafault:true
+      default:true
     },
     tabindex: {
       type: Number,
@@ -52,6 +53,10 @@ export default {
       required: false,
       default: "Select",
     },
+    inline:{
+      type:Boolean,
+      default:true
+    }
   },
   data() {
     return {
@@ -85,6 +90,19 @@ $scroll:$secondary;
 .dev-select-container {
   margin-top: 0.7rem;
 }
+
+.dev-select-container .dev-select-inline{
+  display: flex;
+}
+
+.dev-select-inline{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:0;
+    margin-top:0rem;
+}
+
 .dev-select {
   position: relative;
   width: 100%;
@@ -92,7 +110,12 @@ $scroll:$secondary;
   outline: none;
   height: 2.4rem;
   line-height: 2.4rem;
-  width:10rem;
+
+}
+
+
+.dev-select-inline.dev-select{
+  width:inherit;
 }
 
 .dev-selected {
@@ -103,14 +126,14 @@ $scroll:$secondary;
 	border-bottom: 2px solid $main;
 }
 
-.dev-noborder .dev-selected{
-    border-bottom:0px;
-}
-
 /* Remove focus */
  .dev-select-container:focus,.dev-select:focus,.dev-selected:focus {
 	outline: none;
 	border-bottom: 1px solid rgba(0,0,0, 0);
+}
+
+.dev-noborder .dev-selected{
+    border-bottom:0px;
 }
 
 
@@ -160,6 +183,13 @@ $scroll:$secondary;
 }
 
 /* LABEL ======================================= */
+.select-label-inline{
+  	color: $dev--color-color0;
+}
+.open .select-label-inline,.dev-select-container:hover .select-label-inline {
+  color:$primary;
+}
+
 .select-label {
 	color:$text;
 	font-size: 18px;
