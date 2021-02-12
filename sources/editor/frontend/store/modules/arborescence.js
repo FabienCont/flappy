@@ -50,6 +50,9 @@ const mutations = {
 };
 // getters
 const getters = {
+  getComponents: (state) => () => state.all.models.content.components.content,
+  getEntities: (state) => () => state.all.models.content.entities.content,
+  getScene: (state) => (scope) => state.all.models.content.scenes.content[scope].content,
   getImageFromSprites: (state) => (scope, fileName) => {
     const nameToFind = fileName.split('.json')[0];
     return Object.keys(state.all.assets.content.images.content[scope].content).find((name) => {

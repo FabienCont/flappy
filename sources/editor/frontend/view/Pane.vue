@@ -12,11 +12,13 @@ import DevSpriteEdit from "editor/frontend/view/DevSpriteEdit.vue";
 import DevSoundEdit from "editor/frontend/view/DevSoundEdit.vue";
 import DevAceEditor from "editor/frontend/view/DevAceEditor.vue";
 import DevComponentEdit from "editor/frontend/view/DevComponentEdit.vue";
+import DevEntity from "editor/frontend/view/DevEntity.vue";
+import DevScene from "editor/frontend/view/DevScene.vue";
 import { mapGetters,mapActions } from 'vuex'
 
 export default {
   name: 'pane',
-  components:{PaneHeader,DevImageEdit,DevSoundEdit,DevAceEditor,DevSpriteEdit,DevComponentEdit},
+  components:{PaneHeader,DevImageEdit,DevSoundEdit,DevAceEditor,DevSpriteEdit,DevComponentEdit,DevEntity,DevScene},
   data(){
     return {
       componentParams:{},
@@ -74,13 +76,21 @@ export default {
       }else if(this.currentType==='sprites' && this.currentFiles.length===2){
         this.componentRef=DevSpriteEdit;
         this.componentParams=this.currentFiles;
-      }else if((this.currentFolder==='scenes' || this.currentType==='scenes'|| this.currentType==='entities'|| this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets'|| this.currentType==='scenes' || this.currentType==='entities' || this.currentType==='component') && this.currentFiles.length>0){
+      }else if((this.currentFolder==='scenes' || this.currentType==='scenes'|| this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets') && this.currentFiles.length>0){
         this.componentRef=DevAceEditor;
         this.componentParams=this.currentFiles[0];
-      }else if(this.currentType==='components' && this.currentFiles.length===1){
+      }else if(this.currentType==='entities' && this.currentFiles.length>0){
+        this.componentRef=DevEntity;
+        this.componentParams=this.currentFiles;
+      }else if(this.currentType==='scenes' && this.currentFiles.length>0){
+        this.componentRef=DevScenes;
+        this.componentParams=this.currentFiles;
+      }
+      else if(this.currentType==='components' && this.currentFiles.length===1){
         this.componentRef=DevComponentEdit;
         this.componentParams=this.currentFiles[0];
-      }else if(this.currentFiles.length===0) {
+      }
+      else if(this.currentFiles.length===0) {
         this.componentRef=null;
         this.componentParams={}
       }

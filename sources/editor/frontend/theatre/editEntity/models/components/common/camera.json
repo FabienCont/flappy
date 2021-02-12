@@ -1,0 +1,14 @@
+{
+  "name":"camera",
+  "params":
+    {
+      "cameraName":{
+        "_default":"default",
+        "_type":"string"
+      },
+      "opacity":{
+          "_default":1,
+          "_type":"number"
+      }
+    }
+}

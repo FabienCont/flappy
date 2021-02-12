@@ -1,4 +1,6 @@
-import { getFile, postFile, deleteFile } from 'editor/frontend/api/files';
+import {
+  getFile, postFile, deleteFile,
+} from 'editor/frontend/api/files';
 import { cutFilePath } from 'editor/frontend/utils/path';
 
 // initial state
@@ -41,6 +43,127 @@ const actions = {
         commit('addFile', {
           path: pngPath, content,
         });
+      });
+    } else if (type === 'entities' && paths.length === 4) {
+      const componentsArbo = rootGetters['arborescence/getComponents']();
+      commit('cleanActiveFiles');
+      const componentsFolder = 'models';
+      const componentsType = 'components';
+      Object.entries(componentsArbo).forEach(([scopeComponent, value]) => {
+        Object.keys(value.content).forEach((componentFileName) => {
+          getFile(componentsFolder, componentsType, scopeComponent, componentFileName)
+            .then((content) => {
+              commit('addFile', {
+                path,
+                content,
+                folder: componentsFolder,
+                type: componentsType,
+                scope: scopeComponent,
+                name: componentFileName,
+              });
+            }, (err) => {
+              if (err === 404) {
+                console.log('fine not found', componentsFolder, componentsType, scopeComponent, componentFileName);
+              }
+            });
+        });
+      });
+
+      getFile(folder, type, scope, fileName).then((content) => {
+        commit('addFile', {
+          path,
+          content,
+          folder,
+          type,
+          scope,
+          name: fileName,
+        });
+      }, (err) => {
+        if (err === 404) {
+          commit('addFile', {
+            path, content: [],
+          });
+        }
+      });
+    } else if (type === 'scenes' && paths.length === 4) {
+      const componentsArbo = rootGetters['arborescence/getComponents']();
+      const entitiesArbo = rootGetters['arborescence/getEntities']();
+      const sceneArbo = rootGetters['arborescence/getScene'](scope);
+      commit('cleanActiveFiles');
+      const componentsFolder = 'models';
+      const componentsType = 'components';
+      Object.entries(componentsArbo).forEach(([scopeComponent, value]) => {
+        Object.keys(value.content).forEach((componentFileName) => {
+          getFile(componentsFolder, componentsType, scopeComponent, componentFileName)
+            .then((content) => {
+              commit('addFile', {
+                path,
+                content,
+                folder: componentsFolder,
+                type: componentsType,
+                scope: scopeComponent,
+                name: componentFileName,
+              });
+            }, (err) => {
+              if (err === 404) {
+                console.log('fine not found', componentsFolder, componentsType, scopeComponent, componentFileName);
+              }
+            });
+        });
+      });
+      Object.entries(entitiesArbo).forEach(([scopeEntities, value]) => {
+        Object.keys(value.content).forEach((entityFileName) => {
+          const entitiesFolder = 'models';
+          const entitiesType = 'entities';
+
+          getFile(entitiesFolder, entitiesType, scopeEntities, entityFileName).then((content) => {
+            commit('addFile', {
+              path,
+              content,
+              folder: entitiesFolder,
+              type: entitiesType,
+              scope: scopeEntities,
+              name: entityFileName,
+            });
+          }, (err) => {
+            if (err === 404) {
+              console.log('fine not found', entitiesFolder, entitiesType, scopeEntities, entityFileName);
+            }
+          });
+        });
+      });
+
+      Object.keys(sceneArbo).forEach((sceneFileName) => {
+        const sceneFolder = 'models';
+        const sceneType = 'scenes';
+        if (fileName !== sceneFileName) {
+          getFile(sceneFolder, sceneType, scope, sceneFileName).then((content) => {
+            commit('addFile', {
+              path,
+              content,
+              folder: sceneFolder,
+              type: sceneType,
+              scope,
+              name: sceneFileName,
+            });
+          }, (err) => {
+            if (err === 404) {
+              console.log('fine not found', sceneFolder, sceneType, scope, sceneFileName);
+            }
+          });
+        }
+      });
+      getFile(folder, type, scope, fileName).then((content) => {
+        commit('addFile', {
+          path, content,
+        });
+      }, (err) => {
+        if (err === 404) {
+          console.log('fine not found', folder, type, scope, fileName);
+          commit('addFile', {
+            path, content: [],
+          });
+        }
       });
     } else {
       commit('cleanActiveFiles');
@@ -94,8 +217,12 @@ const mutations = {
     state.all[path] = { content, path, temp: true };
     state.active.push(path);
   },
-  addFile(state, { path, content }) {
-    state.all[path] = { content, path };
+  addFile(state, {
+    path, content, folder, scope, type, name,
+  }) {
+    state.all[path] = {
+      content, path, folder, scope, type, name,
+    };
     state.active.push(path);
   },
   cleanActiveFiles(state) {

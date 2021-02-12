@@ -1,7 +1,9 @@
 <template>
   <div class="dev-sprite-edit">
     <main-pane-container>
-      <div class="dev-sprite-edit-container">
+      <div class="dev-sprite-canvas-container">
+          <div class="dev-sprite-canvas">
+          </div>
       </div>
     </main-pane-container>
     <detail-pane-container>
@@ -50,7 +52,7 @@ export default {
     params:Array
   },
   mounted(){
-      this.canvasContainer = this.$el.querySelector('.dev-sprite-edit-container');
+      this.canvasContainer = this.$el.querySelector('.dev-sprite-canvas');
       this.theatreInstance = new Theatre({
         container:this.canvasContainer,
         expose: false,
@@ -155,11 +157,17 @@ export default {
   overflow: auto;
 }
 
-.dev-sprite-edit-container{
-  display: flex;
-  flex:1;
-  justify-content: center;
-  align-items: center;
+.dev-sprite-canvas-container{
+  position: relative;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+}
+
+.dev-sprite-canvas{
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .dev-sprite-edit-preview{

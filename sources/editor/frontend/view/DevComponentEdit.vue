@@ -116,7 +116,9 @@ export default {
         if(i !== path.length-1){
           if(param[name]['_type']==='dico'){
             param=param[name]['_dico'];
-          }else param=param[name]['_object'];
+          }else if(param[name]['_type']==='array<object>'){
+            param=param[name]['_object'];
+          }else param=param[name];
           parent=param;
         }else{
           param=param[name];
@@ -126,7 +128,7 @@ export default {
     },
     deleteParam:function(path){
       let {parent,param}=this.findParamOrigin(path);
-      this.$delete(parent,path[0]);
+      this.$delete(parent,path[path.length-1]);
     },
     childRenameParam:function({newKey,oldKey,path}){
       let {parent}=this.findParamOrigin(path);

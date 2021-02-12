@@ -21,7 +21,12 @@
           <dev-button @click.stop="addDefault()">Add Default</dev-button>
         </template>
       </div>
-      <div v-if="value['_object']">
+      <div v-if="value['_type']==='object'">
+        <dev-button @click.stop="addObject()">Add object</dev-button>
+        <dev-component-param-edit @rename-param="childRenameParam" @del-param='childDeleteParam' @update-value='childUpdateValue' class="dev-component-params dev-component-param-value" v-for='([subKey,subValue] , indexParam)  in Object.entries(value).filter((entry)=>!entry[0].startsWith("_"))' :key="indexParam" :name="subKey" :value="subValue" >
+        </dev-component-param-edit>
+      </div>
+      <div v-else-if="value['_object']">
         _object :
         <dev-icon :width="svgSize" :height="svgSize" @click.prevent="deleteObject" iconName="delete"></dev-icon>
         <dev-button @click.stop="addObjectElem()">Add Object def</dev-button>
@@ -35,7 +40,7 @@
         <dev-component-param-edit @rename-param="childRenameParam" @del-param='childDeleteParam' @update-value='childUpdateValue' class="dev-component-params dev-component-param-value" v-for='([subKey,subValue] , indexParam)  in Object.entries(value["_dico"])' :key="indexParam" :name="subKey" :value="subValue" >
         </dev-component-param-edit>
       </div>
-      <div v-else-if="value['_type'] === 'object'">
+      <div v-else-if="value['_type'] === 'array<object>'">
         <dev-button @click.stop="addObjectDef()">Add _object</dev-button>
       </div>
       <div v-else-if="value['_type'] === 'dico'">
@@ -97,14 +102,7 @@ export default {
   watch:{
     value:{
       handler(val){
-    /*    if(typeof val._default!==typeof val._type){
-          if((this.isSetToFalse && val._default ===false )||(this.isSetToSnippet)){
-
-          }else {
-
-          }
-        }*/
-        if(val._type!=='object' && val._object ){
+        if(val._type!=='array<object>' && val._object ){
           this.updateObjectDef(undefined)
         }
 
@@ -141,6 +139,9 @@ export default {
     }
   },
   methods:{
+    updateSnippet:function(strSnippet){
+      this.updateDefault(strSnippet)
+    },
     childRenameParam:function({oldKey,newKey,path}){
       this.$emit('rename-param',{oldKey,newKey,path:[this.name,...path]})
     },
@@ -165,6 +166,13 @@ export default {
         'default':1
       }}
       this.updateDicoDef({...this.value._dico,...newParam})
+    },
+    addObject:function(){
+      let newParam={
+        '_type':'number',
+        'default':1
+      }
+      this.emitUpdateToParent({key:'newParam',value:newParam,path:[this.name]})
     },
     addObjectElem:function(){
       let newParam={'newParam':{

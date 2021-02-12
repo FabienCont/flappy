@@ -1,0 +1,27 @@
+[
+    {
+      "name":"images",
+      "scope":"common",
+      "components":["camera", "images", "position"]
+    },
+    {
+      "name":"grids",
+      "scope":"common",
+      "components":["grid", "camera"]
+    },
+    {
+      "name":"renderImages",
+      "scope":"canvas2d",
+      "components":[]
+    },
+    {
+      "name":"renderGrids",
+      "scope":"canvas2d",
+      "components":[]
+    },
+    {
+      "name":"emptyCameras",
+      "scope":"common",
+      "components":[]
+    }
+]

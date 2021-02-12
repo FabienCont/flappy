@@ -1,9 +1,9 @@
 <template>
-  <div class="dev-entity">
+  <div class="dev-scene">
     <main-pane-container>
-      <div class="dev-entity-container">
-        <div class="dev-canvas-entity-container">
-          <div class="dev-canvas-entity">
+      <div class="dev-scene-container">
+        <div class="dev-canvas-scene-container">
+          <div class="dev-canvas-scene">
           </div>
         </div>
       </div>
@@ -13,13 +13,12 @@
       <dev-input  name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
       <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
      <div v-if="isElementModify">
-       <dev-button class="dev-entity-icon" @click="saveElement()">Save</dev-button>
-       <dev-button class="dev-entity-icon" @click="copyProps()">Cancel</dev-button>
+       <dev-button class="dev-scene-icon" @click="saveElement()">Save</dev-button>
+       <dev-button class="dev-scene-icon" @click="copyProps()">Cancel</dev-button>
      </div>
      <div v-else>
-       <dev-button class="dev-entity-icon" @click="deleteElement()">Delete</dev-button>
+       <dev-button class="dev-scene-icon" @click="deleteElement()">Delete</dev-button>
      </div>
-     <dev-entity-components :entity='this.contentCopy'></dev-entity-components>
     </detail-pane-container>
   </div>
 </template>
@@ -28,13 +27,12 @@
 
 import DetailPaneContainer from "editor/frontend/view/DetailPaneContainer.vue";
 import MainPaneContainer from "editor/frontend/view/MainPaneContainer.vue";
-import DevEntityComponents from "editor/frontend/view/DevEntityComponents.vue";
 import Theatre from 'core/theatre';
 
 export default {
-  name: 'devEntity',
+  name: 'devScene',
   components:{
-    DetailPaneContainer,MainPaneContainer,DevEntityComponents
+    DetailPaneContainer,MainPaneContainer
   },
   data(){
     return {
@@ -51,8 +49,8 @@ export default {
     }
   },
   mounted(){
-    let container =  this.$el.querySelector('.dev-canvas-entity');
-    this.theatreInstance = new Theatre({
+    let container =  this.$el.querySelector('.dev-canvas-scene');
+    this.theatreInstance =  new Theatre({
       container,
       expose: false,
       sharp: true,
@@ -155,27 +153,27 @@ export default {
 
 @import "editor/frontend/styles/_variables";
 
-.dev-entity{
+.dev-scene{
   display: flex;
   height: 100%;
   flex: 1;
   overflow: auto;
 }
 
-.dev-entity-container{
+.dev-scene-container{
   display: flex;
   flex:1;
   justify-content: center;
   align-items: center;
 }
-.dev-canvas-entity-container{
+.dev-canvas-scene-container{
   position: relative;
   overflow: auto;
   width: 100%;
   height: 100%;
 }
 
-.dev-canvas-entity{
+.dev-canvas-scene{
   position: absolute;
   width: 100%;
   height: 100%;

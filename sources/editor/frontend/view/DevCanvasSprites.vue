@@ -15,12 +15,18 @@ export default {
       params:{
         animation:this.animation,
         sprite:this.image
-      }
+      },
+      theatreInstance:null
+    }
+  },
+  beforeDestroy(){
+    if(this.theatreInstance){
+      this.theatreInstance.destroy();
     }
   },
   mounted(){
     let container =  this.$el.querySelector('.dev-canvas-sprites');
-    let canvasEditAnim = new Theatre({
+    this.theatreInstance = new Theatre({
       container,
       expose: false,
       sharp: true,
