@@ -3,7 +3,8 @@ import { Camera } from 'modules/camera';
 const generateCameras = function generateCameras(sceneCameras) {
   const cameras = {};
   try {
-    sceneCameras.forEach((cam) => {
+    const camerasModel = JSON.parse(JSON.stringify(sceneCameras));
+    camerasModel.forEach((cam) => {
       if (cam.params.$snippet !== undefined) {
         const snippet = cam.params.$snippet;
         cam.params = this.models.snippets[snippet.scope][snippet.name]();
@@ -40,7 +41,7 @@ const getCamerasScene = function getCamerasScene() {
   try {
     const currentScene = this.models.scenes[this.currentScene];
     if (currentScene && currentScene.cameras !== undefined) {
-      return JSON.parse(JSON.stringify(currentScene.cameras()));
+      return currentScene.cameras();
     }
     return [];
   } catch (err) {

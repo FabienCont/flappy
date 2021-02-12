@@ -2,6 +2,8 @@
   <div class="dev-entity-components-container">
     <h3>Entity :</h3>
     {{entity}}
+    <h4>Components</h4> 
+    {{components}}
   </div>
 </template>
 
@@ -9,7 +11,8 @@
 export default {
   name:'DevEntityComponents',
   props:{
-    entity:{type:Object}
+    entity:{type:Object},
+    components:{type:Object},
   },
 }
 </script>

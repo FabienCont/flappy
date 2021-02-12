@@ -36,4 +36,4 @@ const loadVariables = function loadVariables() {
   }
 };
 
-export { loadVariables };
+export { loadVariables, generateVariables };

@@ -144,6 +144,7 @@ export default {
     addParam:function(){
       let newParam={'_type':'number','_default':0}
       if(!this.contentCopy.params['newParam'])
+      debugger;
       this.contentCopy.params=Object.assign({}, this.contentCopy.params,{newParam});
     },
     copyProps:function(){

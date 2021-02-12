@@ -76,18 +76,17 @@ export default {
       }else if(this.currentType==='sprites' && this.currentFiles.length===2){
         this.componentRef=DevSpriteEdit;
         this.componentParams=this.currentFiles;
-      }else if((this.currentFolder==='scenes' || this.currentType==='scenes'|| this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets') && this.currentFiles.length>0){
-        this.componentRef=DevAceEditor;
-        this.componentParams=this.currentFiles[0];
       }else if(this.currentType==='entities' && this.currentFiles.length>0){
         this.componentRef=DevEntity;
         this.componentParams=this.currentFiles;
       }else if(this.currentType==='scenes' && this.currentFiles.length>0){
-        this.componentRef=DevScenes;
+        this.componentRef=DevScene;
         this.componentParams=this.currentFiles;
-      }
-      else if(this.currentType==='components' && this.currentFiles.length===1){
+      }else if(this.currentType==='components' && this.currentFiles.length===1){
         this.componentRef=DevComponentEdit;
+        this.componentParams=this.currentFiles[0];
+      }else if((this.currentFolder==='scenes' || this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets') && this.currentFiles.length>0){
+        this.componentRef=DevAceEditor;
         this.componentParams=this.currentFiles[0];
       }
       else if(this.currentFiles.length===0) {

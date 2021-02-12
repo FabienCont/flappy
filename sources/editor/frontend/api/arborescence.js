@@ -1,4 +1,4 @@
-const getArborescence = function () {
+const getArborescence = function getArborescence() {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', '/api/arborescence');

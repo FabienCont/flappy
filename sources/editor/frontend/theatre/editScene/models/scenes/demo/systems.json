@@ -5,7 +5,12 @@
     "components":[]
   },
   {
-    "name":"generateEntity",
+    "name":"generateEntitiesModel",
+    "scope":"demo",
+    "components":[]
+  },
+  {
+    "name":"generateSceneElements",
     "scope":"demo",
     "components":[]
   }

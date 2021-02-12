@@ -9,7 +9,7 @@
       </div>
     </main-pane-container>
     <detail-pane-container>
-      <h3>{{type}}</h3>
+      <h3>Scene {{scope}} </h3>
       <dev-input  name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
       <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
      <div v-if="isElementModify">
@@ -28,6 +28,7 @@
 import DetailPaneContainer from "editor/frontend/view/DetailPaneContainer.vue";
 import MainPaneContainer from "editor/frontend/view/MainPaneContainer.vue";
 import Theatre from 'core/theatre';
+import { mapGetters,mapActions } from 'vuex';
 
 export default {
   name: 'devScene',
@@ -40,7 +41,10 @@ export default {
        contentCopy:this.params.content,
        nameCopy:"",
        scopeCopy:"",
-       theatreInstance:null
+       theatreInstance:null,
+       sceneFiles:{},
+       componentFiles:{},
+       entityFiles:{}
     }
   },
   beforeDestroy(){
@@ -54,12 +58,15 @@ export default {
       container,
       expose: false,
       sharp: true,
-      scenarioCtx: require.context('editor/frontend/theatre/editEntity/scenes/', true, /^\.\/scenario\.json$/, 'sync'),
-      hooksCtx:require.context('editor/frontend/theatre/editEntity/scenes/', true, /\.\/(\w+)\/(\w+)\.js$/, 'sync'),
-      assetsCtx:{},
-      modelsCtx:require.context('editor/frontend/theatre/editEntity/models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
+      scenarioCtx: require.context('editor/frontend/theatre/editScene/scenes/', true, /^\.\/scenario\.json$/, 'sync'),
+      hooksCtx:require.context('editor/frontend/theatre/editScene/scenes/', true, /\.\/(\w+)\/(\w+)\.js$/, 'sync'),
+      modelsCtx:require.context('editor/frontend/theatre/editScene/models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
       loadingTime:0,
-      params:this.params,
+      params:{
+        components:this.componentFiles,
+        entities:this.entityFiles,
+        sceneFiles:this.sceneFiles
+      },
       focus:false
     });
   },
@@ -69,71 +76,58 @@ export default {
       content:Object,
     }
   },
-  created(){
-    this.copyProps();
-  },
   watch:{
-    params:function(){
-      this.copyProps();
+    params:function(val){
+      val.forEach((file,i)=>{
+        if(file.type==='scenes'){
+          this.$set(this.sceneFiles,file.path,file);
+        }else if(file.type==='entities'){
+          this.entityFiles[file.path]=file;
+        }else if(file.type==='components'){
+          this.componentFiles[file.path]=file;
+        }else{
+          console.error('file not recognize',file);
+        }
+      });
     },
-    contentCopy:function(val){
-      console.log(val)
-    },
-    nameCopy:function(val){
-      if(this.contentCopy && this.contentCopy.name){
-        this.contentCopy.name=val.split('.')[0];
+    sceneFiles:{
+      deep:true,
+      handler:function(val){
+        let mainSceneFile=val[this.currentPane.path];
+        if(mainSceneFile){
+          this.nameCopy=mainSceneFile.name;
+          this.scopeCopy=mainSceneFile.scope;
+        }
       }
     }
   },
   computed:{
-    paths:function(){
-      return this.params.path.split('/');
-    },
-    type:function(){
-      if(this.paths.length>2){
-        return this.paths[1]
-      }
-      return null;
-    },
-    name:function(){
-      if(this.paths.length===4){
-        return this.paths[3];
-      }
-      else if(this.paths.length===3){
-        return this.paths[2];
-      }
-      else if(this.paths.length===2){
-        return this.paths[1];
-      }
+    ...mapGetters({
+      currentPane:"panes/currentPane"
+    }),
+    mainSceneFile:function(){
+      let mainSceneFile=this.sceneFiles[this.currentPane.path];
+      if(mainSceneFile){
+        return mainSceneFile
+      }else return null;
     },
     scope:function(){
-      if(this.paths.length>3){
-        return this.paths[2]
-      }
-      return null;
+      if(this.mainSceneFile){
+          return this.mainSceneFile.scope
+      }else return "";
+    },
+    name:function(){
+      if(this.mainSceneFile){
+          return this.mainSceneFile.name
+      }else return "";
     },
     isElementModify:function(){
-      return this.params.content!==this.contentCopy || this.scopeCopy!==this.scope || this.nameCopy!==this.name;
+      if(this.mainSceneFile && this.nameCopy!==this.mainSceneFile.name && this.scopeCopy!==this.mainSceneFile.scope){
+        return true;
+      }else return false;
     }
   },
   methods:{
-    updateContentCopyValue:function(){
-      this.contentCopy = this.editor.getSession().getValue();
-    },
-    copyProps:function(){
-      this.nameCopy=this.name;
-      this.scopeCopy=this.scope;
-      this.contentCopy = this.params.content;
-    },
-    updateFile:function(file){
-      if(this.nameCopy==='')this.nameCopy=file.name.split(".")[0];
-      var reader = new FileReader();
-       reader.onload = (e)=> {
-         this.contentCopy= e.target.result;
-       }
-
-      reader.readAsDataURL(file); // convert to base64 string
-    },
     saveElement:function(){
       if(this.isElementModify){
         this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.contentCopy});

@@ -1,7 +1,7 @@
 import {
   getFile, postFile, deleteFile,
 } from 'editor/frontend/api/files';
-import { cutFilePath } from 'editor/frontend/utils/path';
+import { cutFilePath, createFilePath } from 'editor/frontend/utils/path';
 
 // initial state
 const state = () => ({
@@ -54,7 +54,7 @@ const actions = {
           getFile(componentsFolder, componentsType, scopeComponent, componentFileName)
             .then((content) => {
               commit('addFile', {
-                path,
+                path: createFilePath(componentsFolder, componentsType, scopeComponent, componentFileName),
                 content,
                 folder: componentsFolder,
                 type: componentsType,
@@ -97,7 +97,7 @@ const actions = {
           getFile(componentsFolder, componentsType, scopeComponent, componentFileName)
             .then((content) => {
               commit('addFile', {
-                path,
+                path: createFilePath(componentsFolder, componentsType, scopeComponent, componentFileName),
                 content,
                 folder: componentsFolder,
                 type: componentsType,
@@ -118,7 +118,7 @@ const actions = {
 
           getFile(entitiesFolder, entitiesType, scopeEntities, entityFileName).then((content) => {
             commit('addFile', {
-              path,
+              path: createFilePath(entitiesFolder, entitiesType, scopeEntities, entityFileName),
               content,
               folder: entitiesFolder,
               type: entitiesType,
@@ -134,36 +134,20 @@ const actions = {
       });
 
       Object.keys(sceneArbo).forEach((sceneFileName) => {
-        const sceneFolder = 'models';
-        const sceneType = 'scenes';
-        if (fileName !== sceneFileName) {
-          getFile(sceneFolder, sceneType, scope, sceneFileName).then((content) => {
-            commit('addFile', {
-              path,
-              content,
-              folder: sceneFolder,
-              type: sceneType,
-              scope,
-              name: sceneFileName,
-            });
-          }, (err) => {
-            if (err === 404) {
-              console.log('fine not found', sceneFolder, sceneType, scope, sceneFileName);
-            }
-          });
-        }
-      });
-      getFile(folder, type, scope, fileName).then((content) => {
-        commit('addFile', {
-          path, content,
-        });
-      }, (err) => {
-        if (err === 404) {
-          console.log('fine not found', folder, type, scope, fileName);
+        getFile(folder, type, scope, sceneFileName).then((content) => {
           commit('addFile', {
-            path, content: [],
+            path: createFilePath(folder, type, scope, sceneFileName),
+            content,
+            folder,
+            type,
+            scope,
+            name: sceneFileName,
           });
-        }
+        }, (err) => {
+          if (err === 404) {
+            console.log('fine not found', folder, type, scope, sceneFileName);
+          }
+        });
       });
     } else {
       commit('cleanActiveFiles');

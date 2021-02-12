@@ -1,6 +1,6 @@
 {
     "name": "sprite",
-    "scope":"editAnimations",
+    "scope":"demo",
     "components": [{
             "name": "camera",
             "scope": "common"

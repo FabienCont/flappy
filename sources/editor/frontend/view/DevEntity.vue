@@ -9,7 +9,7 @@
       </div>
     </main-pane-container>
     <detail-pane-container>
-      <h3>{{type}}</h3>
+      <h3>Entity</h3>
       <dev-input  name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
       <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
      <div v-if="isElementModify">
@@ -19,7 +19,7 @@
      <div v-else>
        <dev-button class="dev-entity-icon" @click="deleteElement()">Delete</dev-button>
      </div>
-     <dev-entity-components :entity='this.contentCopy'></dev-entity-components>
+     <dev-entity-components :entity='entityFile' :components='componentFiles'></dev-entity-components>
     </detail-pane-container>
   </div>
 </template>
@@ -39,10 +39,11 @@ export default {
   data(){
     return {
       // svgSize:"1.7em",
-       contentCopy:this.params.content,
        nameCopy:"",
        scopeCopy:"",
-       theatreInstance:null
+       entityFile:{content:null},
+       componentFiles:{},
+       theatreInstance:null,
     }
   },
   beforeDestroy(){
@@ -58,11 +59,13 @@ export default {
       sharp: true,
       scenarioCtx: require.context('editor/frontend/theatre/editEntity/scenes/', true, /^\.\/scenario\.json$/, 'sync'),
       hooksCtx:require.context('editor/frontend/theatre/editEntity/scenes/', true, /\.\/(\w+)\/(\w+)\.js$/, 'sync'),
-      assetsCtx:{},
       modelsCtx:require.context('editor/frontend/theatre/editEntity/models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
       loadingTime:0,
-      params:this.params,
-      focus:false
+      params:{
+        components:this.componentFiles,
+        entity:this.entityFile
+      },
+      focus:true
     });
   },
   props: {
@@ -71,71 +74,44 @@ export default {
       content:Object,
     }
   },
-  created(){
-    this.copyProps();
-  },
   watch:{
-    params:function(){
-      this.copyProps();
+    params:function(val){
+      val.forEach((file,i)=>{
+        if(file.type==='entities'){
+          Object.assign(this.entityFile,file);
+        }else if(file.type==='components'){
+          this.componentFiles[file.path]=file;
+        }else{
+          console.error('file not recognize',file);
+        }
+      });
     },
-    contentCopy:function(val){
-      console.log(val)
-    },
-    nameCopy:function(val){
-      if(this.contentCopy && this.contentCopy.name){
-        this.contentCopy.name=val.split('.')[0];
+    entityFile:{
+      deep:true,
+      handler:function(val){
+        this.nameCopy=val.name;
+        this.scopeCopy=val.scope;
       }
     }
   },
   computed:{
-    paths:function(){
-      return this.params.path.split('/');
-    },
-    type:function(){
-      if(this.paths.length>2){
-        return this.paths[1]
-      }
-      return null;
+    scope:function(){
+      if(this.entityFile){
+          return this.entityFile.scope
+      }else return "";
     },
     name:function(){
-      if(this.paths.length===4){
-        return this.paths[3];
-      }
-      else if(this.paths.length===3){
-        return this.paths[2];
-      }
-      else if(this.paths.length===2){
-        return this.paths[1];
-      }
-    },
-    scope:function(){
-      if(this.paths.length>3){
-        return this.paths[2]
-      }
-      return null;
+      if(this.entityFile){
+          return this.entityFile.name
+      }else return "";
     },
     isElementModify:function(){
-      return this.params.content!==this.contentCopy || this.scopeCopy!==this.scope || this.nameCopy!==this.name;
+      if(this.entityFile && this.nameCopy!==this.entityFile.name && this.scopeCopy!==this.entityFile.scope){
+        return true;
+      }else return false;
     }
   },
   methods:{
-    updateContentCopyValue:function(){
-      this.contentCopy = this.editor.getSession().getValue();
-    },
-    copyProps:function(){
-      this.nameCopy=this.name;
-      this.scopeCopy=this.scope;
-      this.contentCopy = this.params.content;
-    },
-    updateFile:function(file){
-      if(this.nameCopy==='')this.nameCopy=file.name.split(".")[0];
-      var reader = new FileReader();
-       reader.onload = (e)=> {
-         this.contentCopy= e.target.result;
-       }
-
-      reader.readAsDataURL(file); // convert to base64 string
-    },
     saveElement:function(){
       if(this.isElementModify){
         this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.contentCopy});
