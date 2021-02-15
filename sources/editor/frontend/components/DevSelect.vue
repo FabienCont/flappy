@@ -50,8 +50,7 @@ export default {
     },
     label: {
       type: String,
-      required: false,
-      default: "Select",
+      required: false
     },
     inline:{
       type:Boolean,

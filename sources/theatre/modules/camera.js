@@ -67,8 +67,7 @@ function Camera(name, type, screenSize, attr) {
   function add(dicoType, element) {
     if (this.dico[dicoType] === undefined) {
       this.dico[dicoType] = [element];
-    }
-    this.dico[dicoType].push(element);
+    } else this.dico[dicoType].push(element);
   }
 
   function look(x, y, z) {
@@ -96,12 +95,15 @@ function Camera(name, type, screenSize, attr) {
   }
 
   this.name = name;
+  const x = (attr.x ? attr.x : 0);
+  const y = (attr.y ? attr.y : 0);
+  const z = (attr.z ? attr.z : 0);
 
   this.position = {
 
-    x: () => 0,
-    y: () => 0,
-    z: () => 0,
+    x: () => x,
+    y: () => y,
+    z: () => z,
   };
 
   this.screen.scale = scale;

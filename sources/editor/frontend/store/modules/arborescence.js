@@ -72,6 +72,16 @@ const getters = {
     });
     return snippetDico;
   },
+  componentDico: (state) => {
+    const componentDico = {};
+    Object.entries(state.all.models.content.components.content).forEach(([scope, value]) => {
+      Object.entries(value.content).forEach(([filename, info]) => {
+        if (!componentDico[scope]) componentDico[scope] = {};
+        componentDico[scope][filename] = info;
+      });
+    });
+    return componentDico;
+  },
 };
 
 export default {

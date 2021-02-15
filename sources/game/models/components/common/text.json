@@ -41,6 +41,10 @@
       "_default": "fill",
       "_type": "string"
     },
+    "opacity":{
+      "_default": 1,
+      "_type": "number"
+    },
     "x": {
       "_default": 0,
       "_type": "number"

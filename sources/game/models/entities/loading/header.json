@@ -6,8 +6,8 @@
             "name": "position",
             "scope": "common",
             "params": {
-                "x": 0,
-                "y": 0,
+                "x": 375,
+                "y": 275,
                 "z": 0
             }
         },
@@ -20,7 +20,7 @@
             "scope": "common",
             "params": {
                 "x": 0,
-                "y": -70,
+                "y": 0,
                 "z": 0,
                 "color": "white",
                 "text":"THEATRE",

@@ -15,7 +15,7 @@ function updateScore(entities) {
 
     if (parseInt(numberStr) != score) {
       const newParts = [];
-      score=(score!==undefined?score:0);
+      score = (score !== undefined && score !== null ? score : 0);
       const scoreStr = score.toString();
       for (let i = 0; i < scoreStr.length; i++) {
         const part = createNumberImagePart(parseInt(scoreStr[i]), i, scoreStr.length, isBestScore);

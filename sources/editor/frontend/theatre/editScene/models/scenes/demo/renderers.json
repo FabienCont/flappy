@@ -15,6 +15,11 @@
       "components":["camera", "images", "position"]
     },
     {
+      "name":"text",
+      "scope":"common",
+      "components":["camera", "text", "position"]
+    },
+    {
       "name":"renderImages",
       "scope":"canvas2d",
       "components":[]
@@ -22,7 +27,7 @@
     {
       "name":"renderText",
       "scope":"canvas2d",
-      "components":["text"]
+      "components":[]
     },
     {
       "name":"showHitbox",

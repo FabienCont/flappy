@@ -10,7 +10,7 @@
     </main-pane-container>
     <detail-pane-container>
       <h3>Entity</h3>
-      <dev-input  name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
+      <dev-input  name='filename' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
       <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
      <div v-if="isElementModify">
        <dev-button class="dev-entity-icon" @click="saveElement()">Save</dev-button>
@@ -19,7 +19,13 @@
      <div v-else>
        <dev-button class="dev-entity-icon" @click="deleteElement()">Delete</dev-button>
      </div>
-     <dev-entity-components :entity='entityFile' :components='componentFiles'></dev-entity-components>
+     <dev-separator></dev-separator>
+     <div>
+       Components:
+       <dev-button @click="addComponent()">Add Component</dev-button>
+       <dev-entity-components  v-if="entityFile.content" :entity='entityFile.content' :componentsModel='componentsModel'></dev-entity-components>
+
+     </div>
     </detail-pane-container>
   </div>
 </template>
@@ -95,6 +101,9 @@ export default {
     }
   },
   computed:{
+    componentsModel:function(){
+      return Object.values(this.componentFiles).map((value)=>{return {scope:value.scope,...value.content}})
+    },
     scope:function(){
       if(this.entityFile){
           return this.entityFile.scope
@@ -112,6 +121,9 @@ export default {
     }
   },
   methods:{
+    addComponent:function(){
+
+    },
     saveElement:function(){
       if(this.isElementModify){
         this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.contentCopy});

@@ -6,8 +6,8 @@
             "name": "position",
             "scope": "common",
             "params": {
-                "x": 0,
-                "y": 0,
+                "x": 375,
+                "y": 375,
                 "z": 0
             }
         },
@@ -20,7 +20,7 @@
             "scope": "common",
             "params": {
                 "x": 0,
-                "y": 50,
+                "y": 0,
                 "z": 0,
                 "color": "white",
                 "text":"preloading assets...",
@@ -28,6 +28,27 @@
                 "fontSize":20,
                 "fontFamily":"serial",
                 "letterSpacing":1
+            }
+        },
+        {
+            "name": "hitbox",
+            "scope": "common",
+            "params": {
+                "height": 20,
+                "width": 200,
+                "x":0,
+                "y":0,
+                "type":"dynamic",
+                "collideable":{
+                  "static":{
+                    "scope": "demo",
+                    "name": "handle-hitbox"
+                  },
+                  "score":{
+                    "scope": "demo",
+                    "name": "handle-hitbox-score"
+                  }
+                }
             }
         }
       ]

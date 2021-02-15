@@ -1,20 +1,12 @@
 [
   {
     "name":"default",
-    "type":"contain-framed-center",
+    "type":"contain-framed",
     "params":{
-      "width":{
-        "$snippet":{
-          "scope":"common",
-          "name":"get-screen-width"
-        }
-      },
-      "height":{
-        "$snippet":{
-        "scope":"common",
-        "name":"get-screen-height"
-      }
+      "width":750,
+      "height":750,
+      "x":375,
+      "y":375
     }
   }
-}
 ]

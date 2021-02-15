@@ -8,5 +8,10 @@
     "name":"generateEntity",
     "scope":"demo",
     "components":[]
+  },
+  {
+    "name":"mockCamera",
+    "scope":"demo",
+    "components":["camera"]
   }
 ]
