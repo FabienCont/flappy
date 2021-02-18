@@ -26,7 +26,7 @@ function generateSceneElements() {
     });
 
     if (variables) {
-    // this.$variables = generateVariables.call(this, variables);
+      // this.$variables = generateVariables.call(this, variables);
     }
 
     if (cameras) {

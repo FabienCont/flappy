@@ -1,21 +1,23 @@
 <template>
   <div class="dev-entity-components-container">
+    Components:
+    <dev-button v-if="!addingComponent" @click="addComponent()">Add Component</dev-button>
+    <div  v-else>
+      <dev-select @input="(val)=>addComponent(component,componentList[val])" :border="false" :default="getDefaultComponent(component)" :options="Object.keys(componentList)"></dev-select>
+      <dev-button @click="validComponent()">Valid</dev-button>
+      <dev-button @click="cancel()">Cancel</dev-button>
+    </div>
     <div v-for="(component , indexComponent)  in entity.components" :key="indexComponent">
       <div class="dev-entity-component">
         <dev-icon :width="svgSize" :height="svgSize" @click="toggleComponentParams(indexComponent)" :iconName="getIconType(indexComponent)"></dev-icon>
-        <dev-select @input="(val)=>updateComponent(componentList[val])" :border="false" :default="getDefaultComponent(component)" :options="Object.keys(componentList)"></dev-select>
+        {{getDefaultComponent(component)}}
+        <dev-icon :width="svgSize" :height="svgSize" @click="deleteComponent(component.name,component.scope)" iconName="delete"></dev-icon>
       </div>
       <div v-if="indexComponent === componentsFocus">
-        <div class="dev-entity-components-param" v-if="component.params">
-        <!-- <dev-button @click="addParam()">Add Param</dev-button> -->
-          <template v-for="([paramName,paramValue] , indexParam)  in Object.entries(component.params)">
-            <dev-entity-param :key="indexParam" :name='paramName' :value='paramValue' :paramModel='getParamModel(component,paramName)'></dev-entity-param>
-          </template>
-          </div>
-        <div class="dev-entity-components-param-default">
-          <template v-for="([paramName,paramValue] , indexParam)  in defaultParams(component)">
-            <dev-entity-default  :key="'default'+indexParam" :name='paramName' :value='paramValue' :paramModel='getParamModel(component,paramName)'></dev-entity-default>
-          </template>
+        <div class="dev-entity-components-param">
+          <dev-entity-param v-for="([paramName,paramValue] , indexParam)  in getAllParams(component)"
+           @update-param="updateComponentParam" :key="indexParam" :component='component' :name='paramName'
+           :value='getComponentValue(component,paramName)' :paramModel='paramValue'></dev-entity-param>
         </div>
       </div>
     </div>
@@ -24,16 +26,16 @@
 
 <script>
 import DevEntityParam from "editor/frontend/view/DevEntityParam.vue";
-import DevEntityDefault from "editor/frontend/view/DevEntityDefault.vue"
 import {mapGetters} from "vuex";
 
 export default {
   name:'DevEntityComponents',
-  components:{DevEntityParam,DevEntityDefault},
+  components:{DevEntityParam},
   data(){
     return {
       svgSize:"2rem",
       componentsFocus:-1,
+      addingComponent:false
     }
   },
   props:{
@@ -53,8 +55,43 @@ export default {
       });
       return componentList
     },
+    AddableComponentList:function(){
+      let filteredList=[]
+      this.entity.components.forEach((component)=>{
+        let foundComponent=this.componentList.find((compo)=>{
+          return compo.file.split('.')[0] ===component.name && compo.scope ===component.scope
+        })
+        if(!foundComponent){
+          filteredList.push(component)
+        }
+     });
+    }
   },
   methods:{
+    addComponent:function(){
+      this.addingComponent=true;
+    },
+    cancel:function(){
+      this.addingComponent=false;
+    },
+    validComponent:function(val){
+      this.$emit("add-component",{file:val.file,scope:val.scope})
+      this.addingComponent=false;
+    },
+    getComponentValue:function(component,paramName){
+      if(component.params)
+      return component.params[paramName]
+      return null;
+    },
+    updateComponentParam:function({component,name,val}){
+      this.$emit("update-component-param",{component,name,val});
+    },
+    updateComponent:function({name,scope,val}){
+      this.$emit("update-component",{name,scope,val})
+    },
+    deleteComponent:function(name,scope){
+      this.$emit("delete-component",{name,scope})
+    },
     getIconType:function(index){
       if(this.componentsFocus!==index){
         return 'right';
@@ -64,6 +101,13 @@ export default {
       if(this.componentsFocus===index){
         this.componentsFocus=-1;
       }else this.componentsFocus=index;
+    },
+    getAllParams:function(component){
+      let componentModel=this.getComponentModel(component);
+      if(componentModel){
+        return Object.entries(componentModel.params)
+      }
+      return []
     },
     defaultParams:function(component){
       let componentModel=this.getComponentModel(component);
@@ -93,9 +137,6 @@ export default {
         return foundComponent.params[paramName]
       }
       return {}
-    },
-    updateComponent:function(val){
-
     },
     getDefaultComponent:function(component){
       let foundComponent=Object.entries(this.componentList).find(([key,value])=>{

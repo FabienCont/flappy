@@ -21,10 +21,7 @@
      </div>
      <dev-separator></dev-separator>
      <div>
-       Components:
-       <dev-button @click="addComponent()">Add Component</dev-button>
-       <dev-entity-components  v-if="entityFile.content" :entity='entityFile.content' :componentsModel='componentsModel'></dev-entity-components>
-
+       <dev-entity-components  v-if="entityFile.content" @update-component-param="updateComponentParam" @update-component="updateComponent" @delete-component="deleteComponent" :entity='entityFileCopy.content' :componentsModel='componentsModel'></dev-entity-components>
      </div>
     </detail-pane-container>
   </div>
@@ -47,6 +44,7 @@ export default {
       // svgSize:"1.7em",
        nameCopy:"",
        scopeCopy:"",
+       entityFileCopy:{content:null},
        entityFile:{content:null},
        componentFiles:{},
        theatreInstance:null,
@@ -69,7 +67,7 @@ export default {
       loadingTime:0,
       params:{
         components:this.componentFiles,
-        entity:this.entityFile
+        entity:this.entityFileCopy
       },
       focus:true
     });
@@ -95,8 +93,9 @@ export default {
     entityFile:{
       deep:true,
       handler:function(val){
-        this.nameCopy=val.name;
-        this.scopeCopy=val.scope;
+        this.entityFileCopy = Object.assign(this.entityFileCopy, JSON.parse(JSON.stringify(val)));
+        this.nameCopy=this.entityFileCopy.name;
+        this.scopeCopy=this.entityFileCopy.scope;
       }
     }
   },
@@ -115,12 +114,29 @@ export default {
       }else return "";
     },
     isElementModify:function(){
-      if(this.entityFile && this.nameCopy!==this.entityFile.name && this.scopeCopy!==this.entityFile.scope){
+      if(JSON.stringify(this.entityFile) !== JSON.stringify(this.entityFileCopy) && this.nameCopy!==this.entityFile.name && this.scopeCopy!==this.entityFile.scope){
         return true;
       }else return false;
     }
   },
   methods:{
+    updateComponentParam:function({component,name,val}){
+      let index=this.entityFileCopy.content.components.findIndex((comp)=>comp.name ===component.name && comp.scope===component.scope);
+      if(index!==-1){
+        let components=this.entityFileCopy.content.components;
+        components[index].params[name]=val;
+        this.$set(this.entityFileCopy.content,'components',components);
+      }
+    },
+    updateComponent:function({name,scope,val}){
+      let indexComponent=this.entityFileCopy.content.components.findIndex((component)=>component.name===name && component.scope===scope);
+      this.entityFileCopy.content.components.splice(indexComponent, 1,val);
+      //this.$set(param,key, value);
+    },
+    deleteComponent:function({name,scope}){
+        let indexComponent=this.entityFileCopy.content.components.findIndex((component)=>component.name===name && component.scope===scope);
+        this.entityFileCopy.content.components.splice(indexComponent, 1);
+    },
     addComponent:function(){
 
     },

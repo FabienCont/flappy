@@ -30,8 +30,8 @@
             "name": "position",
             "scope": "common",
             "params": {
-                "x": 0,
-                "y": 0,
+                "x": 48,
+                "y": 48,
                 "z": 120
             }
         },
