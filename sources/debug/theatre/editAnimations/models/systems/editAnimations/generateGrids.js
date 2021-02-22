@@ -1,13 +1,13 @@
 import { generateEntities } from 'core/loadEntities';
 
 function generateGrids() {
-  if (JSON.stringify(this.saveGrids) !== JSON.stringify(this.params.grids)) {
+  if (JSON.stringify(this.saveGrids) !== JSON.stringify(this.params.grids.content)) {
     Object.values(this.$world.entities).forEach((entity) => {
       if (entity.name === 'grid') this.$world.remove(entity);
     });
 
     const gridModel = this.models.entities.editAnimations.grid();
-    this.params.grids.forEach((grid) => {
+    this.params.grids.content.forEach((grid) => {
       const entity = generateEntities.call(this, [gridModel])[0];
       const newGrid = entity.get('grid');
       newGrid.x = grid.x;
@@ -20,7 +20,7 @@ function generateGrids() {
       this.$world.add(entity);
     });
 
-    this.saveGrids = JSON.parse(JSON.stringify(this.params.grids));
+    this.saveGrids = JSON.parse(JSON.stringify(this.params.grids.content));
   }
 }
 

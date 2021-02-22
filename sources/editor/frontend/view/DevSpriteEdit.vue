@@ -20,7 +20,7 @@
          <dev-button class="dev-preview-img-icon" @click="deleteElement()">Delete</dev-button>
        </div>
        <dev-separator></dev-separator>
-       <dev-sprites-grids :image="image" :grids="this.gridsCopy" :reset="reset" @reset-done="resetDone" @update-sprite-file="updateCurrentGrids">
+       <dev-sprites-grids :image="image" :grids="this.currentGridsValue" :reset="reset" @reset-done="resetDone" @update-sprite-file="updateCurrentGrids">
        </dev-sprites-grids>
     </detail-pane-container>
   </div>
@@ -41,8 +41,10 @@ export default {
   data(){
     return {
        base64:'data:image/png;base64,',
-       gridsCopy:null,
-       currentGridsValue:null,
+       gridsCopy:{
+         content:[]
+       },
+       currentGridsValue:[],
        canvasContainer:null,
        theatreInstance:null,
        reset:false
@@ -64,7 +66,7 @@ export default {
         loadingTime:0,
         params:{
           sprite:this.image,
-          grids:this.spritesFile.content
+          grids:this.gridsCopy
         }
       });
   },
@@ -122,13 +124,19 @@ export default {
       this.reset=false;
     },
     updateCurrentGrids:function(gridsCopy){
-      this.currentGridsValue=JSON.parse(JSON.stringify(gridsCopy));
+      let gridsString=JSON.stringify(gridsCopy)
+      this.currentGridsValue=JSON.parse(gridsString);
+      this.currentGridsValue.splice(this.currentGridsValue.length);
+      this.gridsCopy.content=JSON.parse(gridsString);
     },
     copyProps:function(){
-      this.gridsCopy = JSON.parse(JSON.stringify(this.spritesFile.content));
-      this.currentGridsValue=JSON.parse(JSON.stringify(this.spritesFile.content));
+      let stringFileContent=JSON.stringify(this.spritesFile.content)
+      this.currentGridsValue =JSON.parse(stringFileContent);
+      this.currentGridsValue.splice(this.currentGridsValue.length);
+     this.gridsCopy.content=JSON.parse(stringFileContent);
     },
     cancelModif:function(){
+      this.copyProps();
       this.reset=true;
     },
     saveElement:function(){

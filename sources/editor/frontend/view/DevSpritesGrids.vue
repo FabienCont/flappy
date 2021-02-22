@@ -36,6 +36,7 @@
           <div class="flex align-center">
             <dev-icon :width="svgSize" :height="svgSize" @click="changeSpriteFocus(indexAnim)" :iconName="getSpriteTypeIcon(indexAnim)"></dev-icon>
             <dev-input class="dev-sprite-title" type="string" name="alias" :isEditable="true" :inputValue="animation.alias" @update:inputValue="newVal => animation.alias = newVal"></dev-input>
+            <dev-icon :width="svgSize" :height="svgSize" @click.prevent="deleteSprite(grid,indexAnim)" iconName="delete"></dev-icon>
           </div>
           <dev-canvas-sprites v-if='animation.frames.length!==0' :animation="calculatedAnimations[indexGrid][indexAnim]" :image="image"></dev-canvas-sprites>
           <div v-if='spriteFocus===indexAnim'>
@@ -123,6 +124,9 @@ export default {
   methods:{
     deleteSpritesInGrid:function(grid){
       grid.animations.splice(0);
+    },
+    deleteSprite:function(grid,indexAnim){
+      grid.animations.splice(indexAnim,1);
     },
     deleteGrid:function(index){
       this.gridsCopy.splice(index, 1);

@@ -2,10 +2,12 @@
   <div class="dev-entity-components-container">
     Components:
     <dev-button v-if="!addingComponent" @click="addComponent()">Add Component</dev-button>
-    <div  v-else>
-      <dev-select @input="(val)=>addComponent(component,componentList[val])" :border="false" :default="getDefaultComponent(component)" :options="Object.keys(componentList)"></dev-select>
-      <dev-button @click="validComponent()">Valid</dev-button>
-      <dev-button @click="cancel()">Cancel</dev-button>
+    <div v-else>
+      <dev-select @input="(val)=>addedComponent=allComponents[val]" :border="false" :default="getUnusedComponent()" :options="unusedComponentList"></dev-select>
+      <div class="flex">
+        <dev-button @click="validComponent()">Valid</dev-button>
+        <dev-button @click="cancel()">Cancel</dev-button>
+      </div>
     </div>
     <div v-for="(component , indexComponent)  in entity.components" :key="indexComponent">
       <div class="dev-entity-component">
@@ -35,7 +37,8 @@ export default {
     return {
       svgSize:"2rem",
       componentsFocus:-1,
-      addingComponent:false
+      addingComponent:false,
+      addedComponent:null
     }
   },
   props:{
@@ -44,28 +47,25 @@ export default {
   },
   computed:{
     ...mapGetters({
-      componentDico:"arborescence/componentDico"
+      componentDico:"arborescence/componentDico",
     }),
-    componentList:function(){
-      let componentList={};
+    allComponents:function(){
+      let allComponents={};
       Object.entries(this.componentDico).forEach(([scope,value]) => {
         Object.keys(value).forEach((filename)=>{
-            componentList[scope+'/'+filename]={scope:scope,file:filename};
+          allComponents[scope+'/'+filename]={scope:scope,file:filename};
         });
       });
-      return componentList
+      return allComponents
     },
-    AddableComponentList:function(){
-      let filteredList=[]
-      this.entity.components.forEach((component)=>{
-        let foundComponent=this.componentList.find((compo)=>{
-          return compo.file.split('.')[0] ===component.name && compo.scope ===component.scope
-        })
-        if(!foundComponent){
-          filteredList.push(component)
-        }
-     });
-    }
+    unusedComponentList:function(){
+      let unusedComponent=[]
+      Object.entries(this.allComponents).forEach(([key,value])=>{
+        let componentFound=this.entity.components.find((compo)=>compo.scope ===value.scope && compo.name ===value.file.split('.')[0]);
+        if(!componentFound) unusedComponent.push(key)
+      })
+      return unusedComponent;
+    },
   },
   methods:{
     addComponent:function(){
@@ -75,13 +75,13 @@ export default {
       this.addingComponent=false;
     },
     validComponent:function(val){
-      this.$emit("add-component",{file:val.file,scope:val.scope})
+      this.$emit("add-component",{name:this.addedComponent.file.split('.')[0],scope:this.addedComponent.scope})
       this.addingComponent=false;
     },
     getComponentValue:function(component,paramName){
       if(component.params)
       return component.params[paramName]
-      return null;
+      return undefined;
     },
     updateComponentParam:function({component,name,val}){
       this.$emit("update-component-param",{component,name,val});
@@ -138,8 +138,14 @@ export default {
       }
       return {}
     },
+    getUnusedComponent:function(){
+      if(this.unusedComponentList.length>0){
+        return this.unusedComponentList[0]
+      }
+      return ""
+    },
     getDefaultComponent:function(component){
-      let foundComponent=Object.entries(this.componentList).find(([key,value])=>{
+      let foundComponent=Object.entries(this.allComponents).find(([key,value])=>{
         if(value.file.split('.')[0]===component.name && value.scope===component.scope ){
           return true;
         }
@@ -148,7 +154,7 @@ export default {
       if(foundComponent){
         return foundComponent[0]
       }
-      return Object.keys(this.componentList)[0]
+      return null;
     }
   }
 }

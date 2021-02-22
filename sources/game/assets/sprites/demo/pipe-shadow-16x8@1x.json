@@ -1,0 +1,1 @@
+[{"x":0,"y":0,"columns":1,"rows":2,"width":16,"height":12,"animations":[{"frames":[{"x":0,"y":0,"width":16,"height":12}],"framerate":8,"alias":"pipe_shadow_bottom"},{"frames":[{"x":0,"y":12,"width":16,"height":12}],"framerate":8,"alias":"pipe_shadow_top"}],"alias":"pipe_shadow"}]

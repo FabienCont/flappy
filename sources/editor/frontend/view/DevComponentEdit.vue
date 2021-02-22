@@ -16,7 +16,7 @@
       <h3>{{type}}</h3>
       <dev-input  name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
       <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
-     <div v-if="isElementModify">
+     <div class="flex" v-if="isElementModify">
        <dev-button class="dev-component-icon" @click="saveElement()">Save</dev-button>
        <dev-button class="dev-component-icon" @click="copyProps()">Cancel</dev-button>
      </div>
@@ -144,7 +144,6 @@ export default {
     addParam:function(){
       let newParam={'_type':'number','_default':0}
       if(!this.contentCopy.params['newParam'])
-      debugger;
       this.contentCopy.params=Object.assign({}, this.contentCopy.params,{newParam});
     },
     copyProps:function(){

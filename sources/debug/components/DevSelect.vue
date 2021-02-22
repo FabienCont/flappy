@@ -1,7 +1,7 @@
 <template>
   <div class="dev-select" :tabindex="tabindex" @blur="open = false">
     <div class="selected" :class="{ open: open }" @click="open = !open">
-      {{ selected }}
+      {{selectedDisplay}}
     </div>
     <div class="items" :class="{ selectHide: !open }">
       <div
@@ -24,7 +24,7 @@ export default {
   name: 'DevSelect',
   props:{
     options: {
-      type: Array,
+      type: [Array,Boolean],
       required: true,
     },
     default: {
@@ -40,13 +40,18 @@ export default {
   },
   data() {
     return {
-      selected: this.default
+      selected: this.default!==undefined
         ? this.default
         : this.options.length > 0
         ? this.options[0]
         : null,
       open: false,
     };
+  },
+  computed:{
+    selectedDisplay:function(){
+      return this.selected===false?"false":this.selected
+    }
   },
   mounted() {
     this.$emit("input", this.selected);

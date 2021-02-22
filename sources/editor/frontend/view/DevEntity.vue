@@ -12,7 +12,7 @@
       <h3>Entity</h3>
       <dev-input  name='filename' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
       <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
-     <div v-if="isElementModify">
+     <div class="flex" v-if="isElementModify">
        <dev-button class="dev-entity-icon" @click="saveElement()">Save</dev-button>
        <dev-button class="dev-entity-icon" @click="copyProps()">Cancel</dev-button>
      </div>
@@ -21,7 +21,7 @@
      </div>
      <dev-separator></dev-separator>
      <div>
-       <dev-entity-components  v-if="entityFile.content" @update-component-param="updateComponentParam" @update-component="updateComponent" @delete-component="deleteComponent" :entity='entityFileCopy.content' :componentsModel='componentsModel'></dev-entity-components>
+       <dev-entity-components  v-if="entityFile.content" @add-component="addComponent" @update-component-param="updateComponentParam" @update-component="updateComponent" @delete-component="deleteComponent" :entity='entityFileCopy.content' :componentsModel='componentsModel'></dev-entity-components>
      </div>
     </detail-pane-container>
   </div>
@@ -55,6 +55,9 @@ export default {
       this.theatreInstance.destroy();
     }
   },
+  created(){
+    this.copyProps();
+  },
   mounted(){
     let container =  this.$el.querySelector('.dev-canvas-entity');
     this.theatreInstance = new Theatre({
@@ -84,7 +87,7 @@ export default {
         if(file.type==='entities'){
           Object.assign(this.entityFile,file);
         }else if(file.type==='components'){
-          this.componentFiles[file.path]=file;
+          this.$set(this.componentFiles, file.path, file)
         }else{
           console.error('file not recognize',file);
         }
@@ -103,6 +106,11 @@ export default {
     componentsModel:function(){
       return Object.values(this.componentFiles).map((value)=>{return {scope:value.scope,...value.content}})
     },
+    type:function(){
+      if(this.entityFile){
+          return this.entityFile.type
+      }else return "";
+    },
     scope:function(){
       if(this.entityFile){
           return this.entityFile.scope
@@ -114,35 +122,53 @@ export default {
       }else return "";
     },
     isElementModify:function(){
-      if(JSON.stringify(this.entityFile) !== JSON.stringify(this.entityFileCopy) && this.nameCopy!==this.entityFile.name && this.scopeCopy!==this.entityFile.scope){
+      if(JSON.stringify(this.entityFile) !== JSON.stringify(this.entityFileCopy) || this.nameCopy!==this.entityFile.name || this.scopeCopy!==this.entityFile.scope){
         return true;
       }else return false;
     }
   },
   methods:{
+    addComponent:function(component){
+    console.log("addComponent",component)
+      this.entityFileCopy.content.components.push(component)
+    },
+    copyProps:function(){
+      this.params.forEach((file,i)=>{
+        if(file.type==='entities'){
+          Object.assign(this.entityFile,file);
+        }else if(file.type==='components'){
+          this.componentFiles[file.path]=file;
+        }else{
+          console.error('file not recognize',file);
+        }
+      });
+    },
     updateComponentParam:function({component,name,val}){
+    console.log("updateComponentParam",component,name,val)
       let index=this.entityFileCopy.content.components.findIndex((comp)=>comp.name ===component.name && comp.scope===component.scope);
       if(index!==-1){
         let components=this.entityFileCopy.content.components;
-        components[index].params[name]=val;
+        if(!components[index].params){
+          components[index].params={}
+        }
+        this.$set(components[index].params,name,val);
         this.$set(this.entityFileCopy.content,'components',components);
       }
     },
     updateComponent:function({name,scope,val}){
+          console.log("updateComponent",component,name,val)
       let indexComponent=this.entityFileCopy.content.components.findIndex((component)=>component.name===name && component.scope===scope);
       this.entityFileCopy.content.components.splice(indexComponent, 1,val);
       //this.$set(param,key, value);
+
     },
     deleteComponent:function({name,scope}){
         let indexComponent=this.entityFileCopy.content.components.findIndex((component)=>component.name===name && component.scope===scope);
         this.entityFileCopy.content.components.splice(indexComponent, 1);
     },
-    addComponent:function(){
-
-    },
     saveElement:function(){
       if(this.isElementModify){
-        this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.contentCopy});
+        this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.entityFileCopy.content});
       }
     },
     deleteElement:function(){

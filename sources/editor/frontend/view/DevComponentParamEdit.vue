@@ -5,7 +5,7 @@
       <dev-icon :width="svgSize" :height="svgSize" @click.prevent="deleteParam" iconName="delete"></dev-icon>
     </div>
     <div class="dev-component-param-value">
-      <dev-select @input="(val)=>updateType(val)" v-if="value['_type']" label="type" :border="false" :default="value['_type']" :options="componentParamTypes"></dev-select>
+      <dev-select @input="(val)=>updateType(val)" v-if="value['_type']" label="type" :border="false" :default="value['_type']" :options="Object.keys(allTypes)"></dev-select>
       <div>
         <template v-if="value['_default'] !== undefined" >
           <div class="dev-component-default-checkbox">
@@ -14,7 +14,8 @@
           </div>
           <span v-if="isSetToFalse">default : {{value['_default']}}</span>
           <dev-select v-else-if="value['_type']==='snippet' || isSetToSnippet===true" @input="(val)=>updateSnippet(snippetList[val])" label="default" :border="false" :default="snippetList[0]" :options="Object.keys(snippetList)"></dev-select>
-          <dev-input v-else-if="value['_type']==='string' || value['_type']==='number'" name="default" :border="false" :type="typeof value['_default'] === 'number' ?'number':'string'" @update:inputValue="newVal=>updateDefault(newVal)" :isEditable="true" :inputValue="value['_default']"></dev-input>
+          <dev-input v-else-if="value['_type']==='number'" name="default" :border="false" type="number" @update:inputValue="newVal=>updateDefault(newVal)" :isEditable="true" :inputValue="value['_default']"></dev-input>
+          <dev-input v-else-if="value['_type']==='string'" name="default" :border="false" type="string" @update:inputValue="newVal=>updateDefault(newVal)" :isEditable="true" :inputValue="value['_default']"></dev-input>
           <dev-input :error="invalidJSONInput" v-else name="default" :border="false" type="string" @update:inputValue="newVal=>updateJSON(newVal)" :isEditable="true" :inputValue="JSON.stringify(value['_default'])"></dev-input>
         </template>
         <template v-else >
@@ -52,7 +53,7 @@
 
 <script>
 
-import {componentParamTypes} from 'editor/frontend/utils/components';
+import {allTypes} from 'editor/frontend/utils/type';
 import { mapGetters } from 'vuex'
 //check Ref
 export default {
@@ -61,7 +62,7 @@ export default {
   data(){
     return{
       svgSize:"1.5rem",
-      componentParamTypes:componentParamTypes,
+      allTypes:allTypes,
       selectedCheckbox:[],
       setToFalse:'setToFalse',
       setSnippet:'setSnippet',
@@ -82,7 +83,8 @@ export default {
       let snippetList={};
       Object.entries(this.snippetDico).forEach(([scope,value]) => {
         Object.keys(value).forEach((filename)=>{
-            snippetList[scope+'/'+filename]={scope:scope,file:filename};
+            let name=filename.split('.')[0]
+            snippetList[scope+'/'+name]={scope:scope,name};
         });
 
       });

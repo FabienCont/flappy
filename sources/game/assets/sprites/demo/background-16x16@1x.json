@@ -1,0 +1,1 @@
+[{"x":0,"y":0,"columns":1,"rows":2,"width":16,"height":16,"animations":[{"frames":[{"x":0,"y":0,"width":16,"height":16}],"framerate":8,"alias":"background_up"},{"frames":[{"x":0,"y":16,"width":16,"height":16}],"framerate":8,"alias":"background_down"}],"alias":"background"}]
