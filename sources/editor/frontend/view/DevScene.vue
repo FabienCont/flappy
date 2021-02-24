@@ -19,6 +19,10 @@
      <div v-else>
        <dev-button class="dev-scene-icon" @click="deleteElement()">Delete</dev-button>
      </div>
+     <dev-separator></dev-separator>
+     <div>
+       <dev-entities :sceneFiles='sceneFiles' :entitiesModel='entityFiles' :componentsModel='componentFiles'></dev-entities>
+     </div>
     </detail-pane-container>
   </div>
 </template>
@@ -27,13 +31,14 @@
 
 import DetailPaneContainer from "editor/frontend/view/DetailPaneContainer.vue";
 import MainPaneContainer from "editor/frontend/view/MainPaneContainer.vue";
+import DevEntities from "editor/frontend/view/DevEntities.vue";
 import Theatre from 'core/theatre';
 import { mapGetters,mapActions } from 'vuex';
 
 export default {
   name: 'devScene',
   components:{
-    DetailPaneContainer,MainPaneContainer
+    DetailPaneContainer,MainPaneContainer,DevEntities
   },
   data(){
     return {
@@ -130,7 +135,7 @@ export default {
   methods:{
     saveElement:function(){
       if(this.isElementModify){
-        this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.contentCopy});
+        this.$emit("save",{folder:this.folder,type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.contentCopy});
       }
     },
     deleteElement:function(){

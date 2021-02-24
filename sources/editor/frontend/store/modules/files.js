@@ -30,18 +30,19 @@ const actions = {
       commit('cleanActiveFiles');
       getFile(folder, type, scope, fileName).then((content) => {
         commit('addFile', {
-          path, content,
+          path, folder, type, scope, name: fileName, content,
         });
       }, (err) => {
         if (err === 404) {
           commit('addFile', {
-            path, content: [],
+            path, folder, type, scope, name: fileName, content: [],
           });
         }
       });
-      getFile(folder, 'images', scope, pngFileName).then((content) => {
+      let typeImage='images';
+      getFile(folder, typeImage, scope, pngFileName).then((content) => {
         commit('addFile', {
-          path: pngPath, content,
+          path: pngPath, folder, type: typeImage, scope, name: pngFileName, content,
         });
       });
     } else if (type === 'entities' && paths.length === 4) {
@@ -81,7 +82,7 @@ const actions = {
       }, (err) => {
         if (err === 404) {
           commit('addFile', {
-            path, content: [],
+            path, folder, type, scope, name: fileName, content: [],
           });
         }
       });
@@ -153,7 +154,7 @@ const actions = {
       commit('cleanActiveFiles');
       getFile(folder, type, scope, fileName).then((content) => {
         commit('addFile', {
-          path, content,
+          path, folder, type, scope, name: fileName, content,
         });
       });
     }
@@ -169,7 +170,7 @@ const actions = {
     postFile(folder, type, scope, fileName, content).then(() => {
       dispatch('arborescence/addElement', { path }, { root: true });
       commit('saveFile', {
-        path, content,
+        path, folder, type, scope, name: fileName, content,
       });
     });
   },
@@ -193,8 +194,8 @@ const mutations = {
   deleteFile(state, { path }) {
     this.$app.$delete(state.all, path);
   },
-  saveFile(state, { path, content }) {
-    this.$app.$set(state.all, path, { content, path });
+  saveFile(state, { path, content, folder, scope, type, name }) {
+    this.$app.$set(state.all, path, { content,  folder, scope, type, name ,path });
     state.all = { ...state.all };
   },
   createFile(state, { path, content }) {

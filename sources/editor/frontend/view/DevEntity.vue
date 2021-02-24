@@ -83,19 +83,12 @@ export default {
   },
   watch:{
     params:function(val){
-      val.forEach((file,i)=>{
-        if(file.type==='entities'){
-          Object.assign(this.entityFile,file);
-        }else if(file.type==='components'){
-          this.$set(this.componentFiles, file.path, file)
-        }else{
-          console.error('file not recognize',file);
-        }
-      });
+      this.copyProps();
     },
     entityFile:{
       deep:true,
       handler:function(val){
+        console.log(val)
         this.entityFileCopy = Object.assign(this.entityFileCopy, JSON.parse(JSON.stringify(val)));
         this.nameCopy=this.entityFileCopy.name;
         this.scopeCopy=this.entityFileCopy.scope;
@@ -135,7 +128,7 @@ export default {
     copyProps:function(){
       this.params.forEach((file,i)=>{
         if(file.type==='entities'){
-          Object.assign(this.entityFile,file);
+          this.entityFile=Object.assign({},this.entityFile,file);
         }else if(file.type==='components'){
           this.componentFiles[file.path]=file;
         }else{

@@ -19,47 +19,51 @@ function sprites(entities) {
 
     spritesComponent.parts.forEach((sprite) => {
       const spriteSource = sprite.source;
-      const spritesDef = this.sprites[spriteSource.name]();
-      let imageSrc = this.assets.images[spritesDef.scope][spritesDef.file]();
+      try{
+        const spritesDef = this.sprites[spriteSource.name]();
+        let imageSrc = this.assets.images[spritesDef.scope][spritesDef.file]();
 
-      const { frame, opacity } = sprite.info;
-      let {
-        x, y, width, height,
-      } = spritesDef.frames[frame];
-      const destination = sprite.info.destination || [0, 0, 0, width, height];
+        const { frame, opacity } = sprite.info;
+        let {
+          x, y, width, height,
+        } = spritesDef.frames[frame];
+        const destination = sprite.info.destination || [0, 0, 0, width, height];
 
-      if (typeof imageSrc === 'undefined') {
-        imageSrc = this.assets.spritesAlias.common['placeholder-8x1']();
+        if (typeof imageSrc === 'undefined') {
+          imageSrc = this.assets.spritesAlias.common['placeholder-8x1']();
 
-        x %= 8;
-        y %= 1;
-        width = 1;
-        height = 1;
-      }
+          x %= 8;
+          y %= 1;
+          width = 1;
+          height = 1;
+        }
 
-      camera.add('images', {
-        rotate: {
-          x: rotateX,
-          y: rotateY,
-          z: rotateZ,
-        },
-        source: imageSrc,
-        frame: {
-          x,
-          y,
-          width,
-          height,
-        },
-        destination: {
+        camera.add('images', {
+          rotate: {
+            x: rotateX,
+            y: rotateY,
+            z: rotateZ,
+          },
+          source: imageSrc,
+          frame: {
+            x,
+            y,
+            width,
+            height,
+          },
+          destination: {
 
-          x: (positionComponent.x + destination[0]),
-          y: (positionComponent.y + destination[1]),
-          z: positionComponent.z + destination[2],
-          width: (destination[3]),
-          height: (destination[4]),
-        },
-        opacity: cameraComponent.opacity * opacity,
-      });
+            x: (positionComponent.x + destination[0]),
+            y: (positionComponent.y + destination[1]),
+            z: positionComponent.z + destination[2],
+            width: (destination[3]),
+            height: (destination[4]),
+          },
+          opacity: cameraComponent.opacity * opacity,
+        });
+        } catch (err) {
+          console.log(err)
+        }
     });
   });
 }
