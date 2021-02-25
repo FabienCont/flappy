@@ -10,8 +10,6 @@
     </main-pane-container>
     <detail-pane-container>
       <h3>Scene {{scope}} </h3>
-      <dev-input  name='name' type="string" @update:inputValue="newVal=>nameCopy=newVal" :isEditable="true" :inputValue="nameCopy"></dev-input>
-      <dev-input v-show='scope!==null' name='scope' type="string" @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
      <div v-if="isElementModify">
        <dev-button class="dev-scene-icon" @click="saveElement()">Save</dev-button>
        <dev-button class="dev-scene-icon" @click="copyProps()">Cancel</dev-button>
@@ -21,7 +19,7 @@
      </div>
      <dev-separator></dev-separator>
      <div>
-       <dev-entities :sceneFiles='sceneFiles' :entitiesModel='entityFiles' :componentsModel='componentFiles'></dev-entities>
+       <dev-entities @add-entity='addEntity' :sceneFiles='sceneFiles' :entitiesModel='entityFiles' :componentsModel='componentFiles'></dev-entities>
      </div>
     </detail-pane-container>
   </div>
@@ -48,6 +46,8 @@ export default {
        scopeCopy:"",
        theatreInstance:null,
        sceneFiles:{},
+       sceneFilesStr:"",
+       sceneFilesCopy:{},
        componentFiles:{},
        entityFiles:{}
     }
@@ -127,12 +127,20 @@ export default {
       }else return "";
     },
     isElementModify:function(){
-      if(this.mainSceneFile && this.nameCopy!==this.mainSceneFile.name && this.scopeCopy!==this.mainSceneFile.scope){
+      if(this.sceneFilesStr !== JSON.stringify(this.sceneFilesCopy)){
         return true;
       }else return false;
     }
   },
   methods:{
+    addEntity:function(entity){
+      let fileFound=Object.entries(this.sceneFilesCopy).find(([key,value])=>{
+          return value.name==="entities.json"
+      })
+      if(fileFound){
+        fileFound[1].content.push(entity)
+      }
+    },
     saveElement:function(){
       if(this.isElementModify){
         this.$emit("save",{folder:this.folder,type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.contentCopy});

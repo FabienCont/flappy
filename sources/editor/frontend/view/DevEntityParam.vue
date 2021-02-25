@@ -5,7 +5,7 @@
       <dev-input v-else-if="paramModel._type==='string'" type='string' :name='name' @update:inputValue="val=>updateParam({component,name,val})" :isEditable="true" :inputValue="value"></dev-input>
       <div  v-else-if="paramModel._type==='object'">
         {{name}} :
-        <dev-entity-param v-for="([paramName,paramValue] , indexParam)  in Object.entries(paramModel).filter(([key,value])=>!key.startsWith('_'))"  update-component="updateComponentParam"
+        <dev-entity-param v-for="([paramName,paramValue] , indexParam)  in Object.entries(paramModel).filter(([key,value])=>!key.startsWith('_'))"  @update-param="updateChildParam"
         :key="indexParam" :name='paramName' :value='value[paramName]' :paramModel='paramValue' :component="component"></dev-entity-param>
       </div>
       <div  v-else-if="paramModel._type==='dico'">
@@ -14,8 +14,8 @@
           <dev-icon :width="svgSize" :height="svgSize" @click="addElementDico(value)" iconName="add"></dev-icon>
         </div>
         {{name}} :
-        <dev-entity-param v-for="([paramName,paramValue] , indexParam)  in Object.entries(value)"  update-component="updateComponentParam"
-        :key="index+'_'+indexParam" :name='paramName' :value='paramValue' :paramModel='paramModel._dico' :component="component"></dev-entity-param>
+        <dev-entity-param v-for="([paramName,paramValue] , indexParam)  in Object.entries(value)"  @update-param="(param)=>updateChildArrayParam(paramName,param)"
+        :key="indexParam" :name='paramName' :value='paramValue' :paramModel='paramModel._dico' :component="component"></dev-entity-param>
       </div>
       <div  v-else-if="paramModel._type==='snippet'">
         <dev-select @input="(val)=>updateParam({component,name,val:snippetList[val]})" :label="name"  :border="false" :default="value.scope+'/'+value.name" :options="Object.keys(snippetList)"></dev-select>
@@ -23,7 +23,7 @@
       <div v-else-if="paramModel._type.startsWith('array<object>')">
         <div class="flex align-center">
           {{name}}
-          <dev-icon :width="svgSize" :height="svgSize" @click="addElementtArray(value)" iconName="add"></dev-icon>
+          <dev-icon :width="svgSize" :height="svgSize" @click="addElementArray(value)" iconName="add"></dev-icon>
           <dev-icon :width="svgSize" :height="svgSize" @click="emptyArray(value)" iconName="delete"></dev-icon>
         </div>
           <template v-if="value && Array.isArray(value)">
@@ -34,8 +34,8 @@
                 </div>
                 <template v-if="index === paramFocus">
                   <template v-for="([paramName,paramValue] , indexParam)  in Object.entries(paramModel._object)">
-                    <dev-entity-param   update-component="updateComponentParam"
-                    :key="index+'_'+indexParam" :name='paramName' :value='paramValueArray[paramName]' :paramModel='paramValue' :component="component"></dev-entity-param>
+                    <dev-entity-param   @update-param="(param)=>{updateChildArrayParam(index,param)}"
+                    :key="index+'_'+paramName" :name='paramName' :value='paramValueArray[paramName]' :paramModel='paramValue' :component="component"></dev-entity-param>
                     </template>
                 </template>
               </div>
@@ -45,7 +45,7 @@
         {{name}} :
         <template v-for="(paramValueArray,index) in value">
          [
-          <dev-entity-param  update-component="updateComponentParam"
+          <dev-entity-param  @update-param="(param)=>{updateChildArrayParam(index,param)}"
            :key="index" :name="index" :value='paramValueArray' :paramModel="paramModel._array" :component="component"></dev-entity-param>
         </template>
         ]
@@ -62,7 +62,7 @@
     <div v-else>
       <dev-input v-if="paramModel._type==='number'" type='number' :name='name' @update:inputValue="val=>updateParam({component,name,val})" :isEditable="true" :inputValue="paramModel._default"></dev-input>
       <dev-input v-else-if="paramModel._type==='string'" type='string' :name='name' @update:inputValue="val=>updateParam({component,name,val})" :isEditable="true" :inputValue="paramModel._default"></dev-input>
-      <dev-select v-else-if="paramModel._type==='snippet'" @input="(val)=>updateParam({component,name,val})" :label="name" :border="false" :default="paramModel._default" :options="snippetList"></dev-select>
+      <dev-select v-else-if="paramModel._type==='snippet'" @input="(val)=>updateParam({component,name,val})" :label="name" :border="false" :default="paramModel._default" :options="Object.keys(snippetList)"></dev-select>
       <div  v-else-if="paramModel._type==='dico'">
         {{name}} : {{value}}
         <dev-icon :width="svgSize" :height="svgSize" @click="addElementDico(value)" iconName="add"></dev-icon>
@@ -70,13 +70,13 @@
       <div  v-else-if="paramModel._type==='object'">
         {{name}} :
         <template v-for="([paramName,paramValue] , indexParam)  in Object.entries(paramModel).filter(([key,value])=>!key.startsWith('_'))">
-          <dev-entity-param update-component="updateComponentParam"
+          <dev-entity-param @update-param="updateChildParam"
           :key="indexParam" :name='paramName' :value='undefined' :paramModel='paramValue' :component="component"></dev-entity-param>
         </template>
       </div>
       <div v-else-if="paramModel._type.startsWith('array') && paramModel._type">
         {{name}}
-        <dev-icon :width="svgSize" :height="svgSize" @click="addElementtArray()" iconName="add"></dev-icon>
+        <dev-icon :width="svgSize" :height="svgSize" @click="addElementArray()" iconName="add"></dev-icon>
       </div>
       <div v-else> else default {{name}} {{paramModel}}</div>
     </div>
@@ -96,6 +96,7 @@ export default {
     return {
       paramFocus:-1,
       svgSize:"1.5rem",
+      invalidJSONInput:false
     }
   },
   props:{
@@ -119,7 +120,22 @@ export default {
     },
   },
   methods:{
-    addElementtArray:function(value){
+    updateJSON:function(newVal){
+      try{
+        let jsonValue=JSON.parse(newVal);
+        this.updateParam({component:this.component,name:this.name,val:jsonValue})
+        this.invalidJSONInput=false;
+      }catch(err){
+        this.invalidJSONInput=true;
+      }
+    },
+    updateChildArrayParam:function(index,{component,path,val}){
+      this.$emit('update-param',{component,path:[this.name,index,...path],val});
+    },
+    updateChildParam:function({component,path,val}){
+      this.$emit('update-param',{component,path:[this.name,...path],val});
+    },
+    addElementArray:function(value){
       if(value){
         let newVal=[...value,allTypes[this.paramModel._type].defaultValue]
         this.updateParam({component:this.component,name:this.name,val:newVal})
@@ -142,7 +158,7 @@ export default {
       }else return 'bottom';
     },
     updateParam:function({component,name,val}){
-      this.$emit('update-param',{component,name,val});
+      this.$emit('update-param',{component,path:[name],val});
     },
     getComponentArrayValue:function(component,paramName,index){
       if(component.params && component.params[paramName])

@@ -122,7 +122,6 @@ export default {
   },
   methods:{
     addComponent:function(component){
-    console.log("addComponent",component)
       this.entityFileCopy.content.components.push(component)
     },
     copyProps:function(){
@@ -136,20 +135,36 @@ export default {
         }
       });
     },
-    updateComponentParam:function({component,name,val}){
-    console.log("updateComponentParam",component,name,val)
+    updateComponentParam:function({component,path,val}){
       let index=this.entityFileCopy.content.components.findIndex((comp)=>comp.name ===component.name && comp.scope===component.scope);
       if(index!==-1){
         let components=this.entityFileCopy.content.components;
         if(!components[index].params){
           components[index].params={}
         }
-        this.$set(components[index].params,name,val);
+        let maxLength=path.length;
+        let param=components[index].params;
+        for(let i=0;i<maxLength;i++){
+            if(i===maxLength-1){
+              this.$set(param,path[i],val);
+              if(typeof param[path[i]] ==='array'){
+                param[path[i]].splice(param[path[i]].length);
+              }
+            }else{
+              if(param[path[i]]===undefined){
+                if(typeof path[i] === 'number'){
+                  this.$set(param,path[i],[]);
+                }else{
+                  this.$set(param,path[i],{});
+                }
+              }
+              param=param[path[i]]
+            }
+        }
         this.$set(this.entityFileCopy.content,'components',components);
       }
     },
     updateComponent:function({name,scope,val}){
-          console.log("updateComponent",component,name,val)
       let indexComponent=this.entityFileCopy.content.components.findIndex((component)=>component.name===name && component.scope===scope);
       this.entityFileCopy.content.components.splice(indexComponent, 1,val);
       //this.$set(param,key, value);

@@ -234,4 +234,4 @@ const loadEntities = function () {
   return generateEntities.call(this, sceneEntities);
 };
 
-export { loadEntities, generateEntities, createComponentFromModel };
+export { loadEntities, generateEntities, createComponentFromModel, convertArrayToObject, mergeDeep};

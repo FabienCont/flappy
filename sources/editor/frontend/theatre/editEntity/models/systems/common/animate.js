@@ -4,19 +4,23 @@ function animate(entities) {
 
     spritesComponent.parts.forEach((sprite) => {
       const spriteInfo = sprite.info;
-      const spritesDef = this.sprites[sprite.source.name]();
-      const { frames } = spritesDef;
-      const framerate = spriteInfo.framerate ? spriteInfo.framerate : spritesDef.framerate;
+      try {
+        const spritesDef = this.sprites[sprite.source.name]();
+        const { frames } = spritesDef;
+        const framerate = spriteInfo.framerate ? spriteInfo.framerate : spritesDef.framerate;
 
-      if (frames.length > 1) {
-        spriteInfo.elapsed += this.delta;
+        if (frames.length > 1) {
+          spriteInfo.elapsed += this.delta;
 
-        const duration = 1000 / framerate;
+          const duration = 1000 / framerate;
 
-        while (spriteInfo.elapsed >= duration) {
-          spriteInfo.elapsed -= duration;
-          spriteInfo.frame = (spriteInfo.frame === frames.length - 1) ? 0 : spriteInfo.frame + 1;
+          while (spriteInfo.elapsed >= duration) {
+            spriteInfo.elapsed -= duration;
+            spriteInfo.frame = (spriteInfo.frame === frames.length - 1) ? 0 : spriteInfo.frame + 1;
+          }
         }
+      } catch (err) {
+        console.log(err)
       }
     });
   });

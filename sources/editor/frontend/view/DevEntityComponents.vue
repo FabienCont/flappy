@@ -9,7 +9,7 @@
         <dev-button @click="cancel()">Cancel</dev-button>
       </div>
     </div>
-    <div v-for="(component , indexComponent)  in entity.components" :key="indexComponent">
+    <div v-for="(component , indexComponent)  in entityComponents" :key="indexComponent">
       <div class="dev-entity-component">
         <dev-icon :width="svgSize" :height="svgSize" @click="toggleComponentParams(indexComponent)" :iconName="getIconType(indexComponent)"></dev-icon>
         {{getDefaultComponent(component)}}
@@ -28,6 +28,7 @@
 
 <script>
 import DevEntityParam from "editor/frontend/view/DevEntityParam.vue";
+import {convertArrayToObject,mergeDeep} from "core/loadEntities.js";
 import {mapGetters} from "vuex";
 
 export default {
@@ -44,11 +45,22 @@ export default {
   props:{
     entity:{type:Object},
     componentsModel:{type:Array},
+    entitiesModel:{type:Array},
   },
   computed:{
     ...mapGetters({
       componentDico:"arborescence/componentDico",
     }),
+    entityComponents:function(){
+      if(this.entitiesModel){
+        let entityFound= this.entitiesModel.find((entity)=>entity.name=== this.entity.name&& entity.scope ===this.entity.scope);
+        const componentsOverride = convertArrayToObject(entityFound.components, 'name');
+        const componentsModel = convertArrayToObject(this.entity.components, 'name');
+        const newEntityComponents = mergeDeep(componentsModel, componentsOverride);
+        return newEntityComponents;
+      }
+      return this.entity.components
+    },
     allComponents:function(){
       let allComponents={};
       Object.entries(this.componentDico).forEach(([scope,value]) => {
@@ -83,8 +95,8 @@ export default {
       return component.params[paramName]
       return undefined;
     },
-    updateComponentParam:function({component,name,val}){
-      this.$emit("update-component-param",{component,name,val});
+    updateComponentParam:function({component,path,val}){
+      this.$emit("update-component-param",{component,path,val});
     },
     updateComponent:function({name,scope,val}){
       this.$emit("update-component",{name,scope,val})

@@ -34,7 +34,7 @@ export default {
       required: true,
     },
     default: {
-      type: String,
+      type: [String,Boolean],
       required: false,
       default: ''
     },
@@ -66,9 +66,6 @@ export default {
         : null,
       open: false,
     };
-  },
-  mounted() {
-    this.$emit("input", this.selected);
   },
 }
 </script>

@@ -82,6 +82,16 @@ const getters = {
     });
     return componentDico;
   },
+  entityDico: (state) => {
+    const entityDico = {};
+    Object.entries(state.all.models.content.entities.content).forEach(([scope, value]) => {
+      Object.entries(value.content).forEach(([filename, info]) => {
+        if (!entityDico[scope]) entityDico[scope] = {};
+        entityDico[scope][filename] = info;
+      });
+    });
+    return entityDico;
+  },
 };
 
 export default {

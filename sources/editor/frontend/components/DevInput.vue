@@ -1,6 +1,6 @@
 <template>
   <div class="dev-input-container" :class="{'dev-error':error,'dev-inline':inline,'dev-noborder':!border,'dev-input-container-full':full,'dev-input-container-unnamed':!name}">
-    <label class="dev-label-inline" v-if="name && inline">{{name}}:</label>
+    <label class="dev-label-inline" v-if="name!==undefined && inline">{{name}}:</label>
     <template v-if="type==='number'">
       <input class="dev-input" :placeholder="name"  :disabled="!isEditable" type="number" step="0.1" :value="inputValue"  @input="updateValueNumber">
     </template>
@@ -10,7 +10,7 @@
     <template v-else-if="type ==='boolean'">
       <input class="dev-input" :placeholder="name" :disabled="!isEditable" type="checkbox" :value="inputValue"  @input="updateValue">
     </template>
-    <label class="dev-label" v-if="name && !inline">{{name}}:</label>
+    <label class="dev-label" v-if="name!==undefined && !inline">{{name}}:</label>
   </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
       type:Boolean,
       default:true
     },
-    name:String,
+    name:[String,Number],
     full:{
       type:Boolean,
       default:true
