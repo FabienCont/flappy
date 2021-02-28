@@ -17,8 +17,9 @@
       </div>
       <div v-if="indexEntity === entityFocus">
         <div class="dev-entities-inspect">
-          <dev-entity-components @add-component="addComponent" @update-component-param="updateComponentParam" @update-component="updateComponent" @delete-component="deleteComponent"
-          :entity='entity' :componentsModel='componentModelList' :entitiesModel="entityModelList"></dev-entity-components>
+          <dev-entity-components @add-component="(param)=>addComponent(indexEntity,param)" @update-component-param="(param)=>updateComponentParam(indexEntity,param)"
+          @delete-component="(param)=>deleteComponent(indexEntity,param)" :entity='entity' :componentsModel='componentModelList'
+          :entitiesModel="entityModelList"></dev-entity-components>
         </div>
       </div>
     </div>
@@ -74,6 +75,18 @@ export default {
     }
   },
   methods:{
+    addComponent:function(indexEntity,component){
+      this.$emit('add-entity-component',{index:indexEntity,component})
+    },
+    updateComponentParam:function(indexEntity,{component,path,val}){
+      this.$emit('update-entity-component',{index:indexEntity,component,path,val});
+    },
+    deleteComponent:function(indexEntity,{name,scope}){
+      this.$emit('delete-entity-component',{index:indexEntity,name,scope})
+    },
+    deleteEntity:function(indexEntity){
+        this.$emit("delete-entity",{index:indexEntity})
+    },
     addEntity:function(){
       this.addingEntity=true;
     },

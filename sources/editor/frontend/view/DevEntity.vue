@@ -21,7 +21,7 @@
      </div>
      <dev-separator></dev-separator>
      <div>
-       <dev-entity-components  v-if="entityFile.content" @add-component="addComponent" @update-component-param="updateComponentParam" @update-component="updateComponent" @delete-component="deleteComponent" :entity='entityFileCopy.content' :componentsModel='componentsModel'></dev-entity-components>
+       <dev-entity-components  v-if="entityFile.content" @add-component="addComponent" @update-component-param="updateComponentParam" @delete-component="deleteComponent" :entity='entityFileCopy.content' :componentsModel='componentsModel'></dev-entity-components>
      </div>
     </detail-pane-container>
   </div>
@@ -121,9 +121,6 @@ export default {
     }
   },
   methods:{
-    addComponent:function(component){
-      this.entityFileCopy.content.components.push(component)
-    },
     copyProps:function(){
       this.params.forEach((file,i)=>{
         if(file.type==='entities'){
@@ -134,6 +131,9 @@ export default {
           console.error('file not recognize',file);
         }
       });
+    },
+    addComponent:function(component){
+      this.entityFileCopy.content.components.push(component)
     },
     updateComponentParam:function({component,path,val}){
       let index=this.entityFileCopy.content.components.findIndex((comp)=>comp.name ===component.name && comp.scope===component.scope);
@@ -163,12 +163,6 @@ export default {
         }
         this.$set(this.entityFileCopy.content,'components',components);
       }
-    },
-    updateComponent:function({name,scope,val}){
-      let indexComponent=this.entityFileCopy.content.components.findIndex((component)=>component.name===name && component.scope===scope);
-      this.entityFileCopy.content.components.splice(indexComponent, 1,val);
-      //this.$set(param,key, value);
-
     },
     deleteComponent:function({name,scope}){
         let indexComponent=this.entityFileCopy.content.components.findIndex((component)=>component.name===name && component.scope===scope);

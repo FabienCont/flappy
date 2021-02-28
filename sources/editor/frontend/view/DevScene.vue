@@ -12,14 +12,16 @@
       <h3>Scene {{scope}} </h3>
      <div v-if="isElementModify">
        <dev-button class="dev-scene-icon" @click="saveElement()">Save</dev-button>
-       <dev-button class="dev-scene-icon" @click="copyProps()">Cancel</dev-button>
+       <dev-button class="dev-scene-icon" @click="cancelModification()">Cancel</dev-button>
      </div>
      <div v-else>
        <dev-button class="dev-scene-icon" @click="deleteElement()">Delete</dev-button>
      </div>
      <dev-separator></dev-separator>
      <div>
-       <dev-entities @add-entity='addEntity' :sceneFiles='sceneFiles' :entitiesModel='entityFiles' :componentsModel='componentFiles'></dev-entities>
+       <dev-entities :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
+        :componentsModel='componentFiles' @delete-entity="deleteEntity" @add-entity='addEntity' @delete-entity-component='deleteEntityComponent' @add-entity-component='addEntityComponent'
+        @update-entity-component='updateEntityComponent'></dev-entities>
      </div>
     </detail-pane-container>
   </div>
@@ -41,9 +43,6 @@ export default {
   data(){
     return {
       // svgSize:"1.7em",
-       contentCopy:this.params.content,
-       nameCopy:"",
-       scopeCopy:"",
        theatreInstance:null,
        sceneFiles:{},
        sceneFilesStr:"",
@@ -70,22 +69,20 @@ export default {
       params:{
         components:this.componentFiles,
         entities:this.entityFiles,
-        sceneFiles:this.sceneFiles
+        sceneFiles:this.sceneFilesCopy
       },
       focus:false
     });
   },
   props: {
-    params:{
-      path:String,
-      content:Object,
-    }
+    params:Array
   },
   watch:{
     params:function(val){
       val.forEach((file,i)=>{
         if(file.type==='scenes'){
           this.$set(this.sceneFiles,file.path,file);
+          this.$set(this.sceneFilesCopy,file.path,JSON.parse(JSON.stringify(file)));
         }else if(file.type==='entities'){
           this.entityFiles[file.path]=file;
         }else if(file.type==='components'){
@@ -98,11 +95,7 @@ export default {
     sceneFiles:{
       deep:true,
       handler:function(val){
-        let mainSceneFile=val[this.currentPane.path];
-        if(mainSceneFile){
-          this.nameCopy=mainSceneFile.name;
-          this.scopeCopy=mainSceneFile.scope;
-        }
+        this.sceneFilesStr=JSON.stringify(val);
       }
     }
   },
@@ -133,12 +126,76 @@ export default {
     }
   },
   methods:{
-    addEntity:function(entity){
-      let fileFound=Object.entries(this.sceneFilesCopy).find(([key,value])=>{
+    cancelModification:function(){
+      Object.keys(this.sceneFilesCopy).forEach((key)=>this.$delete(this.sceneFilesCopy,key));
+      Object.entries(this.sceneFiles).forEach(([key,value])=>this.$set(this.sceneFilesCopy,key,JSON.parse(JSON.stringify(value))))
+    },
+    getSceneFile:function(){
+      return Object.values(this.sceneFilesCopy).find((value)=>{
           return value.name==="entities.json"
       })
+    },
+    addEntityComponent:function({index,component}){
+      let fileFound= this.getSceneFile();
       if(fileFound){
-        fileFound[1].content.push(entity)
+        fileFound.content[index].components.push(component)
+      }
+    },
+    deleteEntityComponent:function({index,name,scope}){
+      let fileFound= this.getSceneFile();
+      if(fileFound){
+       let indexComponent=fileFound.content[index].components.findIndex((component)=>component.name===name && component.scope===scope);
+       this.entityFileCopy.content.components.splice(indexComponent, 1);
+      }
+    },
+    updateEntityComponent:function({index,component,path,val}){
+
+      let fileFound= this.getSceneFile();
+      if(fileFound){
+        let entity=fileFound.content[index];
+        let indexComponent=entity.components.findIndex((comp)=>comp.name ===component.name && comp.scope===component.scope);
+        if(indexComponent===-1){
+          entity.components.push({name:component.name,scope:component.scope,params:{}})
+          indexComponent=entity.components.length-1;
+        }
+        if(indexComponent!==-1){
+          let components=entity.components;
+          if(!components[indexComponent].params){
+            components[indexComponent].params={}
+          }
+          let maxLength=path.length;
+          let param=components[indexComponent].params;
+          for(let i=0;i<maxLength;i++){
+              if(i===maxLength-1){
+                this.$set(param,path[i],val);
+                if(typeof param[path[i]] ==='array'){
+                  param[path[i]].splice(param[path[i]].length);
+                }
+              }else{
+                if(param[path[i]]===undefined){
+                  if(typeof path[i] === 'number'){
+                    this.$set(param,path[i],[]);
+                  }else{
+                    this.$set(param,path[i],{});
+                  }
+                }
+                param=param[path[i]]
+              }
+          }
+          this.$set(this.entityFileCopy.content,'components',components);
+        }
+      }
+    },
+    deleteEntity:function({index}){
+      let fileFound= this.getSceneFile();
+      if(fileFound){
+        fileFound.content.splice(index, 1);
+      }
+    },
+    addEntity:function(entity){
+      let fileFound= this.getSceneFile();
+      if(fileFound){
+        fileFound.content.push(entity)
       }
     },
     saveElement:function(){

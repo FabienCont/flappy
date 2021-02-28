@@ -98,9 +98,6 @@ export default {
     updateComponentParam:function({component,path,val}){
       this.$emit("update-component-param",{component,path,val});
     },
-    updateComponent:function({name,scope,val}){
-      this.$emit("update-component",{name,scope,val})
-    },
     deleteComponent:function(name,scope){
       this.$emit("delete-component",{name,scope})
     },

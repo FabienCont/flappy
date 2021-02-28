@@ -1,6 +1,7 @@
 import { generateEntities } from 'core/loadEntities';
 import { generateCameras } from 'core/loadCameras';
 import { generateVariables } from 'core/loadVariables';
+import { loadWorld } from 'core/loadWorld';
 
 function generateSceneElements() {
   const { sceneFiles } = this.params;
@@ -34,6 +35,7 @@ function generateSceneElements() {
     }
 
     if (entities) {
+      this.$world = loadWorld.call(this);
       const sceneEntities = generateEntities.call(this, entities);
       this.$world.add(sceneEntities);
     }
