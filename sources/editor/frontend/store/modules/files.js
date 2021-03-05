@@ -39,7 +39,7 @@ const actions = {
           });
         }
       });
-      let typeImage='images';
+      const typeImage = 'images';
       getFile(folder, typeImage, scope, pngFileName).then((content) => {
         commit('addFile', {
           path: pngPath, folder, type: typeImage, scope, name: pngFileName, content,
@@ -89,6 +89,7 @@ const actions = {
     } else if (type === 'scenes' && paths.length === 4) {
       const componentsArbo = rootGetters['arborescence/getComponents']();
       const entitiesArbo = rootGetters['arborescence/getEntities']();
+      const snippetsArbo = rootGetters['arborescence/getSnippets']();
       const sceneArbo = rootGetters['arborescence/getScene'](scope);
       commit('cleanActiveFiles');
       const componentsFolder = 'models';
@@ -194,8 +195,12 @@ const mutations = {
   deleteFile(state, { path }) {
     this.$app.$delete(state.all, path);
   },
-  saveFile(state, { path, content, folder, scope, type, name }) {
-    this.$app.$set(state.all, path, { content,  folder, scope, type, name ,path });
+  saveFile(state, {
+    path, content, folder, scope, type, name,
+  }) {
+    this.$app.$set(state.all, path, {
+      content, folder, scope, type, name, path,
+    });
     state.all = { ...state.all };
   },
   createFile(state, { path, content }) {

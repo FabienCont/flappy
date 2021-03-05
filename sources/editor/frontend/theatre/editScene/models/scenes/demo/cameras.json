@@ -1,7 +1,7 @@
 [
   {
-    "name":"default",
-    "type":"contain-framed",
+    "name":"debug",
+    "type":"contain-frameless",
     "params":{
       "width":500,
       "height":500

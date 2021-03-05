@@ -1,17 +1,22 @@
 [
   {
     "name":"generateComponents",
-    "scope":"demo",
+    "scope":"debug",
     "components":[]
   },
   {
     "name":"generateEntity",
-    "scope":"demo",
+    "scope":"debug",
     "components":[]
   },
   {
     "name":"mockCamera",
-    "scope":"demo",
+    "scope":"debug",
     "components":["camera"]
+  },
+  {
+    "name":"debugInputs",
+    "scope":"debug",
+    "components":[]
   }
 ]

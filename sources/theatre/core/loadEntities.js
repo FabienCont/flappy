@@ -201,6 +201,7 @@ const createComponentFromModel = function (componentRef) {
     const params = componentRef.params ? componentRef.params : {};
     const newComponent = createNewParamsFromModel.call(this, componentModel.params, params);
     newComponent.name = componentModel.name;
+    newComponent.scope = componentRef.scope;
     return newComponent;
   } catch (err) {
     throw err;
@@ -234,4 +235,6 @@ const loadEntities = function () {
   return generateEntities.call(this, sceneEntities);
 };
 
-export { loadEntities, generateEntities, createComponentFromModel, convertArrayToObject, mergeDeep};
+export {
+  loadEntities, generateEntities, createComponentFromModel, convertArrayToObject, mergeDeep,
+};

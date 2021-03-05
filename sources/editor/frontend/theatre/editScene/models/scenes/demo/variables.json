@@ -1,3 +1,14 @@
 {
-    "saveEntity":""
+  "$debug":{
+    "savedComponents":"",
+    "savedSnippets":"",
+    "savedEntities":"",
+    "savedSceneInfo":"",
+    "cameras":[],
+    "commands":{},
+    "isFocus":false,
+    "stepSize":1,
+    "focusElement":null,
+    "oldPos":{"x":0,"y":0}
+  }
 }

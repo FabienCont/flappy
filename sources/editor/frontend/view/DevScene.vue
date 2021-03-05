@@ -48,7 +48,7 @@ export default {
        sceneFilesStr:"",
        sceneFilesCopy:{},
        componentFiles:{},
-       entityFiles:{}
+       entityFiles:{},
     }
   },
   beforeDestroy(){
@@ -69,7 +69,8 @@ export default {
       params:{
         components:this.componentFiles,
         entities:this.entityFiles,
-        sceneFiles:this.sceneFilesCopy
+        sceneFiles:this.sceneFilesCopy,
+        updateComponent:this.updateComponent
       },
       focus:false
     });
@@ -87,7 +88,8 @@ export default {
           this.entityFiles[file.path]=file;
         }else if(file.type==='components'){
           this.componentFiles[file.path]=file;
-        }else{
+        }
+        else{
           console.error('file not recognize',file);
         }
       });
@@ -148,6 +150,25 @@ export default {
        this.entityFileCopy.content.components.splice(indexComponent, 1);
       }
     },
+    updateComponent:function({index,component,val}){
+      let fileFound= this.getSceneFile();
+      if(fileFound){
+        let entity=fileFound.content[index];
+        let indexComponent=entity.components.findIndex((comp)=>comp.name ===component.name && comp.scope===component.scope);
+        if(indexComponent===-1){
+          entity.components.push({name:component.name,scope:component.scope,params:{}})
+          indexComponent=entity.components.length-1;
+        }
+        if(indexComponent!==-1){
+          let components=entity.components;
+          if(!components[indexComponent].params){
+            components[indexComponent].params={}
+          }
+          this.$set(components[indexComponent],'params',val);
+          entity.components.splice(entity.components.length);
+        }
+      }
+    },
     updateEntityComponent:function({index,component,path,val}){
 
       let fileFound= this.getSceneFile();
@@ -182,7 +203,6 @@ export default {
                 param=param[path[i]]
               }
           }
-          this.$set(this.entityFileCopy.content,'components',components);
         }
       }
     },
@@ -205,9 +225,6 @@ export default {
     },
     deleteElement:function(){
       this.$emit("delete-elem",{type:this.type,scope:this.scope,name:this.name});
-    },
-    editSprites:function(){
-      this.$emit("edit-sprites",this.scopeCopy,this.nameCopy);
     },
   }
 }

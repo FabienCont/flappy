@@ -7,7 +7,7 @@ function generateSceneElements() {
   const { sceneFiles } = this.params;
   const sceneInfo = JSON.stringify(sceneFiles);
 
-  if (this.savedSceneInfo !== sceneInfo && sceneInfo !== 'null') {
+  if (this.$variables.$debug.savedSceneInfo !== sceneInfo && sceneInfo !== 'null') {
     let systems; let variables; let cameras; let entities; let renderers; let inputs;
     Object.values(sceneFiles).forEach((file) => {
       const name = file.name.split('.')[0];
@@ -27,20 +27,26 @@ function generateSceneElements() {
     });
 
     if (variables) {
-      // this.$variables = generateVariables.call(this, variables);
+      const debug = this.$variables.$debug;
+      this.$variables = generateVariables.call(this, variables);
+      this.$variables.$debug = debug;
     }
 
+    this.$world = loadWorld.call(this);
+
     if (cameras) {
-      this.$cameras = generateCameras.call(this, cameras);
+      this.$variables.$debug.cameras = generateCameras.call(this, cameras);
     }
 
     if (entities) {
-      this.$world = loadWorld.call(this);
       const sceneEntities = generateEntities.call(this, entities);
       this.$world.add(sceneEntities);
+      Object.entries(this.$world.entities).forEach(([key, value], i) => {
+        value.index = i;
+      });
     }
 
-    this.savedSceneInfo = sceneInfo;
+    this.$variables.$debug.savedSceneInfo = sceneInfo;
   }
 }
 export { generateSceneElements };

@@ -1,10 +1,5 @@
 [
     {
-      "name":"updateCameraPos",
-      "scope":"demo",
-      "components":["inputs"]
-    },
-    {
       "name":"sprites",
       "scope":"common",
       "components":["sprites"]

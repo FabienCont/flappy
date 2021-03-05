@@ -7,7 +7,8 @@ function showHitbox(entities) {
     const hitboxComponent = entity.get('hitbox');
     const positionComponent = entity.get('position');
 
-    const $camera = getCamera.call(this, cameraComponent.cameraName);
+    const $camera = this.$cameras.debug;
+
     const hitbox = new Rectangle(
 
       $camera.screen.x() + (positionComponent.x + hitboxComponent.x) * $camera.screen.scale() - ($camera.position.x() * $camera.screen.scale() - $camera.screen.width() / 2),

@@ -1,7 +1,7 @@
 [
     {
       "name":"sprites",
-      "scope":"common",
+      "scope":"debug",
       "components":["sprites"]
     },
     {
@@ -11,13 +11,13 @@
     },
     {
       "name":"images",
-      "scope":"common",
-      "components":["camera", "images", "position"]
+      "scope":"debug",
+      "components":["images", "position"]
     },
     {
       "name":"text",
-      "scope":"common",
-      "components":["camera", "text", "position"]
+      "scope":"debug",
+      "components":["text", "position"]
     },
     {
       "name":"renderImages",
@@ -31,8 +31,13 @@
     },
     {
       "name":"showHitbox",
-      "scope":"common",
+      "scope":"debug",
       "components":["hitbox"]
+    },
+    {
+      "name":"showCameras",
+      "scope":"debug",
+      "components":[]
     },
     {
       "name":"emptyCameras",

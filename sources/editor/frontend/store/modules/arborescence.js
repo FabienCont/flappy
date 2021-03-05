@@ -51,6 +51,7 @@ const mutations = {
 // getters
 const getters = {
   getComponents: (state) => () => state.all.models.content.components.content,
+  getSnippets: (state) => () => state.all.models.content.snippets.content,
   getEntities: (state) => () => state.all.models.content.entities.content,
   getScene: (state) => (scope) => state.all.models.content.scenes.content[scope].content,
   getImageFromSprites: (state) => (scope, fileName) => {

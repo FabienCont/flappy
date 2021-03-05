@@ -56,7 +56,7 @@ export default {
         let entityFound= this.entitiesModel.find((entity)=>entity.name=== this.entity.name&& entity.scope ===this.entity.scope);
         const componentsOverride = convertArrayToObject(entityFound.components, 'name');
         const componentsModel = convertArrayToObject(this.entity.components, 'name');
-        const newEntityComponents = mergeDeep(componentsModel, componentsOverride);
+        const newEntityComponents = mergeDeep(componentsOverride,componentsModel);
         return newEntityComponents;
       }
       return this.entity.components

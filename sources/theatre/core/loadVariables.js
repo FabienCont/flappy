@@ -3,11 +3,11 @@ const generateVariables = function generateVariables(sceneVariables) {
 
   try {
     Object.entries(sceneVariables).forEach(([name, value]) => {
-      if (typeof value === 'object' && value.$snippet !== undefined) {
+      if (typeof value === 'object' && value !== null && value.$snippet !== undefined) {
         const snippet = value.$snippet;
         variables[name] = this.models.snippets[snippet.scope][snippet.name]();
       } else {
-        variables[name] = value;
+        variables[name] = JSON.parse(JSON.stringify(value));
       }
     });
   } catch (err) {

@@ -88,7 +88,6 @@ export default {
     entityFile:{
       deep:true,
       handler:function(val){
-        console.log(val)
         this.entityFileCopy = Object.assign(this.entityFileCopy, JSON.parse(JSON.stringify(val)));
         this.nameCopy=this.entityFileCopy.name;
         this.scopeCopy=this.entityFileCopy.scope;

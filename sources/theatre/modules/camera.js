@@ -95,21 +95,24 @@ function Camera(name, type, screenSize, attr) {
   }
 
   this.name = name;
-  const x = (attr.x ? attr.x : 0);
-  const y = (attr.y ? attr.y : 0);
-  const z = (attr.z ? attr.z : 0);
 
   this.position = {
 
-    x: () => x,
-    y: () => y,
-    z: () => z,
+    x: (attr.x ? (typeof attr.x === 'function' ? attr.x : () => attr.x) : () => 0),
+    y: (attr.y ? (typeof attr.y === 'function' ? attr.y : () => attr.y) : () => 0),
+    z: (attr.z ? (typeof attr.z === 'function' ? attr.z : () => attr.z) : () => 0),
+  };
+
+  this.size = {
+    width: () => attr.width,
+    height: () => attr.height,
   };
 
   this.screen.scale = scale;
   this.dico = {};
   this.add = add;
   this.look = look;
+  this.type = type;
   this.visible = visible;
   this.getDico = getDico;
   this.getDicoElement = getDicoElement;

@@ -4,7 +4,14 @@
     "type":"contain-framed",
     "params":{
       "width": 160,
-      "height": 140
+      "height": 140,
+      "x":{
+        "$snippet":{
+          "scope":"demo",
+          "name":"camera-follow-character"
+        }
+      },
+      "y":72
     }
   },
   {
