@@ -147,7 +147,9 @@ export default {
       let fileFound= this.getSceneFile();
       if(fileFound){
        let indexComponent=fileFound.content[index].components.findIndex((component)=>component.name===name && component.scope===scope);
-       this.entityFileCopy.content.components.splice(indexComponent, 1);
+       if(indexComponent!==-1){
+         fileFound.content[index].components.splice(indexComponent, 1);
+       }
       }
     },
     updateComponent:function({index,component,val}){
@@ -170,7 +172,6 @@ export default {
       }
     },
     updateEntityComponent:function({index,component,path,val}){
-
       let fileFound= this.getSceneFile();
       if(fileFound){
         let entity=fileFound.content[index];
@@ -189,12 +190,12 @@ export default {
           for(let i=0;i<maxLength;i++){
               if(i===maxLength-1){
                 this.$set(param,path[i],val);
-                if(typeof param[path[i]] ==='array'){
+                if(Array.isArray(param[path[i]])){
                   param[path[i]].splice(param[path[i]].length);
                 }
               }else{
                 if(param[path[i]]===undefined){
-                  if(typeof path[i] === 'number'){
+                  if(typeof path[i+1] === 'number'){
                     this.$set(param,path[i],[]);
                   }else{
                     this.$set(param,path[i],{});
@@ -203,6 +204,9 @@ export default {
                 param=param[path[i]]
               }
           }
+
+          this.$set(entity,'components',components);
+          entity.components.splice(entity.components.length);
         }
       }
     },

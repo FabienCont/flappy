@@ -12,12 +12,11 @@ function generateEntity() {
     this.models.entities = {};
     this.models.entities[entity.scope] = {};
     this.models.entities[entity.scope][entity.name.split('.')[0]] = entityGetter;
-
-    const newEntity = generateEntities.call(this, [this.params.entity.content])[0];
-    try{
+    try {
+      const newEntity = generateEntities.call(this, [this.params.entity.content])[0];
       this.$world.add(newEntity);
-    }catch(err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
 
     this.saveEntity = stringEntity;

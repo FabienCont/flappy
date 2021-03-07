@@ -1,5 +1,5 @@
 const dezoomCamera = function (camera) {
-  const scale = camera.screen.scale() + 0.1;
+  const scale = camera.screen.scale() - 0.1;
   camera.screen.scale = () => scale;
 };
 

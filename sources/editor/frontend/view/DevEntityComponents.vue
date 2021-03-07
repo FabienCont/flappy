@@ -17,9 +17,12 @@
       </div>
       <div v-if="indexComponent === componentsFocus">
         <div class="dev-entity-components-param">
-          <dev-entity-param v-for="([paramName,paramValue] , indexParam)  in getAllParams(component)"
-           @update-param="updateComponentParam" :key="indexParam" :component='component' :name='paramName'
-           :value='getComponentValue(component,paramName)' :paramModel='paramValue'></dev-entity-param>
+          <template v-for="([paramName,paramValue] , indexParam)  in getAllParams(component)">
+            <dev-entity-param
+             @update-param="updateComponentParam" :key="indexParam" :component='component' :name='paramName'
+             :value='component.params[paramName]' :paramModel='paramValue'></dev-entity-param>
+          </template>
+
         </div>
       </div>
     </div>
@@ -52,14 +55,22 @@ export default {
       componentDico:"arborescence/componentDico",
     }),
     entityComponents:function(){
+      let components=null;
       if(this.entitiesModel){
         let entityFound= this.entitiesModel.find((entity)=>entity.name=== this.entity.name&& entity.scope ===this.entity.scope);
         const componentsOverride = convertArrayToObject(entityFound.components, 'name');
         const componentsModel = convertArrayToObject(this.entity.components, 'name');
         const newEntityComponents = mergeDeep(componentsOverride,componentsModel);
-        return newEntityComponents;
+        components=JSON.parse(JSON.stringify(Object.values(newEntityComponents)));
+      }else{
+        components=JSON.parse(JSON.stringify(this.entity.components));
       }
-      return this.entity.components
+      components.forEach((component)=>{
+        if(!component.params){
+          component.params={};
+        }
+      })
+      return components
     },
     allComponents:function(){
       let allComponents={};
@@ -89,11 +100,6 @@ export default {
     validComponent:function(val){
       this.$emit("add-component",{name:this.addedComponent.file.split('.')[0],scope:this.addedComponent.scope})
       this.addingComponent=false;
-    },
-    getComponentValue:function(component,paramName){
-      if(component.params)
-      return component.params[paramName]
-      return undefined;
     },
     updateComponentParam:function({component,path,val}){
       this.$emit("update-component-param",{component,path,val});

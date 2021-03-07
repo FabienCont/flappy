@@ -112,8 +112,8 @@ const mergeDeep = (...objects) => {
       const oVal = obj[key];
 
       if (Array.isArray(pVal) && Array.isArray(oVal)) {
-        prev[key] = pVal.concat(...oVal);
-        // prev[key] = pVal;
+        // prev[key] = pVal.concat(...oVal);
+        prev[key] = oVal;
       } else if (isObject(pVal) && isObject(oVal)) {
         prev[key] = mergeDeep(pVal, oVal);
       } else {

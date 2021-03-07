@@ -20,7 +20,6 @@ function animate(entities) {
           }
         }
       } catch (err) {
-        console.log(err)
       }
     });
   });

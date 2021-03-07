@@ -21,12 +21,12 @@ function images(entities) {
         destination, framerate, frames, opacity,
       } = image;
 
-      let { source } = image;
+      const { source } = image;
 
-      let sourceImage="";
+      let sourceImage = '';
 
       let [x, y, width, height] = frames[image.frame];
-      try{
+      try {
         if (typeof source === 'undefined') {
           sourceImage = this.assets.images.common['placeholder-8x1']();
 
@@ -34,7 +34,7 @@ function images(entities) {
           y %= 1;
           width = 1;
           height = 1;
-      }else sourceImage= this.assets.images[source.scope][source.file]();
+        } else sourceImage = this.assets.images[source.scope][source.file]();
 
         camera.add('images', {
           rotate: {
@@ -42,7 +42,7 @@ function images(entities) {
             y: rotateY,
             z: rotateZ,
           },
-          source:sourceImage,
+          source: sourceImage,
           frame: {
             x: width * x,
             y: height * y,
@@ -59,8 +59,7 @@ function images(entities) {
           },
           opacity: cameraComponent.opacity * opacity,
         });
-      }catch(err){
-
+      } catch (err) {
       }
     });
   });

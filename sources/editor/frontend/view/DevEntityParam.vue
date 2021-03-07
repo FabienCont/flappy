@@ -11,11 +11,25 @@
       <div  v-else-if="paramModel._type==='dico'">
         <div class="flex align-center">
           Dico :
-          <dev-icon :width="svgSize" :height="svgSize" @click="addElementDico(value)" iconName="add"></dev-icon>
+        </div>
+        <dev-button v-if="!addingDicoElement" @click="addElementDico()">Add Element</dev-button>
+        <div v-else>
+          <div class="flex">
+            <div>
+              <dev-input type='string' name='key' @update:inputValue="val=>newDicoElement=val" :isEditable="true" :inputValue="newDicoElement"></dev-input>
+            </div>
+            <dev-button @click="validDicoELement()">Valid</dev-button>
+            <dev-button @click="cancelDicoELement()">Cancel</dev-button>
+          </div>
         </div>
         {{name}} :
-        <dev-entity-param v-for="([paramName,paramValue] , indexParam)  in Object.entries(value)"  @update-param="(param)=>updateChildArrayParam(paramName,param)"
-        :key="indexParam" :name='paramName' :value='paramValue' :paramModel='paramModel._dico' :component="component"></dev-entity-param>
+        <template v-for="([paramName,paramValue] , indexParam)  in Object.entries(value)">
+          <div :key="indexParam" class="flex">
+            <dev-entity-param @update-param="updateChildParam"
+             :name='paramName' :value='paramValue' :paramModel='paramModel._dico' :component="component"></dev-entity-param>
+           <dev-icon :width="svgSize" :height="svgSize" @click="deleteElementDico(paramName)" iconName="delete"></dev-icon>
+          </div>
+        </template>
       </div>
       <div  v-else-if="paramModel._type==='snippet'">
         <dev-select @input="(val)=>updateParam({component,name,val:snippetList[val]})" :label="name"  :border="false" :default="value.scope+'/'+value.name" :options="Object.keys(snippetList)"></dev-select>
@@ -31,6 +45,7 @@
                 <div class="flex align-center">
                   <dev-icon :width="svgSize" :height="svgSize" @click="toggleParamsArray(index)" :iconName="getIconType(index)"></dev-icon>
                   {{index}}:
+                  <dev-icon :width="svgSize" :height="svgSize" @click="deleteElementArray(index)" iconName="delete"></dev-icon>
                 </div>
                 <template v-if="index === paramFocus">
                   <template v-for="([paramName,paramValue] , indexParam)  in Object.entries(paramModel._object)">
@@ -47,6 +62,7 @@
          [
           <dev-entity-param  @update-param="(param)=>{updateChildArrayParam(index,param)}"
            :key="index" :name="index" :value='paramValueArray' :paramModel="paramModel._array" :component="component"></dev-entity-param>
+           <dev-icon :width="svgSize" :height="svgSize" @click="deleteElementArray(index)" iconName="delete"></dev-icon>
         </template>
         ]
       </div>
@@ -65,7 +81,16 @@
       <dev-select v-else-if="paramModel._type==='snippet'" @input="(val)=>updateParam({component,name,val})" :label="name" :border="false" :default="paramModel._default" :options="Object.keys(snippetList)"></dev-select>
       <div  v-else-if="paramModel._type==='dico'">
         {{name}} : {{value}}
-        <dev-icon :width="svgSize" :height="svgSize" @click="addElementDico(value)" iconName="add"></dev-icon>
+        <dev-button v-if="!addingDicoElement" @click="addElementDico()">Add Element</dev-button>
+        <div v-else>
+          <div class="flex">
+            <div>
+            <dev-input type='string' name='key' @update:inputValue="val=>newDicoElement=val" :isEditable="true" :inputValue="newDicoElement"></dev-input>
+            </div>
+            <dev-button @click="validDicoELement()">Valid</dev-button>
+            <dev-button @click="cancelDicoELement()">Cancel</dev-button>
+          </div>
+        </div>
       </div>
       <div  v-else-if="paramModel._type==='object'">
         {{name}} :
@@ -96,7 +121,9 @@ export default {
     return {
       paramFocus:-1,
       svgSize:"1.5rem",
-      invalidJSONInput:false
+      invalidJSONInput:false,
+      addingDicoElement:false,
+      newDicoElement:""
     }
   },
   props:{
@@ -120,6 +147,24 @@ export default {
     },
   },
   methods:{
+    addElementDico:function(){
+      this.addingDicoElement=true
+    },
+    validDicoELement:function(){
+      debugger;
+      this.$emit('update-param',{component:this.component,path:[this.name],val:{[this.newDicoElement]:{}}});
+      this.newDicoElement="";
+      this.addingDicoElement=false
+    },
+    cancelDicoELement:function(){
+      this.newDicoElement="";
+      this.addingDicoElement=false
+    },
+    deleteElementDico:function(paramName){
+      let newVal=JSON.parse(JSON.stringify(this.value))
+      delete newVal[paramName]
+      this.$emit('update-param',{component:this.component,path:[this.name],val:newVal});
+    },
     updateJSON:function(newVal){
       try{
         let jsonValue=JSON.parse(newVal);
@@ -128,6 +173,10 @@ export default {
       }catch(err){
         this.invalidJSONInput=true;
       }
+    },
+    deleteElementArray:function(index){
+      let newVal=this.value.filter((element,i)=>i!==index)
+      this.$emit('update-param',{component:this.component,path:[this.name],val:newVal});
     },
     updateChildArrayParam:function(index,{component,path,val}){
       this.$emit('update-param',{component,path:[this.name,index,...path],val});
@@ -145,7 +194,7 @@ export default {
       }
     },
     emptyArray:function(){
-
+        this.updateParam({component:this.component,name:this.name,val:[]})
     },
     toggleParamsArray:function(index){
       if(this.paramFocus===index){

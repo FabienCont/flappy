@@ -39,11 +39,15 @@ function generateSceneElements() {
     }
 
     if (entities) {
-      const sceneEntities = generateEntities.call(this, entities);
-      this.$world.add(sceneEntities);
-      Object.entries(this.$world.entities).forEach(([key, value], i) => {
-        value.index = i;
-      });
+      try {
+        const sceneEntities = generateEntities.call(this, entities);
+        this.$world.add(sceneEntities);
+        Object.entries(this.$world.entities).forEach(([key, value], i) => {
+          value.index = i;
+        });
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     this.$variables.$debug.savedSceneInfo = sceneInfo;

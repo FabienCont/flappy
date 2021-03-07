@@ -146,12 +146,12 @@ export default {
         for(let i=0;i<maxLength;i++){
             if(i===maxLength-1){
               this.$set(param,path[i],val);
-              if(typeof param[path[i]] ==='array'){
+              if(Array.isArray(param[path[i]])){
                 param[path[i]].splice(param[path[i]].length);
               }
             }else{
               if(param[path[i]]===undefined){
-                if(typeof path[i] === 'number'){
+                if(typeof path[i+1] === 'number'){
                   this.$set(param,path[i],[]);
                 }else{
                   this.$set(param,path[i],{});
@@ -161,6 +161,7 @@ export default {
             }
         }
         this.$set(this.entityFileCopy.content,'components',components);
+        this.entityFileCopy.content.components.splice(this.entityFileCopy.content.components.length);
       }
     },
     deleteComponent:function({name,scope}){
