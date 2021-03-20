@@ -13,6 +13,8 @@ keynames[38] = 'UP';
 keynames[39] = 'RIGHT';
 keynames[40] = 'DOWN';
 
+keynames[46] = 'DEL';
+
 keynames[48] = 'ZERO';
 keynames[49] = 'ONE';
 keynames[50] = 'TWO';
@@ -52,4 +54,4 @@ keynames[89] = 'Y';
 keynames[90] = 'Z';
 
 // exports current module as an array
-export {keynames};
+export { keynames };

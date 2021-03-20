@@ -1,7 +1,7 @@
 <template>
   <div class="dev-entity">
     <main-pane-container>
-      <div class="dev-entity-container">
+      <div @keydown.ctrl.83.prevent="saveElement()"  @keydown.ctrl.90.prevent="copyProps()" class="dev-entity-container">
         <div class="dev-canvas-entity-container">
           <div class="dev-canvas-entity">
           </div>

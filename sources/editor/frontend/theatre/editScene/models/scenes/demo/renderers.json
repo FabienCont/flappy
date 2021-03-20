@@ -35,7 +35,17 @@
       "components":["hitbox"]
     },
     {
+      "name":"showPosition",
+      "scope":"debug",
+      "components":[]
+    },
+    {
       "name":"showCameras",
+      "scope":"debug",
+      "components":[]
+    },
+    {
+      "name":"renderGrid",
       "scope":"debug",
       "components":[]
     },

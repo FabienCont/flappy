@@ -16,7 +16,6 @@ export default function (entity, collision) {
       duration: 2000,
       elapsed: 0,
       ending: {
-        type: 'snippets',
         scope: 'demo',
         name: 'timeout-ending',
       },
@@ -33,13 +32,11 @@ export default function (entity, collision) {
           y: -20,
           duration: 200,
           easing: {
-            type: 'snippets',
             scope: 'demo',
             name: 'ease-out',
           },
           elapsed: 0,
           ending: {
-            type: 'snippets',
             scope: 'demo',
             name: 'forces-down',
           },

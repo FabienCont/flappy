@@ -63,7 +63,7 @@ export default {
     return{
       svgSize:"1.5rem",
       allTypes:allTypes,
-      selectedCheckbox:[],
+      selectedCheckbox:this.getDefaultCheckbox(),
       setToFalse:'setToFalse',
       setSnippet:'setSnippet',
       invalidJSONInput:false
@@ -107,7 +107,6 @@ export default {
         if(val._type!=='array<object>' && val._object ){
           this.updateObjectDef(undefined)
         }
-
         if(val._type!=='dico' && val._dico ){
           this.updateDicoDef(undefined)
         }
@@ -141,8 +140,20 @@ export default {
     }
   },
   methods:{
+    getDefaultCheckbox:function(){
+      if(this.value['_default']===false && this.value['_type']!=='boolean'){
+        return ['setToFalse']
+      }else if(this.value['$snippet'] && this.value['_type']!=='snippet'){
+        return ['setSnippet']
+      }else{
+        return []
+      }
+    },
     updateSnippet:function(strSnippet){
-      this.updateDefault(strSnippet)
+      if(this.isSetToSnippet){
+        this.updateDefault(null);
+        this.emitUpdateToParent({key:'$snippet',value:strSnippet,path:[this.name]})
+      }else this.updateDefault(strSnippet)
     },
     childRenameParam:function({oldKey,newKey,path}){
       this.$emit('rename-param',{oldKey,newKey,path:[this.name,...path]})
@@ -165,21 +176,21 @@ export default {
     addDicoElem:function(){
       let newParam={'newParam':{
         '_type':'number',
-        'default':1
+        '_default':1
       }}
       this.updateDicoDef({...this.value._dico,...newParam})
     },
     addObject:function(){
       let newParam={
         '_type':'number',
-        'default':1
+        '_default':1
       }
       this.emitUpdateToParent({key:'newParam',value:newParam,path:[this.name]})
     },
     addObjectElem:function(){
       let newParam={'newParam':{
         '_type':'number',
-        'default':1
+        '_default':1
       }}
       this.updateObjectDef({...this.value._object,...newParam})
     },

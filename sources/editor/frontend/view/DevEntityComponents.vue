@@ -10,10 +10,10 @@
       </div>
     </div>
     <div v-for="(component , indexComponent)  in entityComponents" :key="indexComponent">
-      <div class="dev-entity-component">
-        <dev-icon :width="svgSize" :height="svgSize" @click="toggleComponentParams(indexComponent)" :iconName="getIconType(indexComponent)"></dev-icon>
+      <div @click.prevent="toggleComponentParams(indexComponent)" class="dev-entity-component">
+        <dev-icon :width="svgSize" :height="svgSize" :iconName="getIconType(indexComponent)"></dev-icon>
         {{getDefaultComponent(component)}}
-        <dev-icon :width="svgSize" :height="svgSize" @click="deleteComponent(component.name,component.scope)" iconName="delete"></dev-icon>
+        <dev-icon :width="svgSize" :height="svgSize" @click.stop="deleteComponent(component.name,component.scope)" iconName="delete"></dev-icon>
       </div>
       <div v-if="indexComponent === componentsFocus">
         <div class="dev-entity-components-param">

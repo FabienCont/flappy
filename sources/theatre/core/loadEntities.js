@@ -43,10 +43,10 @@ const createNewParamsFromModel = function (paramsModel, params, deep = 0) {
         if (modelNewParam._default === undefined) {
           throw `error missing parameter :${keyModel}`;
         } else {
-          let defaultValue = JSON.parse(JSON.stringify(modelNewParam._default));
-          if (modelNewParam._type === 'ref') {
-            defaultValue = loadRef.call(this, defaultValue);
-          }
+          const defaultValue = JSON.parse(JSON.stringify(modelNewParam._default));
+          // if (modelNewParam._type === 'ref') {
+          //   defaultValue = loadRef.call(this, defaultValue);
+          // }
           newParams[keyModel] = defaultValue;
         }
       } else if (modelNewParam._type.startsWith('array') && Array.isArray(valueParam)) {
@@ -61,15 +61,23 @@ const createNewParamsFromModel = function (paramsModel, params, deep = 0) {
           for (var c = 0; c < valueParam.length; c++) {
             newParams[keyModel].push(createNewParamsFromModel.call(this, modelNewParam[`_${arraySubType}`], valueParam[c]));
           }
+        } else if (arraySubType === 'snippet') {
+          const subTypeModel = {
+            scope: { _type: 'string' },
+            name: { _type: 'string' },
+          };
+          for (var c = 0; c < valueParam.length; c++) {
+            newParams[keyModel].push(createNewParamsFromModel.call(this, subTypeModel, valueParam[c]));
+          }
         } else if (arraySubType === 'string' || arraySubType === 'number' || arraySubType === 'boolean') {
           for (var c = 0; c < valueParam.length; c++) {
             if (arraySubType !== typeof valueParam[c]) {
-              throw `wrong subType${arraySubType}in array model for param :${keyModel}`;
+              throw `wrong subType ${arraySubType} in array model for param :${keyModel}`;
             }
             newParams[keyModel].push(valueParam[c]);
           }
         } else {
-          throw `missing/wrong subType${arraySubType}in array model for param :${keyModel}`;
+          throw `missing/wrong subType ${arraySubType} in array model for param :${keyModel}`;
         }
       } else if (modelNewParam._type === 'dico' && typeof valueParam === 'object' && !Array.isArray(valueParam)) {
         newParams[keyModel] = {};
@@ -82,6 +90,10 @@ const createNewParamsFromModel = function (paramsModel, params, deep = 0) {
         }
       } else if ((modelNewParam._type === 'object' || modelNewParam._type === 'snippet') && typeof valueParam === 'object' && !Array.isArray(valueParam)) {
         newParams[keyModel] = {};
+        if (modelNewParam._type === 'snippet') {
+          modelNewParam.scope = { _type: 'string' };
+          modelNewParam.name = { _type: 'string' };
+        }
         const modelNewParamKeys = Object.keys(modelNewParam).filter((key) => !key.startsWith('_'));
         for (var c = 0; c < modelNewParamKeys.length; c++) {
           const modelNewParamKey = modelNewParamKeys[c];

@@ -8,7 +8,12 @@
     "commands":{},
     "isFocus":false,
     "stepSize":1,
+    "focusTime":0,
     "focusElement":null,
+    "stepGrid":16,
+    "followGrid":true,
+    "inputs":[],
+    "cursorPos":{"x":0,"y":0},
     "oldPos":{"x":0,"y":0}
   }
 }

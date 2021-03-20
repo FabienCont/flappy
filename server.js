@@ -49,20 +49,29 @@ app.get('/alive', (req, res) => {
 });
 
 const gameFolder = 'sources/game/';
+
+const generateFolderArbo = function (graph, source, name) {
+  graph[name] = {
+    type: 'folder',
+    content: generateArbo(`${source}/${name}`),
+  };
+  return graph;
+};
+
+const generateFileArbo = function (graph, source, name) {
+  const { mtime, ctime } = fs.statSync(`${source}/${name}`);
+  graph[name] = { mtime, ctime, type: 'file' };
+  return graph;
+};
+
 const generateArbo = (source) => Object.assign({}, ...readdirSync(source, { withFileTypes: true })
   .map((dirent) => {
     const graph = {};
     if (dirent.isDirectory()) {
-      graph[dirent.name] = {
-        type: 'folder',
-        content: generateArbo(`${source}/${dirent.name}`),
-      };
-      return graph;
+      return generateFolderArbo(graph, source, dirent.name);
     }
 
-    const { mtime, ctime } = fs.statSync(`${source}/${dirent.name}`);
-    graph[dirent.name] = { mtime, ctime, type: 'file' };
-    return graph;
+    return generateFileArbo(graph, source, dirent.name);
   }));
 
 const arborescence = generateArbo(gameFolder);
@@ -102,8 +111,13 @@ const writeFile = function writeFile(folder, type, scope, name, data) {
   }
   fs.mkdirSync(`${gameFolder}${folder}/${type}/${scope}/`, { recursive: true });
   fs.writeFileSync(`${gameFolder}${folder}/${type}/${scope}/${name}`, dataToWrite, options);
-  const { mtime, ctime } = fs.statSync(`${gameFolder}${folder}/${type}/${scope}/${name}`);
-  arborescence[folder].content[type].content[scope].content[name] = { mtime, ctime, type: 'file' };
+  if (!arborescence[folder].content[type]) {
+    generateFolderArbo(arborescence[folder].content, `${gameFolder}${folder}`, type);
+  } else if (!arborescence[folder].content[type].content[scope]) {
+    generateFolderArbo(arborescence[folder].content[type].content, `${gameFolder}${folder}/${type}`, scope);
+  } else {
+    generateFileArbo(arborescence[folder].content[type].content[scope].content, `${gameFolder}${folder}/${type}/${scope}`, name);
+  }
 };
 
 const deleteFile = function deleteFile(folder, type, scope, name) {
@@ -116,6 +130,10 @@ const deleteFile = function deleteFile(folder, type, scope, name) {
     // file removed
   });
   delete arborescence[folder].content[type].content[scope].content[name];
+  const scopeKeys = Object.keys(arborescence[folder].content[type].content[scope].content);
+  if (scopeKeys.length === 0) {
+    delete arborescence[folder].content[type].content[scope];
+  }
   return true;
 };
 
@@ -495,34 +513,44 @@ const obserser = new Obserser();
 
 obserser.on('file-added', (file) => {
   const regex = new RegExp(/(?<=sources\\game\\)(.*)/, 'gm');
-  const subPaths = regex.match(file.filePath)[0].split('/');
+  const subPaths = file.filePath.match(regex)[0].split('\\');
   let arborescenceNode = arborescence;
   subPaths.forEach((subPath, i) => {
-    if (typeof arborescenceNode[subPath] === 'object') {
-      arborescenceNode[subPath] = {};
-      arborescenceNode = arborescenceNode[subPath];
-    } else if (i === subPaths.length - 1) {
+    if (i === subPaths.length - 1) {
       const { mtime, ctime } = fs.statSync(file.filePath);
-      arborescenceNode[subPath] = { mtime, ctime };
+      arborescenceNode[subPath] = { type: 'file', mtime, ctime };
     } else {
-      arborescenceNode = arborescenceNode[subPath];
+      if (arborescenceNode[subPath] === undefined) {
+        arborescenceNode[subPath] = {
+          type: 'folder',
+          content: {
+
+          },
+        };
+      }
+      arborescenceNode = arborescenceNode[subPath].content;
     }
   });
 });
 
 obserser.on('file-change', (file) => {
   const regex = new RegExp(/(?<=sources\\game\\)(.*)/, 'gm');
-  const subPaths = regex.match(file.filePath)[0].split('/');
+  const subPaths = file.filePath.match(regex)[0].split('\\');
   let arborescenceNode = arborescence;
   subPaths.forEach((subPath, i) => {
-    if (typeof arborescenceNode[subPath] === 'object') {
-      arborescenceNode[subPath] = {};
-      arborescenceNode = arborescenceNode[subPath];
-    } else if (i === subPaths.length - 1) {
+    if (i === subPaths.length - 1) {
       const { mtime, ctime } = fs.statSync(file.filePath);
-      arborescenceNode[subPath] = { mtime, ctime };
+      arborescenceNode[subPath] = { type: 'file', mtime, ctime };
     } else {
-      arborescenceNode = arborescenceNode[subPath];
+      if (arborescenceNode[subPath] === undefined) {
+        arborescenceNode[subPath] = {
+          type: 'folder',
+          content: {
+
+          },
+        };
+      }
+      arborescenceNode = arborescenceNode[subPath].content;
     }
   });
 });
@@ -530,15 +558,24 @@ obserser.on('file-change', (file) => {
 obserser.on('file-deleted', (file) => {
   // print error message to console
   const regex = new RegExp(/(?<=sources\\game\\)(.*)/, 'gm');
-  const subPaths = regex.match(file.filePath)[0].split('/');
+  const subPaths = file.filePath.match(regex)[0].split('\\');
   let arborescenceNode = arborescence;
-  subPaths.forEach((subPath, i) => {
-    if (i === subPaths.length - 1) {
-      arborescenceNode = arborescenceNode[subPath];
-    } else {
+  for (let i = 0; i < subPaths.length; i++) {
+    const subPath = subPaths[i];
+    if (i === subPaths.length - 1 && arborescenceNode[subPath]) {
       delete arborescenceNode[subPath];
+    } else if (arborescenceNode[subPath] !== undefined) {
+      if (i === subPaths.length - 2) {
+        const scopeKeys = Object.keys(arborescenceNode[subPath].content);
+        if (scopeKeys.length === 1 && scopeKeys[0] === subPaths[subPaths.length - 1]) {
+          delete arborescenceNode[subPath];
+        }
+      }
+      arborescenceNode = arborescenceNode[subPath].content;
+    } else {
+      break;
     }
-  });
+  }
 });
 
 obserser.watchFolder(gameFolder);

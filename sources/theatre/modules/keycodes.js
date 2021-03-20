@@ -51,15 +51,15 @@ const Z = 90;
 
 export {
 
-    // exports control keys
-    TAB, ENTER, SHIFT, CTRL, ALT, ESC, SPACE,
+  // exports control keys
+  TAB, ENTER, SHIFT, CTRL, ALT, ESC, SPACE,
 
-    // exports arrow keys
-    LEFT, UP, RIGHT, DOWN,
+  // exports arrow keys
+  LEFT, UP, RIGHT, DOWN,
 
-    // exports numeric keys
-    ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,
+  // exports numeric keys
+  ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,
 
-    // exports alhabetic keys
-    A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+  // exports alhabetic keys
+  A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
 };

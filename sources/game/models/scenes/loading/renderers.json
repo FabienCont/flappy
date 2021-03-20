@@ -1,7 +1,12 @@
 [
     {
+      "name":"text",
+      "scope":"common",
+      "components":["text","camera"]
+    },
+    {
       "name":"renderText",
       "scope":"canvas2d",
-      "components":["text"]
+      "components":[""]
     }
 ]

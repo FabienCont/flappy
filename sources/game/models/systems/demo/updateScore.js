@@ -2,15 +2,18 @@ import { createComponentFromModel } from 'core/loadEntities.js';
 
 function updateScore(entities) {
   Object.entries(entities).forEach(([id, entity]) => {
-    const { parts } = entity.get('images');
+    const { parts } = entity.get('sprites');
     let { score } = this.$variables;
     const isBestScore = (entity.name === 'bestScore');
     if (isBestScore) {
       score = this.$variables.bestScore;
     }
+    
+    
+    const alias = isBestScore ? 'number-blue' : 'number';
     let numberStr = '';
     parts.forEach((part, i) => {
-      numberStr += findNumber(part);
+      numberStr += findNumber(part,alias);
     });
 
     if (parseInt(numberStr) != score) {
@@ -18,41 +21,38 @@ function updateScore(entities) {
       score = (score !== undefined && score !== null ? score : 0);
       const scoreStr = score.toString();
       for (let i = 0; i < scoreStr.length; i++) {
-        const part = createNumberImagePart(parseInt(scoreStr[i]), i, scoreStr.length, isBestScore);
+        const part = createNumberSpritePart(parseInt(scoreStr[i]), i, scoreStr.length, alias);
         newParts.push(part);
       }
 
-      const images = {
-        name: 'images',
+      const sprites = {
+        name: 'sprites',
         scope: 'common',
         params: {
           parts: newParts,
         },
       };
 
-      const newImages = createComponentFromModel.call(this, images);
-      entity.add(newImages);
+      const newSprites = createComponentFromModel.call(this, sprites);
+      entity.add(newSprites);
     }
   });
 }
 
-const findNumber = function (part) {
-  return part.frames[0][0].toString();
+const findNumber = function (part,alias) {
+  return part.source.name.split(alias)[1];
 };
 
-const createNumberImagePart = function (number, index, length, isBestScore) {
+const createNumberSpritePart = function (number, index, length, alias) {
   const destinationX = ((index + 1) * 8) - (8 * length);
-  const file = isBestScore ? 'numbers-blue-8x16@1x' : 'numbers-8x16@1x';
+  const name =alias+'_'+number;
   return {
     source: {
-      scope: 'demo',
-      file,
+      name:name,
     },
-    frames: [
-      [number, 0, 8, 16],
-    ],
-    frame: 0,
-    destination: [destinationX, 0, 0, 8, 16],
+    info:{
+        destination: [destinationX, 0, 0, 8, 16]
+    }
   };
 };
 

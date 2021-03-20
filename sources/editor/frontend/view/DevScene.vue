@@ -1,7 +1,7 @@
 <template>
   <div class="dev-scene">
     <main-pane-container>
-      <div class="dev-scene-container">
+      <div @keydown.ctrl.83.prevent="saveElement()"  @keydown.ctrl.90.prevent="cancelModification()"class="dev-scene-container">
         <div class="dev-canvas-scene-container">
           <div class="dev-canvas-scene">
           </div>
@@ -10,7 +10,7 @@
     </main-pane-container>
     <detail-pane-container>
       <h3>Scene {{scope}} </h3>
-     <div v-if="isElementModify">
+     <div class="flex" v-if="isElementModify">
        <dev-button class="dev-scene-icon" @click="saveElement()">Save</dev-button>
        <dev-button class="dev-scene-icon" @click="cancelModification()">Cancel</dev-button>
      </div>
@@ -18,10 +18,23 @@
        <dev-button class="dev-scene-icon" @click="deleteElement()">Delete</dev-button>
      </div>
      <dev-separator></dev-separator>
+     <div class="dev-tab-group flex align-center">
+       <dev-tab @click="()=>selectedMenu=menu" :isActive="menu=== selectedMenu" v-for="menu in listMenu" :key="menu">{{menu}}</dev-tab>
+     </div>
      <div>
-       <dev-entities :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
+       <dev-entities v-if="selectedMenu==='Entities'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
         :componentsModel='componentFiles' @delete-entity="deleteEntity" @add-entity='addEntity' @delete-entity-component='deleteEntityComponent' @add-entity-component='addEntityComponent'
         @update-entity-component='updateEntityComponent'></dev-entities>
+       <dev-cameras v-else-if="selectedMenu==='Cameras'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
+       :componentsModel='componentFiles'></dev-cameras>
+       <dev-variables v-else-if="selectedMenu==='Variables'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
+        :componentsModel='componentFiles'></dev-variables>
+        <dev-inputs v-else-if="selectedMenu==='Inputs'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
+       :componentsModel='componentFiles' @delete-input="deleteInput" @add-input="addInput"></dev-inputs>
+       <dev-systems v-else-if="selectedMenu==='Systems'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
+        :componentsModel='componentFiles'></dev-systems>
+       <dev-renderers v-else-if="selectedMenu==='Renderers'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
+        :componentsModel='componentFiles'></dev-renderers>
      </div>
     </detail-pane-container>
   </div>
@@ -32,13 +45,18 @@
 import DetailPaneContainer from "editor/frontend/view/DetailPaneContainer.vue";
 import MainPaneContainer from "editor/frontend/view/MainPaneContainer.vue";
 import DevEntities from "editor/frontend/view/DevEntities.vue";
+import DevCameras from "editor/frontend/view/DevCameras.vue";
+import DevRenderers from "editor/frontend/view/DevRenderers.vue";
+import DevInputs from "editor/frontend/view/DevInputs.vue";
+import DevSystems from "editor/frontend/view/DevSystems.vue";
+import DevVariables from "editor/frontend/view/DevVariables.vue";
 import Theatre from 'core/theatre';
 import { mapGetters,mapActions } from 'vuex';
 
 export default {
   name: 'devScene',
   components:{
-    DetailPaneContainer,MainPaneContainer,DevEntities
+    DetailPaneContainer,MainPaneContainer,DevEntities,DevCameras,DevRenderers,DevInputs,DevSystems,DevVariables
   },
   data(){
     return {
@@ -49,6 +67,15 @@ export default {
        sceneFilesCopy:{},
        componentFiles:{},
        entityFiles:{},
+       selectedMenu:'Entities',
+       listMenu:[
+         'Entities',
+         'Cameras',
+         'Variables',
+         'Inputs',
+         'Renderers',
+         'Systems',
+       ]
     }
   },
   beforeDestroy(){
@@ -70,8 +97,13 @@ export default {
         components:this.componentFiles,
         entities:this.entityFiles,
         sceneFiles:this.sceneFilesCopy,
-        updateComponent:this.updateComponent
+        updateComponent:this.updateComponent,
+        copyEntity:this.copyEntity,
+        pasteEntity:this.pasteEntity,
+        focusEntity:this.focusEntity,
+        deleteEntity:this.deleteEntity
       },
+      entityCopied:null,
       focus:false
     });
   },
@@ -128,23 +160,72 @@ export default {
     }
   },
   methods:{
+    copyEntity:function(index){
+      let fileFound= this.getEntitiesFile();
+      if(fileFound){
+        this.entityCopied=JSON.parse(JSON.stringify(fileFound.content[index]));
+      }
+    },
+    setPosition:function(entity,x,y){
+      let positionIndex=entity.components.findIndex((comp)=> comp.name==='position')
+      if(positionIndex===-1){
+        entity.components.push({'name':'position','scope':'common','params':{'x':x,'y':y}})
+      }
+      else {
+        let position=JSON.parse(JSON.stringify(entity.components[positionIndex]))
+        if(!position.params) position.params={}
+        position.params.x=x;
+        position.params.y=y;
+        entity.components[positionIndex]=position
+      }
+    },
+    pasteEntity:function(x,y){
+      if(this.entityCopied){
+        let newEntity=JSON.parse(JSON.stringify(this.entityCopied))
+        this.setPosition(newEntity,x,y);
+        this.addEntity(newEntity)
+      }
+    },
+    focusEntity:function(){
+      if(this.selectedMenu ==='Entities'){
+        //TODO send Focus to component DevEntities
+      }
+    },
     cancelModification:function(){
       Object.keys(this.sceneFilesCopy).forEach((key)=>this.$delete(this.sceneFilesCopy,key));
       Object.entries(this.sceneFiles).forEach(([key,value])=>this.$set(this.sceneFilesCopy,key,JSON.parse(JSON.stringify(value))))
     },
-    getSceneFile:function(){
+    getSceneFile:function(filename){
       return Object.values(this.sceneFilesCopy).find((value)=>{
-          return value.name==="entities.json"
+          return value.name===filename
       })
     },
+    getEntitiesFile:function(){
+      return this.getSceneFile('entities.json');
+    },
+    getInputsFile:function(){
+      return this.getSceneFile('inputs.json');
+    },
+    getVariablesFile:function(){
+      return this.getSceneFile('variables.json');
+    },
+    getCamerasFile:function(){
+      return this.getSceneFile('cameras.json');
+    },
+    getSystemsFile:function(){
+      return this.getSceneFile('systems.json');
+    },
+    getRenderersFile:function(){
+      return this.getSceneFile('renderers.json');
+    },
     addEntityComponent:function({index,component}){
-      let fileFound= this.getSceneFile();
+      let fileFound= this.getEntitiesFile();
       if(fileFound){
         fileFound.content[index].components.push(component)
       }
     },
     deleteEntityComponent:function({index,name,scope}){
-      let fileFound= this.getSceneFile();
+      let fileFound= this.getEntitiesFile();
       if(fileFound){
        let indexComponent=fileFound.content[index].components.findIndex((component)=>component.name===name && component.scope===scope);
        if(indexComponent!==-1){
@@ -153,7 +234,7 @@ export default {
       }
     },
     updateComponent:function({index,component,val}){
-      let fileFound= this.getSceneFile();
+      let fileFound= this.getEntitiesFile();
       if(fileFound){
         let entity=fileFound.content[index];
         let indexComponent=entity.components.findIndex((comp)=>comp.name ===component.name && comp.scope===component.scope);
@@ -172,7 +253,7 @@ export default {
       }
     },
     updateEntityComponent:function({index,component,path,val}){
-      let fileFound= this.getSceneFile();
+      let fileFound= this.getEntitiesFile();
       if(fileFound){
         let entity=fileFound.content[index];
         let indexComponent=entity.components.findIndex((comp)=>comp.name ===component.name && comp.scope===component.scope);
@@ -211,20 +292,39 @@ export default {
       }
     },
     deleteEntity:function({index}){
-      let fileFound= this.getSceneFile();
+      let fileFound= this.getEntitiesFile();
       if(fileFound){
         fileFound.content.splice(index, 1);
       }
     },
     addEntity:function(entity){
-      let fileFound= this.getSceneFile();
+      let fileFound= this.getEntitiesFile();
       if(fileFound){
         fileFound.content.push(entity)
       }
     },
+    addInput:function(input){
+      let fileFound= this.getInputsFile();
+      if(fileFound){
+        fileFound.content.push(input)
+      }
+    },
+    deleteInput:function(index){
+      let fileFound= this.getInputsFile();
+      if(fileFound){
+        fileFound.content.splice(index, 1);
+      }
+    },
     saveElement:function(){
       if(this.isElementModify){
-        this.$emit("save",{folder:this.folder,type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.contentCopy});
+        let listFiles=Object.entries(this.sceneFiles)
+        for (var i = 0; i < listFiles.length; i++) {
+          let key=listFiles[i][0];
+          let value=listFiles[i][1];
+          if(JSON.stringify(this.sceneFilesCopy[key].content) !== JSON.stringify(value.content)){
+                this.$emit("save",{folder:this.sceneFilesCopy[key].folder,type:this.sceneFilesCopy[key].type,scope:this.sceneFilesCopy[key].scope,name:this.sceneFilesCopy[key].name,content:this.sceneFilesCopy[key].content});
+          }
+        }
       }
     },
     deleteElement:function(){
@@ -262,6 +362,10 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
+}
+
+.dev-tab-group{
+  overflow: auto;
 }
 
 </style>

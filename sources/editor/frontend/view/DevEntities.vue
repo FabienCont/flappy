@@ -1,6 +1,6 @@
 <template>
   <div class="dev-entities-container">
-    Entity:
+    Entities:
     <dev-button v-if="!addingEntity" @click="addEntity()">Add entity</dev-button>
     <div v-else>
       <dev-select @input="(val)=>addedEntity=allEntity[val]" :border="false" :default="entityKeys[0]" :options="entityKeys"></dev-select>
@@ -89,6 +89,7 @@ export default {
     },
     addEntity:function(){
       this.addingEntity=true;
+      this.addedEntity=this.entityKeys[0]
     },
     cancel:function(){
       this.addingEntity=false;

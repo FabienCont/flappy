@@ -5,11 +5,31 @@ const state = () => ({
   all: {},
 });
 
-const reduceFindPath = function reduceFindPath(pathInState, subPath, i, paths) {
+const reduceFindOrCreatePath = function reduceFindOrCreatePath(pathInState, subPath, i, paths) {
   if (i !== paths.length - 1) {
+    if (!pathInState[subPath] || !pathInState[subPath].content) {
+      this.$app.$set(pathInState, subPath, { type: 'folder', content: {} });
+    }
     return pathInState[subPath].content;
   }
   return { file: subPath, path: pathInState };
+};
+
+const findPath = function findPath(pathInState, paths) {
+  let foundPath = pathInState;
+  for (let i = 0; i < paths.length; i++) {
+    const subPath = paths[i];
+    if (i === paths.length - 1 && foundPath[subPath]) {
+      break;
+    } else if (foundPath[subPath]) {
+      foundPath = foundPath[subPath].content;
+    } else {
+      foundPath = null;
+      break;
+    }
+  }
+  if (foundPath === pathInState) return null;
+  return foundPath;
 };
 
 // actions
@@ -31,15 +51,25 @@ const actions = {
 const mutations = {
   addElement(state, { path }) {
     const paths = path.split('/');
-    const pathInState = paths.reduce(reduceFindPath, state.all);
+    const pathInState = paths.reduce(reduceFindOrCreatePath.bind(this), state.all);
     if (!pathInState.path[pathInState.file]) {
       this.$app.$set(pathInState.path, pathInState.file, { type: 'file' });
     }
   },
   deleteElement(state, path) {
     const paths = path.split('/');
-    const pathInState = paths.reduce(reduceFindPath, state.all);
-    this.$app.$delete(pathInState.path, pathInState.file);
+    const elementPathName = paths[paths.length - 1];
+    const pathInState = findPath(state.all, paths);
+    if (pathInState) {
+      this.$app.$delete(pathInState, elementPathName);
+      const scopeKeys = Object.keys(pathInState);
+      if (scopeKeys.length === 0 && paths.length === 4) {
+        paths.pop();
+        const folderPathName = paths[paths.length - 1];
+        const folderPathInstate = findPath(state.all, paths);
+        this.$app.$delete(folderPathInstate, folderPathName);
+      }
+    }
   },
   setArborescence(state, arborescence) {
     state.all = arborescence;

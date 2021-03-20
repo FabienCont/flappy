@@ -53,6 +53,11 @@ export default {
   align-items: center;
 }
 
+.justify-center{
+  justify-content: center;
+}
+
+
 .justify-around{
   justify-content: space-around;
 }

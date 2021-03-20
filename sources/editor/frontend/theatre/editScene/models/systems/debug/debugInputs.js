@@ -10,6 +10,25 @@ function debugInputs() {
   }) => {
     const inputsCombine = state ? `${action}_${state}` : action;
     switch (inputsCombine) {
+      case 'KEY_CTRL_DOWN':
+        debugVariables.inputs.push(['KEY_CTRL']);
+        break;
+      case 'KEY_CTRL_UP':
+        debugVariables.inputs.splice(debugVariables.inputs.indexOf('KEY_CTRL'));
+        break;
+      case 'KEY_C_DOWN':
+        if (debugVariables.inputs.indexOf('KEY_CTRL') != null) {
+          this.models.snippets.debug.copyEntity();
+        }
+        break;
+      case 'KEY_V_DOWN':
+        if (debugVariables.inputs.indexOf('KEY_CTRL') != null) {
+          this.models.snippets.debug.pasteEntity();
+        }
+        break;
+      case 'KEY_DEL_DOWN':
+        this.models.snippets.debug.deleteEntity();
+        break;
       case 'SCROLL_UP':
         this.models.snippets.debug.zoom({ x, y });
         break;
@@ -17,12 +36,22 @@ function debugInputs() {
         this.models.snippets.debug.dezoom({ x, y });
         break;
       case 'CLICK_LEFT_DOWN':
-        this.models.snippets.debug.select({ x, y });
+        this.models.snippets.debug.select();
         break;
       case 'MOVE':
+        const camera = this.$cameras.debug;
+        const { cursorPos } = this.$variables.$debug;
+        cursorPos.x = (x - camera.screen.x()
+      + camera.position.x() * camera.screen.scale()
+      - camera.screen.width() / 2) / camera.screen.scale();
+
+        cursorPos.y = (y - camera.screen.y()
+      + camera.position.y() * camera.screen.scale()
+      - camera.screen.height() / 2) / camera.screen.scale();
+
         if (debugVariables.isFocus) {
           if (debugVariables.focusElement) {
-            debugVariables.commands.entityDrag = { x, y };
+            debugVariables.commands.entityDrag = cursorPos;
           } else {
             debugVariables.commands.cameraDrag = { x, y };
           }
@@ -32,6 +61,7 @@ function debugInputs() {
         break;
       case 'MOVE_LEAVE':
       case 'CLICK_LEFT_UP':
+        debugVariables.inputs.splice(0);
         debugVariables.commands = {};
         removeFocus.call(this);
         break;
