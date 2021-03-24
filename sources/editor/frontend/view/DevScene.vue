@@ -9,7 +9,7 @@
       </div>
     </main-pane-container>
     <detail-pane-container>
-      <h3>Scene {{scope}} </h3>
+     <h3>Scene {{scope}} </h3>
      <div class="flex" v-if="isElementModify">
        <dev-button class="dev-scene-icon" @click="saveElement()">Save</dev-button>
        <dev-button class="dev-scene-icon" @click="cancelModification()">Cancel</dev-button>
@@ -17,24 +17,35 @@
      <div v-else>
        <dev-button class="dev-scene-icon" @click="deleteElement()">Delete</dev-button>
      </div>
+     <span>Debug Info :</span>
+     <div>
+       <dev-button @click="toggleDebugInfo" v-if="showDebugInfo">show</dev-button>
+       <template v-else>
+         <dev-button @click="toggleDebugInfo">hide</dev-button>
+            <dev-checkbox v-if="typeof debugVariables.followGrid ==='boolean'" label="followGrid" @input="(val)=> debugVariables.followGrid=val" :val="debugVariables.followGrid" ></dev-checkbox>
+            <dev-input v-if="debugVariables.stepGrid" @update:inputValue="(val)=>debugVariables.stepGrid=val" :isEditable="true" type="number" name="stepGrid" :inputValue="debugVariables.stepGrid"></dev-input>
+        </template>
+     </div>
      <dev-separator></dev-separator>
-     <div class="dev-tab-group flex align-center">
-       <dev-tab @click="()=>selectedMenu=menu" :isActive="menu=== selectedMenu" v-for="menu in listMenu" :key="menu">{{menu}}</dev-tab>
+     <div>
+       <div class="dev-tab-group flex align-center">
+         <dev-tab @click="()=>selectedMenu=menu" :isActive="menu=== selectedMenu" v-for="menu in listMenu" :key="menu">{{menu}}</dev-tab>
+       </div>
      </div>
      <div>
        <dev-entities v-if="selectedMenu==='Entities'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
         :componentsModel='componentFiles' @delete-entity="deleteEntity" @add-entity='addEntity' @delete-entity-component='deleteEntityComponent' @add-entity-component='addEntityComponent'
         @update-entity-component='updateEntityComponent'></dev-entities>
        <dev-cameras v-else-if="selectedMenu==='Cameras'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
-       :componentsModel='componentFiles'></dev-cameras>
+       :componentsModel='componentFiles'  @add='addCamera' @remove='removeCamera' @update='updateCamera'></dev-cameras>
        <dev-variables v-else-if="selectedMenu==='Variables'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
-        :componentsModel='componentFiles'></dev-variables>
+        :componentsModel='componentFiles'  @add='addVariable' @remove='removeVariable' @update='updateVariable'></dev-variables>
         <dev-inputs v-else-if="selectedMenu==='Inputs'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
-       :componentsModel='componentFiles' @delete-input="deleteInput" @add-input="addInput"></dev-inputs>
+       :componentsModel='componentFiles' @remove="deleteInput" @add="addInput"></dev-inputs>
        <dev-systems v-else-if="selectedMenu==='Systems'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
-        :componentsModel='componentFiles'></dev-systems>
+        :componentsModel='componentFiles' @swap='swapSystem' @add='addSystem' @remove='removeSystem' @update='updateSystem'></dev-systems>
        <dev-renderers v-else-if="selectedMenu==='Renderers'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
-        :componentsModel='componentFiles'></dev-renderers>
+        :componentsModel='componentFiles' @swap='swapRenderer'  @add='addRenderer' @remove='removeRenderer' @update='updateRenderer'></dev-renderers>
      </div>
     </detail-pane-container>
   </div>
@@ -67,6 +78,9 @@ export default {
        sceneFilesCopy:{},
        componentFiles:{},
        entityFiles:{},
+       showDebugInfo:false,
+       debugVariables:{},
+       theatreVariables:null,
        selectedMenu:'Entities',
        listMenu:[
          'Entities',
@@ -106,11 +120,17 @@ export default {
       entityCopied:null,
       focus:false
     });
+    this.$set(this.theatreInstance,'$variables',{})
   },
   props: {
     params:Array
   },
   watch:{
+    'theatreInstance.$variables':function(newVal,oldVal){
+      if(newVal && newVal.$debug){
+          this.debugVariables=newVal.$debug
+      }else return {}
+    },
     params:function(val){
       val.forEach((file,i)=>{
         if(file.type==='scenes'){
@@ -160,6 +180,9 @@ export default {
     }
   },
   methods:{
+    toggleDebugInfo:function(){
+      this.showDebugInfo=!this.showDebugInfo;
+    },
     copyEntity:function(index){
       let fileFound= this.getEntitiesFile();
       if(fileFound){
@@ -314,6 +337,96 @@ export default {
       if(fileFound){
         fileFound.content.splice(index, 1);
       }
+    },
+    addRenderer:function(renderer){
+      let fileFound= this.getRenderersFile();
+      if(fileFound){
+        fileFound.content.push(renderer)
+      }
+    },
+    removeRenderer:function(index){
+      let fileFound= this.getRenderersFile();
+      if(fileFound){
+        fileFound.content.splice(index, 1);
+      }
+    },
+    updateRenderer:function({index,renderer}){
+      let fileFound= this.getRenderersFile();
+      if(fileFound){
+        fileFound.content.splice(index, 1,renderer);
+      }
+    },
+    swapRenderer:function({index, to}){
+      let fileFound= this.getRenderersFile();
+      if(fileFound){
+        fileFound.content=this.swapPos(fileFound.content,index,to)
+        fileFound.content.splice(fileFound.content.length);
+      }
+    },
+    addSystem:function(system){
+      let fileFound= this.getSystemsFile();
+      if(fileFound){
+        fileFound.content.push(system)
+      }
+    },
+    removeSystem:function(index){
+      let fileFound= this.getSystemsFile();
+      if(fileFound){
+        fileFound.content.splice(index, 1);
+      }
+    },
+    updateSystem:function({index,system}){
+      let fileFound= this.getSystemsFile();
+      if(fileFound){
+        fileFound.content.splice(index, 1,system);
+      }
+    },
+    swapSystem:function({index, to}){
+      let fileFound= this.getSystemsFile();
+      if(fileFound){
+        fileFound.content=this.swapPos(fileFound.content,index,to)
+        fileFound.content.splice(fileFound.content.length);
+      }
+    },
+    addCamera:function(camera){
+      let fileFound= this.getCamerasFile();
+      if(fileFound){
+        fileFound.content.push(camera)
+      }
+    },
+    removeCamera:function(index){
+      let fileFound= this.getCamerasFile();
+      if(fileFound){
+        fileFound.content.splice(index, 1);
+      }
+    },
+    updateCamera:function({index,camera}){
+      let fileFound= this.getCamerasFile();
+      if(fileFound){
+        fileFound.content.splice(index, 1,camera);
+      }
+    },
+    addVariable:function({name,value}){
+      let fileFound=this.getVariablesFile();
+      if(fileFound){
+        this.$set(fileFound.content,name,value);
+      }
+    },
+    removeVariable:function(name){
+      let fileFound= this.getVariablesFile();
+      if(fileFound){
+        this.$delete(fileFound.content,name);
+      }
+    },
+    updateVariable:function({name,value}){
+      let fileFound= this.getVariablesFile();
+      if(fileFound){
+        this.$set(fileFound.content,name,value);
+      }
+    },
+    swapPos:function(arr, from, to){
+      [arr[from],arr[to]] = [arr[to],arr[from]];
+      return arr;
     },
     saveElement:function(){
       if(this.isElementModify){

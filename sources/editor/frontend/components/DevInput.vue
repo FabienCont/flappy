@@ -8,7 +8,7 @@
       <input class="dev-input" spellcheck="false" :placeholder="name" :disabled="!isEditable" type="text"  :value="inputValue"  @input="updateValue">
     </template>
     <template v-else-if="type ==='boolean'">
-      <input class="dev-input" :placeholder="name" :disabled="!isEditable" type="checkbox" :value="inputValue"  @input="updateValue">
+      <input class="dev-input dev-input-boolean" :placeholder="name" :disabled="!isEditable" type="checkbox" :value="inputValue"  @input="updateValue">
     </template>
     <label class="dev-label" v-if="name!==undefined && !inline">{{name}}:</label>
   </div>
@@ -108,6 +108,11 @@ $gray: $dev--color-color0;
     top: 20px;
   }
 }
+
+.dev-input-boolean{
+  cursor: pointer;
+}
+
 .dev-noborder .dev-input{
     border-bottom:0px;
 }

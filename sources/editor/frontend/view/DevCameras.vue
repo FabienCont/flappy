@@ -10,17 +10,23 @@
       </div>
       <div v-if="index === cameraFocus">
         <div class="dev-camera-inspect">
-          <dev-input name="name" :border="false" type="string" @update:inputValue="newVal=>updateDefault(newVal)" :isEditable="true" :inputValue="camera.name"></dev-input>
-          <dev-select label="type" @input="(val)=>camera.type=val" :default="camera.type" :options="cameraTypeList"></dev-select>
+          <dev-input name="name" :border="false" type="string" @update:inputValue="newVal=>updateCameraName(index,newVal)" :isEditable="true" :inputValue="camera.name"></dev-input>
+          <dev-select label="type" @input="(val)=>updateCameraType(index,val)" :default="camera.type" :options="cameraTypeList"></dev-select>
           params:
           <div class="dev-camera-params">
-            <template v-for="param in possibleParams">
-              <dev-input v-if="camera.params && camera.params[param] &&  typeof camera.params[param]==='number'" :name="param" :border="false" type="number" @update:inputValue="newVal=>updateDefault(newVal)" :isEditable="true" :inputValue="camera.params[param]"></dev-input>
-              <dev-input v-else-if="!camera.params || !camera.params[param]" :name="param" :border="false" type="number" @update:inputValue="newVal=>updateDefault(newVal)" :isEditable="true" inputValue="0"></dev-input>
-              <template v-else-if="camera.params && camera.params[param] &&  typeof camera.params[param] ==='object' &&  Object.keys(camera.params[param])[0]==='$snippet'">
-                <dev-select @input="(val)=>updateSnippet(snippetList[val])" :label="param" :border="false" :default="snippetList[0]" :options="Object.keys(snippetList)"></dev-select>
+            <div class="dev-camera-param" v-for="param,indexParam in possibleParams" :key='indexParam'>
+              <template v-if="camera.params && typeof camera.params[param]==='number'" >
+                <dev-icon class="snippet-icon":width="miniSvgSize" :height="miniSvgSize" @click="toggleParamToSnippet(index,param)" iconName="link"></dev-icon>
+                <dev-input :name="param" :border="false" type="number" @update:inputValue="newVal=>updateCameraParam(index,param,newVal)" :isEditable="true" :inputValue="camera.params[param]"></dev-input>
               </template>
-            </template>
+              <template v-else-if="!camera.params || !camera.params[param]">
+                <dev-input :name="param" :border="false" type="number" @update:inputValue="newVal=>updateCameraParam(index,param,newVal)" :isEditable="true" inputValue="0"></dev-input>
+              </template>
+              <template v-else-if="camera.params && camera.params[param] &&  typeof camera.params[param] ==='object' &&  Object.keys(camera.params[param])[0]==='$snippet'">
+                <dev-icon class="snippet-icon snippet-icon-active" :width="miniSvgSize" :height="miniSvgSize" @click="toggleParamToSnippet(index,param)" iconName="link"></dev-icon>
+                <dev-select @input="(val)=>updateCameraParam(index,param,snippetList[val])" :label="param" :border="false" :default="getSnippet(camera.params[param])" :options="Object.keys(snippetList)"></dev-select>
+              </template>
+            </div>
           </div>
         </div>
       </div>
@@ -37,6 +43,7 @@ export default {
   data(){
     return {
       svgSize:"2rem",
+      miniSvgSize:"1.3rem",
       cameraFocus:-1,
       possibleParams:["width","height","x","y","z"]
     }
@@ -47,11 +54,33 @@ export default {
     componentsModel:{type:Object},
   },
   methods:{
-    addCamera:function(){
-
+    getSnippet:function(param){
+      return param.$snippet.scope+'/'+param.$snippet.name
     },
-    deleteCamera:function(){
-
+    addCamera:function(){
+      let camera={name:'default',type:'contain-framed',params:{width:160,height:140,x:0,y:0,z:0}};
+      this.$emit("add",camera)
+    },
+    deleteCamera:function(index){
+      this.$emit("remove",index)
+    },
+    updateCamera:function(index,camera){
+      this.$emit("update",{index,camera})
+    },
+    updateCameraParam:function(index,param,value){
+      let camera=JSON.parse(JSON.stringify(this.sceneCameras[index]));
+      camera.params[param]=value;
+      this.updateCamera(index,camera);
+    },
+    updateCameraName:function(index,value){
+      let camera=JSON.parse(JSON.stringify(this.sceneCameras[index]));
+      camera.name=value;
+      this.updateCamera(index,camera);
+    },
+    updateCameraType:function(index,value){
+      let camera=JSON.parse(JSON.stringify(this.sceneCameras[index]));
+      camera.type=value;
+      this.updateCamera(index,camera);
     },
     getIconType:function(index){
       if(this.cameraFocus!==index){
@@ -62,6 +91,17 @@ export default {
       if(this.cameraFocus===index){
         this.cameraFocus=-1;
       }else this.cameraFocus=index;
+    },
+    toggleParamToSnippet(index,param){
+        let camera=JSON.parse(JSON.stringify(this.sceneCameras[index]));
+        let value=camera.params[param];
+        if(typeof value ==='object' &&  Object.keys(value)[0]==='$snippet'){
+          camera.params[param]=0;
+        }else{
+          camera.params[param]={'$snippet':Object.values(this.snippetList)[0]};
+        }
+
+        this.updateCamera(index,camera);
     }
   },
   computed:{
@@ -93,6 +133,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "editor/frontend/styles/_variables";
   .dev-camera-select{
       width:100%;
       flex:1;
@@ -103,5 +144,16 @@ export default {
 
   .dev-camera-params{
     margin-left:1rem;
+  }
+
+  .dev-camera-param{
+    display:flex;
+    align-items:center;
+  }
+  .snippet-icon{
+    margin-right:0.1rem;
+  }
+  .snippet-icon-active{
+    stroke: $dev--color-color6;
   }
 </style>

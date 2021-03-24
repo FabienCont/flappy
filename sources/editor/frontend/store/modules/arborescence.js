@@ -93,6 +93,16 @@ const getters = {
       return false;
     });
   },
+  systemDico: (state) => {
+    const systemDico = {};
+    Object.entries(state.all.models.content.systems.content).forEach(([scope, value]) => {
+      Object.entries(value.content).forEach(([filename, info]) => {
+        if (!systemDico[scope]) systemDico[scope] = {};
+        systemDico[scope][filename] = info;
+      });
+    });
+    return systemDico;
+  },
   snippetDico: (state) => {
     const snippetDico = {};
     Object.entries(state.all.models.content.snippets.content).forEach(([scope, value]) => {

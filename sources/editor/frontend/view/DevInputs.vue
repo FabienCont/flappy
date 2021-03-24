@@ -35,11 +35,11 @@ export default {
       if(!this.addedInput){
         this.addedInput=this.inputsList[0]
       }
-      this.$emit("add-input",this.addedInput)
+      this.$emit("add",this.addedInput)
       this.addedInput=null;
     },
     deleteInput:function(index){
-      this.$emit("delete-input",index)
+      this.$emit("remove",index)
     },
   },
   computed:{

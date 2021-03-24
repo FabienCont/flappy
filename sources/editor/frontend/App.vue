@@ -49,6 +49,10 @@ export default {
     display: flex;
 }
 
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
 .align-center{
   align-items: center;
 }

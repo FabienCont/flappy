@@ -89,12 +89,12 @@ export default {
     },
     addEntity:function(){
       this.addingEntity=true;
-      this.addedEntity=this.entityKeys[0]
+      this.addedEntity=this.allEntity[this.entityKeys[0]]
     },
     cancel:function(){
       this.addingEntity=false;
     },
-    valid:function(val){
+    valid:function(){
       let entityToAdd=this.addedEntity?this.addedEntity:this.allEntity[this.entityKeys[0]];
       this.$emit("add-entity",{name:entityToAdd.file.split('.')[0],scope:entityToAdd.scope,components:[]})
       this.addingEntity=false;

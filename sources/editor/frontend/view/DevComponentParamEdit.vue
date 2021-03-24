@@ -10,10 +10,8 @@
         <template v-if="value['_default'] !== undefined" >
           <div class="dev-component-default-checkbox">
             <dev-checkbox v-if="value['_type']!=='boolean'" :val="setToFalse" v-model="selectedCheckbox" label="Set to false"></dev-checkbox>
-            <dev-checkbox v-if="value['_type']!=='snippet'" :val="setSnippet" v-model="selectedCheckbox" label="default is snippet"></dev-checkbox>
           </div>
           <span v-if="isSetToFalse">default : {{value['_default']}}</span>
-          <dev-select v-else-if="value['_type']==='snippet' || isSetToSnippet===true" @input="(val)=>updateSnippet(snippetList[val])" label="default" :border="false" :default="snippetList[0]" :options="Object.keys(snippetList)"></dev-select>
           <dev-input v-else-if="value['_type']==='number'" name="default" :border="false" type="number" @update:inputValue="newVal=>updateDefault(newVal)" :isEditable="true" :inputValue="value['_default']"></dev-input>
           <dev-input v-else-if="value['_type']==='string'" name="default" :border="false" type="string" @update:inputValue="newVal=>updateDefault(newVal)" :isEditable="true" :inputValue="value['_default']"></dev-input>
           <dev-input :error="invalidJSONInput" v-else name="default" :border="false" type="string" @update:inputValue="newVal=>updateJSON(newVal)" :isEditable="true" :inputValue="JSON.stringify(value['_default'])"></dev-input>
@@ -76,20 +74,6 @@ export default {
     name:String
   },
   computed:{
-    ...mapGetters({
-      snippetDico:"arborescence/snippetDico"
-    }),
-    snippetList:function(){
-      let snippetList={};
-      Object.entries(this.snippetDico).forEach(([scope,value]) => {
-        Object.keys(value).forEach((filename)=>{
-            let name=filename.split('.')[0]
-            snippetList[scope+'/'+name]={scope:scope,name};
-        });
-
-      });
-      return snippetList
-    },
     isSetToFalse:function(){
         if(this.selectedCheckbox.length === 1 && this.selectedCheckbox[0] ===this.setToFalse ){
           return true
@@ -110,11 +94,7 @@ export default {
         if(val._type!=='dico' && val._dico ){
           this.updateDicoDef(undefined)
         }
-        if(val._type==='snippet'){
-          if(this.selectedCheckbox.length>0 && this.selectedCheckbox===this.setSnippet){
-            this.selectedCheckbox.splice(0)
-          }
-        }else if(val._type==='boolean' ){
+        if(val._type==='boolean' ){
           if(this.selectedCheckbox.length>0 && this.selectedCheckbox===this.setToFalse){
             this.selectedCheckbox.splice(0)
           }
@@ -130,9 +110,6 @@ export default {
       if(val.length === 1 && val[0] ===this.setToFalse ){
         let value=false;
         this.emitUpdateToParent({key,value,path:[this.name]})
-      }else if(val.length === 1 && val[0] ===this.setSnippet) {
-        let value="snippet";
-        this.emitUpdateToParent({key,value,path:[this.name]})
       }else  {
         let value=undefined;
         this.emitUpdateToParent({key,value,path:[this.name]})
@@ -143,17 +120,9 @@ export default {
     getDefaultCheckbox:function(){
       if(this.value['_default']===false && this.value['_type']!=='boolean'){
         return ['setToFalse']
-      }else if(this.value['$snippet'] && this.value['_type']!=='snippet'){
-        return ['setSnippet']
       }else{
         return []
       }
-    },
-    updateSnippet:function(strSnippet){
-      if(this.isSetToSnippet){
-        this.updateDefault(null);
-        this.emitUpdateToParent({key:'$snippet',value:strSnippet,path:[this.name]})
-      }else this.updateDefault(strSnippet)
     },
     childRenameParam:function({oldKey,newKey,path}){
       this.$emit('rename-param',{oldKey,newKey,path:[this.name,...path]})

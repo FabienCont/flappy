@@ -1,7 +1,7 @@
 <template>
   <div class="dev-checkbox-container" :class="{'fill':value!=='' }">
-    <input class="dev-checkbox" name="label" type="checkbox" :value="val" v-model="checked" @change="updateValue">
-    <label class="dev-label" for="label">{{label}}</label>
+    <input class="dev-checkbox" :name="label" type="checkbox" :value="val" v-model="checked" @change="updateValue">
+    <label class="dev-label" :for="label">{{label}}</label>
   </div>
 </template>
 
@@ -11,10 +11,10 @@ export default {
   props:{
     value:{
       type: Array,
-      required: true
+      required: false
     },
     val:{
-      type: String,
+      type: [String,Boolean],
       required: true
     },
     label:{
@@ -25,7 +25,9 @@ export default {
   computed: {
 	  checked: {
       get () {
-        return this.value
+        if(typeof this.val==='boolean' )
+        return  this.val
+        else return this.value;
       },
       set (val) {
         this.checkedProxy = val
