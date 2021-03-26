@@ -24,7 +24,7 @@
               </template>
               <template v-else-if="camera.params && camera.params[param] &&  typeof camera.params[param] ==='object' &&  Object.keys(camera.params[param])[0]==='$snippet'">
                 <dev-icon class="snippet-icon snippet-icon-active" :width="miniSvgSize" :height="miniSvgSize" @click="toggleParamToSnippet(index,param)" iconName="link"></dev-icon>
-                <dev-select @input="(val)=>updateCameraParam(index,param,snippetList[val])" :label="param" :border="false" :default="getSnippet(camera.params[param])" :options="Object.keys(snippetList)"></dev-select>
+                <dev-select @input="(val)=>updateCameraParam(index,param,{'$snippet':snippetList[val]})" :label="param" :border="false" :default="getSnippet(camera.params[param])" :options="Object.keys(snippetList)"></dev-select>
               </template>
             </div>
           </div>

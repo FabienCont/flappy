@@ -1,4 +1,4 @@
-import entityString from 'editor/frontend/utils/template/entity.json.raw!=!raw-loader!editor/frontend/utils/template/entity.json';
+import entityJSON from 'editor/frontend/utils/template/entity.json';
 import componentJSON from 'editor/frontend/utils/template/component.json';
 import snippetString from '!!raw-loader!editor/frontend/utils/template/snippet';
 import systemstring from '!!raw-loader!editor/frontend/utils/template/system';
@@ -11,8 +11,8 @@ const typeList = {
   systems: { isAddable: true, ext: 'js', content: systemstring },
   snippets: { isAddable: true, ext: 'js', content: snippetString },
   components: { isAddable: true, ext: 'json', content: componentJSON },
-  entities: { isAddable: true, ext: 'json', content: entityString },
-  scenes: { isAddable: false, ext: 'json', content: '' },
+  entities: { isAddable: true, ext: 'json', content: entityJSON },
+  scenes: { isAddable: true, ext: 'json', content: [] },
 };
 
 const isAddable = function isAddable(type) {

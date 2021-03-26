@@ -85,7 +85,7 @@ export default {
       }else if(this.currentType==='components' && this.currentFiles.length===1){
         this.componentRef=DevComponentEdit;
         this.componentParams=this.currentFiles[0];
-      }else if((this.currentFolder==='scenes' || this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets') && this.currentFiles.length>0){
+      }else if((this.currentFolder==='lifecycles' || this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets') && this.currentFiles.length>0){
         this.componentRef=DevAceEditor;
         this.componentParams=this.currentFiles[0];
       }

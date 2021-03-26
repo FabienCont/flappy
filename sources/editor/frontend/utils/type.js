@@ -8,7 +8,6 @@ const allTypes = {
   'array<object>': { defaultValue: {} },
   'array<number>': { defaultValue: 0 },
   'array<string>': { defaultValue: '' },
-  'array<dico>': { defaultValue: {} },
   'array<snippet>': { defaultValue: { scope: 'common', name: 'get-screen-height' } },
   'array<array>': { defaultValue: [] },
 };

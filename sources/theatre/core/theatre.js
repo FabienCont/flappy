@@ -5,7 +5,7 @@ import { generateUUID } from 'core/uuidv4';
 
 import { preloadAssets } from 'core/preloadAssets';
 import { preloadModels } from 'core/preloadModels';
-import { preloadScenes } from 'core/preloadScenes';
+import { preloadLifecycles } from 'core/preloadLifecycles';
 
 function Theatre(config) {
   const { container } = config;
@@ -87,7 +87,7 @@ function Theatre(config) {
     this.delta = 0;
 
     this.loop = new Loop(forward.bind(this), this.logger, framerate, speed);
-    preloadScenes.call(this, scenarioCtx, hooksCtx);
+    preloadLifecycles.call(this, scenarioCtx, hooksCtx);
     const promisePreloadAssets = preloadAssets.call(this, assetsCtx);
     const promisePreloadModels = preloadModels.call(this, modelsCtx);
 

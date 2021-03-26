@@ -21,7 +21,11 @@ const actions = {
     } = cutFolderPath(path);
     scope = scope === '' ? 'common' : scope;
     const ext = getDefaultExt(type);
-    const newPath = createFilePath(folder, type, scope, `newFile.${ext}`);
+    let name = 'newFile';
+    if (folder === 'models' && type === 'scenes') {
+      name = 'entities';
+    }
+    const newPath = createFilePath(folder, type, scope, `${name}.${ext}`);
     const index = state.all.findIndex((pane) => pane.path === path);
     if (index === -1 && paths.length === 2 && isAddable(type)) {
       const newPane = {

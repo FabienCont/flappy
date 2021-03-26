@@ -12,17 +12,7 @@
     </div>
     <div v-for="([name,variable] , index)  in Object.entries(sceneVariables)" :key="index">
       <div v-if='typeof variable==="object"' class="flex-column justify-center">
-        <template v-if='Array.isArray(variable)'>
-          <div class="flex align-center">
-            <dev-icon :width="svgSize" :height="svgSize" @click="toggleVariable(index)" :iconName="getIconType(index)"></dev-icon>
-            {{name}}
-            <dev-icon :width="svgSize" :height="svgSize" @click="deleteVariable(name)" iconName="delete"></dev-icon>
-          </div>
-          <div v-if="index === variableFocus">
-            <dev-sub-variables @update='({index,value})=>updateSubVariable({name,index,value})' :variableList='convertArrayToObject(variable)'></dev-sub-variables>
-          </div>
-        </template>
-        <template v-else-if="Object.keys(variable).length>0 && Object.keys(variable)[0]==='$snippet'">
+        <template v-if="Object.keys(variable).length>0 && Object.keys(variable)[0]==='$snippet'">
           <div class='flex'>
             <dev-select @input="(val)=>updateVariable(name,{'$snippet':snippetList[val]})" :label="name" :border="false" :default="getSnippet(variable)" :options="Object.keys(snippetList)"></dev-select>
             <dev-icon :width="svgSize" :height="svgSize" @click="deleteVariable(name)" iconName="delete"></dev-icon>
@@ -35,7 +25,7 @@
             <dev-icon :width="svgSize" :height="svgSize" @click="deleteVariable(name)" iconName="delete"></dev-icon>
           </div>
           <div v-if="index === variableFocus">
-            <dev-sub-variables @update='({index,value})=>updateSubVariable({name,index,value})' :variableList='variable'></dev-sub-variables>
+            <dev-sub-variables  @remove='(index)=>deleteSubVariable({name,index})'  @update='({index,value})=>updateSubVariable({name,index,value})' :variables='variable'></dev-sub-variables>
           </div>
         </template>
       </div>
@@ -53,7 +43,6 @@
 <script>
 
 import { mapGetters } from 'vuex'
-import {convertArrayToObject} from "core/loadEntities.js";
 import DevSubVariables from "editor/frontend/view/DevSubVariables.vue";
 
 export default {
@@ -63,7 +52,7 @@ export default {
     return {
       svgSize:"2rem",
       variableFocus:-1,
-      possibleType:{'boolean':false,'object':{},'array':[],'string':'test','number':0,'snippet':{'$snippet':{'scope':'common','name':'get-screen-height'}}},
+      possibleType:{'boolean':false,'object':{},'string':'test','number':0,'snippet':{'$snippet':{'scope':'common','name':'get-screen-height'}}},
       addingVariable:false,
       addedVariable:'',
       addedVariableType:''
@@ -83,6 +72,11 @@ export default {
       this.addedVariableType='number';
       this.addingVariable=true;
     },
+    deleteSubVariable:function({name,index}){
+      let variable=JSON.parse(JSON.stringify(this.sceneVariables[name]));
+      this.$delete(variable,index)
+      this.updateVariable(name,variable);
+    },
     updateSubVariable:function({name,index,value}){
       let variable=JSON.parse(JSON.stringify(this.sceneVariables[name]));
       if(Array.isArray(variable)){
@@ -90,7 +84,7 @@ export default {
       }else{
         variable[index]=value;
       }
-      this.$updateVariable(name,variable);
+      this.updateVariable(name,variable);
     },
     valid:function(){
       this.$emit('add',{name:this.addedVariable,value:this.possibleType[this.addedVariableType]});

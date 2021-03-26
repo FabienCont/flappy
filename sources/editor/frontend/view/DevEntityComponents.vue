@@ -93,6 +93,7 @@ export default {
   methods:{
     addComponent:function(){
       this.addingComponent=true;
+      this.addedComponent=this.allComponents[this.getUnusedComponent()];
     },
     cancel:function(){
       this.addingComponent=false;

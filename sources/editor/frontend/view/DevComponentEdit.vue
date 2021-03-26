@@ -114,9 +114,7 @@ export default {
       let parent=this.contentCopy.params;
       path.forEach((name, i) => {
         if(i !== path.length-1){
-          if(param[name]['_type']==='dico'){
-            param=param[name]['_dico'];
-          }else if(param[name]['_type']==='array<object>'){
+          if(param[name]['_type']==='array<object>'){
             param=param[name]['_object'];
           }else param=param[name];
           parent=param;

@@ -1,6 +1,6 @@
 <template>
   <div class="dev-component-param">
-    <div class="dev-component-param-name">
+    <div v-if='displayName' class="dev-component-param-name">
       <dev-input :border="false" type="string" @update:inputValue="newVal=>updateName(newVal)" :isEditable="true" :inputValue="name"></dev-input>
       <dev-icon :width="svgSize" :height="svgSize" @click.prevent="deleteParam" iconName="delete"></dev-icon>
     </div>
@@ -35,16 +35,20 @@
       <div v-else-if="value['_dico']">
         _dico :
         <dev-icon :width="svgSize" :height="svgSize" @click.prevent="deleteDico" iconName="delete"></dev-icon>
-        <dev-button @click.stop="addDicoElem()">Add Dico Def</dev-button>
-        <dev-component-param-edit @rename-param="childRenameParam" @del-param='childDeleteParam' @update-value='childUpdateValue' class="dev-component-params dev-component-param-value" v-for='([subKey,subValue] , indexParam)  in Object.entries(value["_dico"])' :key="indexParam" :name="subKey" :value="subValue" >
+        <dev-button  v-if="Object.keys(value['_dico']).length === 0" @click.stop="addDicoElem()">Add Dico Def</dev-button>
+        <dev-component-param-edit v-else @rename-param="childRenameParam" @del-param='childDeleteParam' @update-value='childUpdateValue' class="dev-component-params dev-component-param-value" :displayName='false' name="_dico" :value="value['_dico']" >
         </dev-component-param-edit>
-      </div>
-      <div v-else-if="value['_type'] === 'array<object>'">
-        <dev-button @click.stop="addObjectDef()">Add _object</dev-button>
       </div>
       <div v-else-if="value['_type'] === 'dico'">
         <dev-button @click.stop="addDicoDef()">Add _dico</dev-button>
       </div>
+      <div v-else-if="value['_type'] === 'array<object>'">
+        <dev-button @click.stop="addObjectDef()">Add _object</dev-button>
+      </div>
+      <div v-else-if="value['_type'].startsWith === 'array<'">
+        <dev-button @click.stop="addElementArray()">Add Element</dev-button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -70,6 +74,10 @@ export default {
   props:{
     value:{
       type:Object
+    },
+    displayName:{
+      type:Boolean,
+      default:true
     },
     name:String
   },
@@ -143,11 +151,11 @@ export default {
         this.updateObjectDef({})
     },
     addDicoElem:function(){
-      let newParam={'newParam':{
+      let _dico={
         '_type':'number',
         '_default':1
-      }}
-      this.updateDicoDef({...this.value._dico,...newParam})
+      }
+      this.updateDicoDef({..._dico})
     },
     addObject:function(){
       let newParam={

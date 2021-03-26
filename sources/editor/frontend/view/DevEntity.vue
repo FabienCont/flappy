@@ -21,7 +21,7 @@
      </div>
      <dev-separator></dev-separator>
      <div>
-       <dev-entity-components  v-if="entityFile.content" @add-component="addComponent" @update-component-param="updateComponentParam" @delete-component="deleteComponent" :entity='entityFileCopy.content' :componentsModel='componentsModel'></dev-entity-components>
+       <dev-entity-components  v-if="entityFileCopy.content" @add-component="addComponent" @update-component-param="updateComponentParam" @delete-component="deleteComponent" :entity='entityFileCopy.content' :componentsModel='componentsModel'></dev-entity-components>
      </div>
     </detail-pane-container>
   </div>
@@ -64,8 +64,8 @@ export default {
       container,
       expose: false,
       sharp: true,
-      scenarioCtx: require.context('editor/frontend/theatre/editEntity/scenes/', true, /^\.\/scenario\.json$/, 'sync'),
-      hooksCtx:require.context('editor/frontend/theatre/editEntity/scenes/', true, /\.\/(\w+)\/(\w+)\.js$/, 'sync'),
+      scenarioCtx: require.context('editor/frontend/theatre/editEntity/lifecycles/', true, /^\.\/scenario\.json$/, 'sync'),
+      hooksCtx:require.context('editor/frontend/theatre/editEntity/lifecycles/', true, /\.\/(\w+)\/(\w+)\.js$/, 'sync'),
       modelsCtx:require.context('editor/frontend/theatre/editEntity/models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
       loadingTime:0,
       params:{

@@ -24,7 +24,7 @@
               ["assets", "./sources/game/assets/"],
               ["components", "./sources/game/models/components/"],
               ["entities", "./sources/game/models/entities/"],
-              ["scenes", "./sources/game/scenes/"],
+              ["lifecycles", "./sources/game/lifecycles/"],
               ["systems", "./sources/game/models/systems/"],
               ["debug", "./sources/debug"],
               ["editor", "./sources/editor/"],

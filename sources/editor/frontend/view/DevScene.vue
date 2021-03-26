@@ -9,9 +9,10 @@
       </div>
     </main-pane-container>
     <detail-pane-container>
-     <h3>Scene {{scope}} </h3>
+     <h3 >Scene {{scopeCopy}}</h3>
+      <dev-input v-if="mainSceneFile.temp" :isEditable='true' type='string' name='scope' @update:inputValue='(val)=>scopeCopy=val' :inputValue='scopeCopy'></dev-input>
      <div class="flex" v-if="isElementModify">
-       <dev-button class="dev-scene-icon" @click="saveElement()">Save</dev-button>
+       <dev-button class="dev-scene-icon" v-if='scopeCopy!==""' @click="saveElement()">Save</dev-button>
        <dev-button class="dev-scene-icon" @click="cancelModification()">Cancel</dev-button>
      </div>
      <div v-else>
@@ -73,6 +74,7 @@ export default {
     return {
       // svgSize:"1.7em",
        theatreInstance:null,
+       scopeCopy:'',
        sceneFiles:{},
        sceneFilesStr:"",
        sceneFilesCopy:{},
@@ -103,8 +105,8 @@ export default {
       container,
       expose: false,
       sharp: true,
-      scenarioCtx: require.context('editor/frontend/theatre/editScene/scenes/', true, /^\.\/scenario\.json$/, 'sync'),
-      hooksCtx:require.context('editor/frontend/theatre/editScene/scenes/', true, /\.\/(\w+)\/(\w+)\.js$/, 'sync'),
+      scenarioCtx: require.context('editor/frontend/theatre/editScene/lifecycles/', true, /^\.\/scenario\.json$/, 'sync'),
+      hooksCtx:require.context('editor/frontend/theatre/editScene/lifecycles/', true, /\.\/(\w+)\/(\w+)\.js$/, 'sync'),
       modelsCtx:require.context('editor/frontend/theatre/editScene/models/', true, /^.\/.+\.[a-zA-Z0-9]+$/, 'lazy'),
       loadingTime:0,
       params:{
@@ -131,23 +133,27 @@ export default {
           this.debugVariables=newVal.$debug
       }else return {}
     },
-    params:function(val){
-      val.forEach((file,i)=>{
-        if(file.type==='scenes'){
-          this.$set(this.sceneFiles,file.path,file);
-          this.$set(this.sceneFilesCopy,file.path,JSON.parse(JSON.stringify(file)));
-        }else if(file.type==='entities'){
-          this.entityFiles[file.path]=file;
-        }else if(file.type==='components'){
-          this.componentFiles[file.path]=file;
-        }
-        else{
-          console.error('file not recognize',file);
-        }
-      });
+    params:{
+      handler:function(val){
+        val.forEach((file,i)=>{
+          if(file.type==='scenes'){
+            this.$set(this.sceneFiles,file.path,file);
+            this.$set(this.sceneFilesCopy,file.path,JSON.parse(JSON.stringify(file)));
+          }else if(file.type==='entities'){
+            this.entityFiles[file.path]=file;
+          }else if(file.type==='components'){
+            this.componentFiles[file.path]=file;
+          }
+          else{
+            console.error('file not recognize',file);
+          }
+        });
+      },
+      immediate:true
     },
     sceneFiles:{
       deep:true,
+      immediate:true,
       handler:function(val){
         this.sceneFilesStr=JSON.stringify(val);
       }
@@ -160,13 +166,9 @@ export default {
     mainSceneFile:function(){
       let mainSceneFile=this.sceneFiles[this.currentPane.path];
       if(mainSceneFile){
+        this.scopeCopy=mainSceneFile.scope;
         return mainSceneFile
       }else return null;
-    },
-    scope:function(){
-      if(this.mainSceneFile){
-          return this.mainSceneFile.scope
-      }else return "";
     },
     name:function(){
       if(this.mainSceneFile){
@@ -434,8 +436,8 @@ export default {
         for (var i = 0; i < listFiles.length; i++) {
           let key=listFiles[i][0];
           let value=listFiles[i][1];
-          if(JSON.stringify(this.sceneFilesCopy[key].content) !== JSON.stringify(value.content)){
-                this.$emit("save",{folder:this.sceneFilesCopy[key].folder,type:this.sceneFilesCopy[key].type,scope:this.sceneFilesCopy[key].scope,name:this.sceneFilesCopy[key].name,content:this.sceneFilesCopy[key].content});
+          if(JSON.stringify(this.sceneFilesCopy[key].content) !== JSON.stringify(value.content) || value.temp){
+            this.$emit("save",{folder:this.sceneFilesCopy[key].folder,type:this.sceneFilesCopy[key].type,scope:this.scopeCopy,name:this.sceneFilesCopy[key].name,content:this.sceneFilesCopy[key].content});
           }
         }
       }

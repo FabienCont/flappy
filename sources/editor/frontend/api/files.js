@@ -34,12 +34,12 @@ const postFile = function postFile(folder, type, scope, name, data) {
   });
 };
 
-const getFile = function getFile(folder, type, scope, name) {
+const getFile = function getFile(path, folder, type, scope, name) {
   return new Promise((resolve, reject) => {
     if (typeof folder === 'string' && typeof name === 'string') {
       const xhr = new XMLHttpRequest();
-      const path = createApiPath(folder, type, scope, name);
-      xhr.open('GET', path);
+      const apiPath = createApiPath(folder, type, scope, name);
+      xhr.open('GET', apiPath);
       // Envoie les informations du header adaptées avec la requête
       if (type === 'images' || type === 'spritesheets') {
         xhr.setRequestHeader('Content-Type', 'image/png');
@@ -51,9 +51,13 @@ const getFile = function getFile(folder, type, scope, name) {
           const responseObj = xhr.response;
           // Requête finie, traitement ici.
           if (name.indexOf('.json') !== -1 && (type === 'sprites' || type === 'components' || type === 'entities' || type === 'scenes')) {
-            resolve(JSON.parse(responseObj));
+            resolve({
+              path, folder, type, scope, name, content: JSON.parse(responseObj),
+            });
           }
-          resolve(responseObj);
+          resolve({
+            path, folder, type, scope, name, content: responseObj,
+          });
         } else if (this.readyState === XMLHttpRequest.DONE) {
           reject(this.status);
         }
