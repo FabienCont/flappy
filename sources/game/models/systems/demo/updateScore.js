@@ -12,17 +12,17 @@ function updateScore(entities) {
     
     const alias = isBestScore ? 'number-blue' : 'number';
     let numberStr = '';
-    parts.forEach((part, i) => {
+    Object.values(parts).forEach((part, i) => {
       numberStr += findNumber(part,alias);
     });
 
     if (parseInt(numberStr) != score) {
-      const newParts = [];
+      const newParts = {};
       score = (score !== undefined && score !== null ? score : 0);
       const scoreStr = score.toString();
       for (let i = 0; i < scoreStr.length; i++) {
         const part = createNumberSpritePart(parseInt(scoreStr[i]), i, scoreStr.length, alias);
-        newParts.push(part);
+        newParts[i]=part;
       }
 
       const sprites = {
@@ -40,19 +40,16 @@ function updateScore(entities) {
 }
 
 const findNumber = function (part,alias) {
-  return part.source.name.split(alias)[1];
+  return part.source.split(alias)[1];
 };
 
 const createNumberSpritePart = function (number, index, length, alias) {
   const destinationX = ((index + 1) * 8) - (8 * length);
   const name =alias+'_'+number;
   return {
-    source: {
-      name:name,
-    },
-    info:{
-        destination: [destinationX, 0, 0, 8, 16]
-    }
+    source: name,
+    destination: {x:destinationX, y:0, z:0},
+    size:{ width:8,height: 16}
   };
 };
 

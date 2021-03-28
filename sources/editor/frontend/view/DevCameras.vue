@@ -6,6 +6,8 @@
       <div class="flex align-center">
         <dev-icon :width="svgSize" :height="svgSize" @click="toggleCamera(index)" :iconName="getIconType(index)"></dev-icon>
         {{camera.name}}
+        <dev-icon v-if="index!==0" :width="svgSize" :height="svgSize" @click="moveTop(index)" iconName="top"></dev-icon>
+        <dev-icon v-if="index!==sceneCameras.length-1" :width="svgSize" :height="svgSize" @click="moveBottom(index)" iconName="bottom"></dev-icon>
         <dev-icon :width="svgSize" :height="svgSize" @click="deleteCamera(index)" iconName="delete"></dev-icon>
       </div>
       <div v-if="index === cameraFocus">
@@ -54,6 +56,15 @@ export default {
     componentsModel:{type:Object},
   },
   methods:{
+    moveTop:function(index){
+      this.swap(index,index-1);
+    },
+    swap:function(index,to){
+      this.$emit("swap",{index,to})
+    },
+    moveBottom:function(index){
+      this.swap(index,index+1);
+    },
     getSnippet:function(param){
       return param.$snippet.scope+'/'+param.$snippet.name
     },

@@ -10,7 +10,6 @@
       </div>
       <div  v-else-if="paramModel._type==='dico'">
         <div class="flex align-center">
-          Dico :
         </div>
         <dev-button v-if="!addingDicoElement" @click="addElementDico()">Add Element</dev-button>
         <div v-else>
@@ -25,10 +24,12 @@
         {{name}} :
         <template v-for="([paramName,paramValue] , indexParam)  in Object.entries(value)">
           <div :key="indexParam" class="flex">
-            <dev-entity-param @update-param="updateChildParam"
-             :name='paramName' :value='paramValue' :paramModel='paramModel._dico' :component="component"></dev-entity-param>
-           <dev-icon :width="svgSize" :height="svgSize" @click="deleteElementDico(paramName)" iconName="delete"></dev-icon>
+            <dev-icon :width="svgSize" :height="svgSize" @click="toggleParamsArray(indexParam)" :iconName="getIconType(indexParam)"></dev-icon>
+            {{paramName}}
+            <dev-icon :width="svgSize" :height="svgSize" @click="deleteElementDico(paramName)" iconName="delete"></dev-icon>
           </div>
+          <dev-entity-param v-if="indexParam === paramFocus" @update-param="updateChildParam"
+           :name='paramName' :value='paramValue' :paramModel='paramModel._dico' :component="component"></dev-entity-param>
         </template>
       </div>
       <div  v-else-if="paramModel._type==='snippet'">
@@ -152,8 +153,7 @@ export default {
       this.addingDicoElement=true
     },
     validDicoELement:function(){
-      debugger;
-      this.$emit('update-param',{component:this.component,path:[this.name],val:{[this.newDicoElement]:{}}});
+      this.$emit('update-param',{component:this.component,path:[this.name,this.newDicoElement],val:{}});
       this.newDicoElement="";
       this.addingDicoElement=false
     },

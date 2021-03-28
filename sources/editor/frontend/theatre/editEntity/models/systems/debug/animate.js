@@ -2,10 +2,10 @@ function animate(entities) {
   Object.entries(entities).forEach(([name, entity]) => {
     const spritesComponent = entity.get('sprites');
 
-    spritesComponent.parts.forEach((sprite) => {
-      const spriteInfo = sprite.info;
+    Object.values(spritesComponent.parts).forEach((sprite) => {
+      const spriteInfo = sprite.animation;
       try {
-        const spritesDef = this.sprites[sprite.source.name]();
+        const spritesDef = this.sprites[sprite.source]();
         const { frames } = spritesDef;
         const framerate = spriteInfo.framerate ? spriteInfo.framerate : spritesDef.framerate;
 

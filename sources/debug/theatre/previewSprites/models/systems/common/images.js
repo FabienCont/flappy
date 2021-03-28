@@ -18,12 +18,16 @@ function images(entities) {
     }
     imagesComponent.parts.forEach((image) => {
       const {
-        destination, framerate, frames, opacity,
+        frames, opacity,
       } = image;
 
       let { source } = image;
 
       let [x, y, width, height] = frames[image.frame];
+
+      const destination = image.destination || {
+        x: 0, y: 0, z: 0, width, height,
+      };
 
       if (typeof source === 'undefined') {
         source = this.assets.images.common['placeholder-8x1']();
@@ -48,12 +52,11 @@ function images(entities) {
           height,
         },
         destination: {
-
-          x: (positionComponent.x + destination[0]),
-          y: (positionComponent.y + destination[1]),
-          z: positionComponent.z + destination[2],
-          width: (destination[3]),
-          height: (destination[4]),
+          x: (positionComponent.x + destination.x),
+          y: (positionComponent.y + destination.y),
+          z: positionComponent.z + destination.z,
+          width: (destination.width),
+          height: (destination.height),
         },
         opacity: cameraComponent.opacity * opacity,
       });

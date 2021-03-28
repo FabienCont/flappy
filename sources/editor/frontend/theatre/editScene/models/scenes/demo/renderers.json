@@ -6,7 +6,7 @@
     },
     {
       "name":"animate",
-      "scope":"common",
+      "scope":"debug",
       "components":["sprites"]
     },
     {

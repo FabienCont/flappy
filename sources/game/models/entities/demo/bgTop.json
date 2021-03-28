@@ -1,0 +1,1 @@
+{"name":"bgTop","scope":"demo","components":[{"name":"camera","scope":"common"},{"name":"position","scope":"common","params":{"x":0,"y":0,"z":0}},{"name":"sprites","scope":"common","params":{"parts":{"bg_top":{"source":"background_up","size":{"width":160,"height":64}}}}}]}

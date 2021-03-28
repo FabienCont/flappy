@@ -1,0 +1,1 @@
+{"name":"bgBottom","scope":"demo","components":[{"name":"camera","scope":"common"},{"name":"position","scope":"common","params":{"x":0,"y":0,"z":0}},{"name":"sprites","scope":"common","params":{"parts":{"bg_down":{"source":"background_down","size":{"width":160,"height":48},"destination":{"x":0,"y":0}}}}}]}

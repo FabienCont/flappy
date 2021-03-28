@@ -16,25 +16,23 @@ function images(entities) {
       rotateY = rotateComponent.y;
       rotateZ = rotateComponent.z;
     }
-    imagesComponent.parts.forEach((image) => {
-      const {
-        destination, framerate, frames, opacity,
-      } = image;
-
-      const { source } = image;
-
-      let sourceImage = '';
-
-      let [x, y, width, height] = frames[image.frame];
+    Object.values(imagesComponent.parts).forEach((image) => {
       try {
-        if (typeof source === 'undefined') {
-          sourceImage = this.assets.images.common['placeholder-8x1']();
+        const {
+          opacity, source,
+        } = image;
 
-          x %= 8;
-          y %= 1;
-          width = 1;
-          height = 1;
-        } else sourceImage = this.assets.images[source.scope][source.file]();
+        let sourceImage = '';
+
+        const destination = image.destination || {
+          x: 0, y: 0, z: 0,
+        };
+
+        sourceImage = this.assets.images[source.scope][source.file]();
+
+        const size = image.size || {
+          width: sourceImage.naturalWidth, height: sourceImage.naturalHeight,
+        };
 
         this.$cameras.debug.add('images', {
           rotate: {
@@ -44,18 +42,17 @@ function images(entities) {
           },
           source: sourceImage,
           frame: {
-            x: width * x,
-            y: height * y,
-            width,
-            height,
+            x: 0,
+            y: 0,
+            width: sourceImage.naturalWidth,
+            height: sourceImage.naturalHeight,
           },
           destination: {
-
-            x: (positionComponent.x + destination[0]),
-            y: (positionComponent.y + destination[1]),
-            z: positionComponent.z + destination[2],
-            width: (destination[3]),
-            height: (destination[4]),
+            x: (positionComponent.x + destination.x - size.width / 2),
+            y: (positionComponent.y + destination.y - size.height / 2),
+            z: positionComponent.z + destination.z,
+            width: (size.width),
+            height: (size.height),
           },
           opacity: cameraComponent.opacity * opacity,
         });

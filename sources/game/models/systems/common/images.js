@@ -16,23 +16,18 @@ function images(entities) {
       rotateY = rotateComponent.y;
       rotateZ = rotateComponent.z;
     }
-    imagesComponent.parts.forEach((image) => {
-      const {
-        destination, framerate, frames, opacity,
-      } = image;
+    Object.values(imagesComponent.parts).forEach((image) => {
+      const { source } = image;
 
-      let { source } = image;
+      const sourceImg = this.assets.images[source.scope][source.file]();
 
-      let [x, y, width, height] = frames[image.frame];
+      const destination = image.destination || {
+        x: 0, y: 0, z: 0,
+      };
 
-      if (typeof source === 'undefined') {
-        source = this.assets.images.common['placeholder-8x1']();
-
-        x %= 8;
-        y %= 1;
-        width = 1;
-        height = 1;
-      }
+      const size = image.size || {
+        width: sourceImg.naturalWidth, height: sourceImg.naturalHeight,
+      };
 
       camera.add('images', {
         rotate: {
@@ -40,22 +35,21 @@ function images(entities) {
           y: rotateY,
           z: rotateZ,
         },
-        source: this.assets.images[source.scope][source.file](),
+        source: sourceImg,
         frame: {
-          x: width * x,
-          y: height * y,
-          width,
-          height,
+          x: 0,
+          y: 0,
+          width: size.width,
+          height: size.height,
         },
         destination: {
-
-          x: (positionComponent.x + destination[0]),
-          y: (positionComponent.y + destination[1]),
-          z: positionComponent.z + destination[2],
-          width: (destination[3]),
-          height: (destination[4]),
+          x: (positionComponent.x + destination.x - size.width / 2),
+          y: (positionComponent.y + destination.y - size.height / 2),
+          z: positionComponent.z + destination.z,
+          width: (size.width),
+          height: (size.height),
         },
-        opacity: cameraComponent.opacity * opacity,
+        opacity: cameraComponent.opacity * image.opacity,
       });
     });
   });

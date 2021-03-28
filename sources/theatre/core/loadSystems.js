@@ -1,3 +1,5 @@
+import catchError from 'core/catchError';
+
 const updateSystems = function (sceneSystems) {
   sceneSystems.forEach((system) => {
     const updateSystem = getSystem.call(this, system.name, system.scope);
@@ -24,6 +26,7 @@ const getSystem = function (systemName, systemScope) {
     const systemModule = this.models.systems[systemScope][systemName]();
     if (systemModule[systemName]) {
       return systemModule[systemName];
+      return catchError.bind(this, systemModule[systemName]);
     } throw "system don't export good systemName";
     // return require('components/common/'+componentRef.name+'.json');
   } catch (err) {

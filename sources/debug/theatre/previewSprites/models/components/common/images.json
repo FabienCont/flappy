@@ -18,7 +18,7 @@
                     [7, 0, 32, 32]
                 ],
                 "frame": 0,
-                "destination": [0, 0, 0, 64, 64],
+                "destination": {"x":0, "y":0, "y":0, "width":64, "height":64},
                 "opacity": 1,
                 "elapsed": 0,
                 "framerate": 8
@@ -58,9 +58,30 @@
                     "_default": 0
                 },
                 "destination": {
-                    "_length": 5,
-                    "_type": "array<number>",
-                    "_default": [0, 0, 0, 64, 64]
+                  "_type": "object",
+                  "_default": {"x":0, "y":0, "y":0, "width":64, "height":64},
+                  "_object":{
+                    "x": {
+                        "_type": "number",
+                        "_default":0
+                    },
+                    "y": {
+                        "_type": "number",
+                        "_default":0
+                    },
+                    "z": {
+                        "_type": "number",
+                        "_default":0
+                    },
+                    "width": {
+                        "_type": "number",
+                        "_default":0
+                    },
+                    "height": {
+                        "_type": "number",
+                        "_default":0
+                    }
+                  }
                 },
                 "opacity": {
                     "_type": "number",

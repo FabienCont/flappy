@@ -5,7 +5,13 @@ function generateDecor(entities) {
   const birdPosition = birdEntity.get('position');
   const maxPosBeyondBird = birdPosition.x + 128;
   const minPosition = birdPosition.x - 32;
-  const entitiesName = ['top', 'bottom', 'background', 'water', 'pipeTop', 'pipeBottom', 'cloud'];
+  const entitiesName = [
+    'top',
+    'bottom',
+    'water',
+    'pipeTop',
+    'pipeBottom',
+    'cloud'];
 
   if (this.$variables.started) {
     entitiesName.push('checkpoint');
@@ -15,22 +21,29 @@ function generateDecor(entities) {
   for (let i = 0; i < entitiesName.length; i += 1) {
     const name = entitiesName[i];
     decorEntities[name] = {
-      model: this.models.entities.demo[name], width: 64, maxPosition: minPosition, maxId: '', entities: [],
+      model: this.models.entities.demo[name], width: 64, distanceBetween: 64, maxPosition: minPosition, maxId: '', entities: [], defaultY: 0,
     };
   }
 
   decorEntities.cloud.width = 160;
+  decorEntities.cloud.distanceBetween = 160;
+  decorEntities.pipeTop.width = 8;
+  decorEntities.pipeBottom.width = 8;
+  decorEntities.bottom.width = 32;
+  decorEntities.top.width = 32;
 
   Object.entries(entities).filter(([id, entity]) => {
     const entityName = entity.name;
     const isOut = (entity.get('position').x + decorEntities[entityName].width) < minPosition;
     if (isOut) {
+      decorEntities[entityName].defaultY = entity.get('position').y;
       this.$world.remove(entity);
     } else {
       decorEntities[entityName].entities.push(entity);
-      if (decorEntities[entityName].maxPosition < (entity.get('position').x + decorEntities[entityName].width)) {
-        decorEntities[entityName].maxPosition = entity.get('position').x + decorEntities[entityName].width;
+      if (decorEntities[entityName].maxPosition < (entity.get('position').x)) {
+        decorEntities[entityName].maxPosition = entity.get('position').x;
         decorEntities[entityName].maxId = id;
+        decorEntities[entityName].defaultY = entity.get('position').y;
       }
     }
     return !isOut;
@@ -46,6 +59,7 @@ function generateDecor(entities) {
     while (maxPosBeyondBird > entityInfo.maxPosition) {
       const newEntities = generateEntities.call(this, [entityInfo.model()]);
       let newEntity = newEntities[0];
+      newEntity.get('position').y = entityInfo.defaultY;
       if (this.$variables.started && (name === 'pipeTop' || name === 'pipeBottom')) {
         const otherPipeName = name === 'pipeTop' ? 'pipeBottom' : 'pipeTop';
         const otherPipeInfo = decorEntities[otherPipeName];
@@ -53,14 +67,14 @@ function generateDecor(entities) {
         newEntity = randomizePipeInfo(newEntity, randomHeight, name);
         let newOtherPipe = generateEntities.call(this, [otherPipeInfo.model()])[0];
         newOtherPipe = randomizePipeInfo(newOtherPipe, randomHeight, otherPipeName);
-        newOtherPipe.get('position').x = entityInfo.maxPosition;
+        newOtherPipe.get('position').x = entityInfo.maxPosition + entityInfo.distanceBetween;
         this.$world.add(newOtherPipe);
-        otherPipeInfo.maxPosition += otherPipeInfo.width;
+        otherPipeInfo.maxPosition += entityInfo.distanceBetween;
         otherPipeInfo.maxId = newOtherPipe.id;
       }
-      newEntity.get('position').x = entityInfo.maxPosition;
+      newEntity.get('position').x = entityInfo.maxPosition + entityInfo.distanceBetween;
       this.$world.add(newEntity);
-      entityInfo.maxPosition += entityInfo.width;
+      entityInfo.maxPosition = newEntity.get('position').x;
       entityInfo.maxId = newEntity.id;
     }
   });
@@ -68,12 +82,13 @@ function generateDecor(entities) {
 
 const randomizePipeInfo = function (newEntity, height, pipeName) {
   const spaceHeight = 20;
-  let frameY = 1;
+  const frameY = 1;
   const newParts = [];
   let isLast = 0;
 
   let yDestOffset = 0;
-  let frameEndY = 0;
+  let spriteName = 'pipe_mid';
+  let spriteEnd = 'pipe_bottom';
   let direction = -1;
   let pipeHeight = 96 - (height + spaceHeight);
   const hitbox = newEntity.get('hitbox');
@@ -81,7 +96,7 @@ const randomizePipeInfo = function (newEntity, height, pipeName) {
 
   if (pipeName === 'pipeTop') {
     yDestOffset = -4;
-    frameEndY = 2;
+    spriteEnd = 'pipe_top';
     direction = 1;
     pipeHeight = height;
   } else {
@@ -93,82 +108,71 @@ const randomizePipeInfo = function (newEntity, height, pipeName) {
     const heightShadow = heightPercent * ((maxHeightShadow - minHeightShadow) + minHeightShadow);
 
     if (heightShadow <= 4) {
-      newParts.push({
-        source: {
-          scope: 'demo',
-          file: 'pipe-shadow-16x8@1x',
+      newParts[heightShadow] = {
+        source: 'pipe_shadow_bottom',
+        animation: {
+          frame: 0,
+          elapsed: 0,
+          framerate: 8,
         },
-        frames: [
-          [0, 1, 16, 12],
-        ],
-        frame: 0,
         opacity: 1,
-        elapsed: 0,
-        framerate: 8,
-        destination: [0, 8 + heightShadow, 0, 16, 12],
-      });
+        destination: { x: 0, y: 8 + heightShadow, z: 0 },
+        size: { width: 16, height: 12 },
+      };
     } else {
-      newParts.push({
-        source: {
-          scope: 'demo',
-          file: 'pipe-shadow-16x8@1x',
+      newParts[heightShadow] = {
+        source: 'pipe_shadow_top',
+        animation: {
+          frame: 0,
+          elapsed: 0,
+          framerate: 8,
         },
-        frames: [
-          [0, 0, 16, 12],
-        ],
-        frame: 0,
         opacity: 1,
-        elapsed: 0,
-        framerate: 8,
-        destination: [0, -2 + heightShadow, 0, 16, 12],
-      });
+        destination: { x: 0, y: -2 + heightShadow, z: 0 },
+        size: { width: 16, height: 12 },
+      };
 
-      newParts.push({
-        source: {
-          scope: 'demo',
-          file: 'pipe-shadow-16x8@1x',
+      newParts[heightShadow] = {
+        source: 'pipe_shadow_bottom',
+        animation: {
+          frame: 0,
+          elapsed: 0,
+          framerate: 8,
         },
-        frames: [
-          [0, 1, 16, 12],
-        ],
-        frame: 0,
         opacity: 1,
-        elapsed: 0,
-        framerate: 8,
-        destination: [0, 10 + heightShadow, 0, 16, 12],
-      });
+        destination: { x: 0, y: 10 + heightShadow, z: 0 },
+        size: { width: 16, height: 12 },
+      };
     }
   }
 
   hitbox.height = pipeHeight + yDestOffset;
 
-  const parts = newEntity.get('images');
   while (heightSprite < pipeHeight) {
     let yDest = (heightSprite * direction) + yDestOffset;
 
     if (pipeHeight - heightSprite <= 16) {
       yDest -= ((16 - (pipeHeight - heightSprite)) * direction);
-      frameY = frameEndY;
+      spriteName = spriteEnd;
       isLast = 1;
     }
-    newParts.push({
-      source: {
-        scope: 'demo',
-        file: 'pipe-16x16@1x',
+    newParts[frameY] = {
+      source: spriteName,
+      animation: {
+        frame: 0,
+        elapsed: 0,
+        framerate: 8,
       },
-      frames: [
-        [0, frameY, 16, 16],
-      ],
-      frame: 0,
       opacity: 1,
-      elapsed: 0,
-      framerate: 8,
-      destination: [0, yDest, isLast, 16, 16],
-    });
+      destination: { x: 0, y: yDest, z: isLast },
+      size: { width: 16, height: 16 },
+    };
     heightSprite += 16;
   }
 
-  newEntity.get('images').parts = newParts;
+  let sprite = newEntity.get('sprites');
+  if (!sprite)sprite = newEntity.get('images');
+  sprite.parts = newParts;
 
   return newEntity;
 };

@@ -1,5 +1,5 @@
 export default function getDestination() {
-  return [
-    0, 0, 0, this.params.animation.width, this.params.animation.height,
-  ];
+  return {
+    x: 0, y: 0, z: 0, width: this.params.animation.width, height: this.params.animation.height,
+  };
 }

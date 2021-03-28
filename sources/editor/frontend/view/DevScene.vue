@@ -38,7 +38,7 @@
         :componentsModel='componentFiles' @delete-entity="deleteEntity" @add-entity='addEntity' @delete-entity-component='deleteEntityComponent' @add-entity-component='addEntityComponent'
         @update-entity-component='updateEntityComponent'></dev-entities>
        <dev-cameras v-else-if="selectedMenu==='Cameras'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
-       :componentsModel='componentFiles'  @add='addCamera' @remove='removeCamera' @update='updateCamera'></dev-cameras>
+       :componentsModel='componentFiles' @swap='swapCamera' @add='addCamera' @remove='removeCamera' @update='updateCamera'></dev-cameras>
        <dev-variables v-else-if="selectedMenu==='Variables'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
         :componentsModel='componentFiles'  @add='addVariable' @remove='removeVariable' @update='updateVariable'></dev-variables>
         <dev-inputs v-else-if="selectedMenu==='Inputs'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
@@ -385,6 +385,13 @@ export default {
     },
     swapSystem:function({index, to}){
       let fileFound= this.getSystemsFile();
+      if(fileFound){
+        fileFound.content=this.swapPos(fileFound.content,index,to)
+        fileFound.content.splice(fileFound.content.length);
+      }
+    },
+    swapCamera:function({index, to}){
+      let fileFound= this.getCamerasFile();
       if(fileFound){
         fileFound.content=this.swapPos(fileFound.content,index,to)
         fileFound.content.splice(fileFound.content.length);

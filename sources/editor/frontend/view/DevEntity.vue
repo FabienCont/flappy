@@ -170,6 +170,8 @@ export default {
     },
     saveElement:function(){
       if(this.isElementModify){
+        this.entityFileCopy.content.name=this.nameCopy.split('.json')[0];
+        this.entityFileCopy.content.scope=this.scopeCopy;
         this.$emit("save",{type:this.type,scope:this.scopeCopy,name:this.nameCopy,content:this.entityFileCopy.content});
       }
     },

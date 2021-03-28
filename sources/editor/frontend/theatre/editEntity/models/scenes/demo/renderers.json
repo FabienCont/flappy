@@ -1,22 +1,22 @@
 [
     {
+      "name":"images",
+      "scope":"debug",
+      "components":["images"]
+    },
+    {
       "name":"sprites",
-      "scope":"common",
+      "scope":"debug",
       "components":["sprites"]
     },
     {
       "name":"animate",
-      "scope":"common",
+      "scope":"debug",
       "components":["sprites"]
     },
     {
-      "name":"images",
-      "scope":"common",
-      "components":["camera", "images", "position"]
-    },
-    {
       "name":"text",
-      "scope":"common",
+      "scope":"debug",
       "components":["camera", "text", "position"]
     },
     {
@@ -31,12 +31,12 @@
     },
     {
       "name":"showHitbox",
-      "scope":"common",
+      "scope":"debug",
       "components":["hitbox"]
     },
     {
       "name":"emptyCameras",
-      "scope":"common",
+      "scope":"debug",
       "components":[]
     }
 ]
