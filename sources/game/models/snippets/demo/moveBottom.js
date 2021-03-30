@@ -9,7 +9,7 @@ export default function moveTop(entity) {
       parts: [
         {
           x: 0,
-          y: -5,
+          y: 5,
           z: 0,
           rotateX: 0,
           rotateY: 0,
@@ -18,11 +18,11 @@ export default function moveTop(entity) {
             scope: 'demo',
             name: 'ease-linear',
           },
+          elapsed: 0,
           ending: {
             scope: 'demo',
             name: 'removeLastForce',
           },
-          elapsed: 0,
         },
       ],
     },
@@ -31,7 +31,7 @@ export default function moveTop(entity) {
 
   const entityForces= entity.get('forces');
   if(entityForces){
-       if (entityForces.parts.length > 1) {
+        if (entityForces.parts.length > 1) {
         entityForces.parts.pop();
         }
        entityForces.parts.push(newForces.parts[0]);
@@ -39,5 +39,5 @@ export default function moveTop(entity) {
        entity.add('forces').parts.push(newForces.parts[0]);
   }
   this.assets.sounds.demo.jump().play();
- 
+
 }

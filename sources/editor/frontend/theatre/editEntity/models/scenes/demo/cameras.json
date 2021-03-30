@@ -1,10 +1,25 @@
 [
   {
     "name":"default",
-    "type":"contain-framed",
+    "type":"contain-frameless",
     "params":{
       "width":500,
-      "height":500
+      "height":500,
+      "x":{
+        "$snippet": {
+          "scope": "common",
+          "name": "camera-follow-x-first-entity"
+      }},
+      "y":{
+        "$snippet": {
+          "scope": "common",
+          "name": "camera-follow-y-first-entity"
+      }},
+      "z":{
+        "$snippet": {
+          "scope": "common",
+          "name": "camera-follow-z-first-entity"
+      }}
     }
-}
+  }
 ]

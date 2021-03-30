@@ -1,6 +1,6 @@
 import { createComponentFromModel } from 'core/loadEntities';
 
-export default function moveTop(entity) {
+export default function jump(entity) {
   this.$variables.started = true;
   const forces = {
     name: 'forces',
@@ -9,35 +9,35 @@ export default function moveTop(entity) {
       parts: [
         {
           x: 0,
-          y: -5,
+          y: -20,
           z: 0,
           rotateX: 0,
           rotateY: 0,
-          duration: 100,
+          rotateZ: -180,
+          duration: 200,
           easing: {
             scope: 'demo',
-            name: 'ease-linear',
-          },
-          ending: {
-            scope: 'demo',
-            name: 'removeLastForce',
+            name: 'ease-out',
           },
           elapsed: 0,
+          ending: {
+            scope: 'demo',
+            name: 'forces-down',
+          },
+          handling: {
+            scope: 'demo',
+            name: 'rotation-limit',
+          },
         },
       ],
     },
   };
   const newForces = createComponentFromModel.call(this, forces);
 
-  const entityForces= entity.get('forces');
-  if(entityForces){
-       if (entityForces.parts.length > 1) {
-        entityForces.parts.pop();
-        }
-       entityForces.parts.push(newForces.parts[0]);
-  }else{
-       entity.add('forces').parts.push(newForces.parts[0]);
+  const { parts } = entity.get('forces');
+  if (parts.length > 1) {
+    parts.pop();
   }
   this.assets.sounds.demo.jump().play();
- 
+  entity.get('forces').parts.push(newForces.parts[0]);
 }

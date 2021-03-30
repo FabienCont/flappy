@@ -18,15 +18,7 @@
      <div v-else>
        <dev-button class="dev-scene-icon" @click="deleteElement()">Delete</dev-button>
      </div>
-     <span>Debug Info :</span>
-     <div>
-       <dev-button @click="toggleDebugInfo" v-if="showDebugInfo">show</dev-button>
-       <template v-else>
-         <dev-button @click="toggleDebugInfo">hide</dev-button>
-            <dev-checkbox v-if="typeof debugVariables.followGrid ==='boolean'" label="followGrid" @input="(val)=> debugVariables.followGrid=val" :val="debugVariables.followGrid" ></dev-checkbox>
-            <dev-input v-if="debugVariables.stepGrid" @update:inputValue="(val)=>debugVariables.stepGrid=val" :isEditable="true" type="number" name="stepGrid" :inputValue="debugVariables.stepGrid"></dev-input>
-        </template>
-     </div>
+     <dev-scene-config :debugVariables="debugVariables"></dev-scene-config>
      <dev-separator></dev-separator>
      <div>
        <div class="dev-tab-group flex align-center">
@@ -62,13 +54,14 @@ import DevRenderers from "editor/frontend/view/DevRenderers.vue";
 import DevInputs from "editor/frontend/view/DevInputs.vue";
 import DevSystems from "editor/frontend/view/DevSystems.vue";
 import DevVariables from "editor/frontend/view/DevVariables.vue";
+import DevSceneConfig from "editor/frontend/view/DevSceneConfig.vue";
 import Theatre from 'core/theatre';
 import { mapGetters,mapActions } from 'vuex';
 
 export default {
   name: 'devScene',
   components:{
-    DetailPaneContainer,MainPaneContainer,DevEntities,DevCameras,DevRenderers,DevInputs,DevSystems,DevVariables
+    DetailPaneContainer,MainPaneContainer,DevEntities,DevCameras,DevRenderers,DevInputs,DevSystems,DevVariables,DevSceneConfig
   },
   data(){
     return {
@@ -80,7 +73,6 @@ export default {
        sceneFilesCopy:{},
        componentFiles:{},
        entityFiles:{},
-       showDebugInfo:false,
        debugVariables:{},
        theatreVariables:null,
        selectedMenu:'Entities',
@@ -182,9 +174,6 @@ export default {
     }
   },
   methods:{
-    toggleDebugInfo:function(){
-      this.showDebugInfo=!this.showDebugInfo;
-    },
     copyEntity:function(index){
       let fileFound= this.getEntitiesFile();
       if(fileFound){

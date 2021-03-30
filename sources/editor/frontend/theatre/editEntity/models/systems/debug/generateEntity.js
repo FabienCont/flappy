@@ -3,7 +3,7 @@ import { generateEntities } from 'core/loadEntities';
 function generateEntity() {
   const { entity } = this.params;
   const stringEntity = JSON.stringify(entity.content);
-  if (this.saveEntity !== stringEntity && stringEntity !== 'null') {
+  if (this.$variables.$debug.saveEntity !== stringEntity && stringEntity !== 'null') {
     Object.values(this.$world.entities).forEach((createdEntity) => {
       this.$world.remove(createdEntity);
     });
@@ -19,7 +19,7 @@ function generateEntity() {
       console.log(err);
     }
 
-    this.saveEntity = stringEntity;
+    this.$variables.$debug.saveEntity = stringEntity;
   }
 }
 

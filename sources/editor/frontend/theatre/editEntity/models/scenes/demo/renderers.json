@@ -35,6 +35,11 @@
       "components":["hitbox"]
     },
     {
+      "name":"renderGrid",
+      "scope":"debug",
+      "components":[]
+    },
+    {
       "name":"emptyCameras",
       "scope":"debug",
       "components":[]

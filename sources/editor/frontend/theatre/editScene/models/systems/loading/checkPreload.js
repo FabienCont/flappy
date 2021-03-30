@@ -1,5 +1,4 @@
-function update() {
-  // this.logger.log('update loading scene');
+function checkPreload() {
   if (this.preloading === false && this.$variables.redirect === false) {
     setTimeout(() => {
       this.load('demo');
@@ -9,4 +8,4 @@ function update() {
   }
 }
 
-export { update };
+export { checkPreload };

@@ -19,6 +19,7 @@
      <div v-else>
        <dev-button class="dev-entity-icon" @click="deleteElement()">Delete</dev-button>
      </div>
+      <dev-scene-config :debugVariables="debugVariables"></dev-scene-config>
      <dev-separator></dev-separator>
      <div>
        <dev-entity-components  v-if="entityFileCopy.content" @add-component="addComponent" @update-component-param="updateComponentParam" @delete-component="deleteComponent" :entity='entityFileCopy.content' :componentsModel='componentsModel'></dev-entity-components>
@@ -32,12 +33,13 @@
 import DetailPaneContainer from "editor/frontend/view/DetailPaneContainer.vue";
 import MainPaneContainer from "editor/frontend/view/MainPaneContainer.vue";
 import DevEntityComponents from "editor/frontend/view/DevEntityComponents.vue";
+import DevSceneConfig from "editor/frontend/view/DevSceneConfig.vue";
 import Theatre from 'core/theatre';
 
 export default {
   name: 'devEntity',
   components:{
-    DetailPaneContainer,MainPaneContainer,DevEntityComponents
+    DetailPaneContainer,MainPaneContainer,DevEntityComponents,DevSceneConfig
   },
   data(){
     return {
@@ -48,6 +50,7 @@ export default {
        entityFile:{content:null},
        componentFiles:{},
        theatreInstance:null,
+       debugVariables:{},
     }
   },
   beforeDestroy(){
@@ -74,6 +77,7 @@ export default {
       },
       focus:true
     });
+    this.$set(this.theatreInstance,'$variables',{})
   },
   props: {
     params:{
@@ -82,6 +86,11 @@ export default {
     }
   },
   watch:{
+    'theatreInstance.$variables':function(newVal,oldVal){
+      if(newVal && newVal.$debug){
+          this.debugVariables=newVal.$debug
+      }else return {}
+    },
     params:function(val){
       this.copyProps();
     },

@@ -1,3 +1,6 @@
 {
-    "saveEntity":""
+ "$debug":{
+   "saveEntity":"",
+   "stepGrid":16
+  }
 }
