@@ -7,12 +7,12 @@ const generateCameras = function generateCameras(sceneCameras) {
     camerasModel.forEach((cam) => {
       if (cam.params.$snippet !== undefined) {
         const snippet = cam.params.$snippet;
-        cam.params = this.models.snippets[snippet.scope][snippet.name]();
+        cam.params = this.scripts.snippets[snippet.scope][snippet.name]();
       } else {
         Object.entries(cam.params).forEach(([paramKey, paramValue]) => {
           if (typeof paramValue === 'object' && paramValue.$snippet !== undefined) {
             const snippet = paramValue.$snippet;
-            cam.params[paramKey] = this.models.snippets[snippet.scope][snippet.name]();
+            cam.params[paramKey] = this.scripts.snippets[snippet.scope][snippet.name]();
           }
         });
       }

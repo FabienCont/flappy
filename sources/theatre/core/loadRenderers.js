@@ -15,7 +15,7 @@ const getSystem = function getSystem(systemName, systemScope) {
     if (typeof systemName !== 'string' || systemName === '') {
       throw 'no system name defined';
     }
-    return this.models.systems[systemScope][systemName]()[systemName];
+    return this.scripts.systems[systemScope][systemName]()[systemName];
     // return require('components/common/'+componentRef.name+'.json');
   } catch (err) {
     throw `no system found with name :${systemName}`;

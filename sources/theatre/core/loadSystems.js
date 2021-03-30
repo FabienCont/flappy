@@ -9,9 +9,9 @@ const updateSystems = function (sceneSystems) {
 
 const loadSystems = function () {
   try {
-    const sceneModel = this.models.scenes[this.currentScene];
-    if (sceneModel !== undefined && sceneModel.systems !== undefined) {
-      return sceneModel.systems();
+    const sceneScript = this.models.scenes[this.currentScene];
+    if (sceneScript !== undefined && sceneScript.systems !== undefined) {
+      return sceneScript.systems();
     }
     return [];
   } catch (err) {
@@ -23,14 +23,14 @@ const getSystem = function (systemName, systemScope) {
     if (typeof systemName !== 'string' || systemName === '') {
       throw 'no system name defined';
     }
-    const systemModule = this.models.systems[systemScope][systemName]();
+    const systemModule = this.scripts.systems[systemScope][systemName]();
     if (systemModule[systemName]) {
       return systemModule[systemName];
       return catchError.bind(this, systemModule[systemName]);
     } throw "system don't export good systemName";
     // return require('components/common/'+componentRef.name+'.json');
   } catch (err) {
-    throw `no system found with name :${systemName}`;
+    throw `no system found with name :${systemName} and scope : ${systemScope}`;
   }
 };
 

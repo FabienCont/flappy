@@ -5,6 +5,7 @@ import { generateUUID } from 'core/uuidv4';
 
 import { preloadAssets } from 'core/preloadAssets';
 import { preloadModels } from 'core/preloadModels';
+import { preloadScripts } from 'core/preloadScripts';
 import { preloadLifecycles } from 'core/preloadLifecycles';
 
 function Theatre(config) {
@@ -19,6 +20,7 @@ function Theatre(config) {
   const { hooksCtx } = config;
   const { assetsCtx } = config;
   const { modelsCtx } = config;
+  const { scriptsCtx } = config;
   const focus = typeof config.focus === 'boolean' ? config.focus : true;
   const silentLog = typeof config.focus === 'boolean' ? config.focus : false;
 
@@ -84,18 +86,20 @@ function Theatre(config) {
     this.element = canvas.element;
     this.models = {};
     this.assets = {};
+    this.scripts = {};
     this.delta = 0;
 
     this.loop = new Loop(forward.bind(this), this.logger, framerate, speed);
     preloadLifecycles.call(this, scenarioCtx, hooksCtx);
     const promisePreloadAssets = preloadAssets.call(this, assetsCtx);
+    const promisePreloadScripts = preloadScripts.call(this, scriptsCtx);
     const promisePreloadModels = preloadModels.call(this, modelsCtx);
 
     promisePreloadAssets.then(() => {
       this.preloading = false;
     });
 
-    promisePreloadModels.then(() => {
+    Promise.all([promisePreloadModels, promisePreloadScripts]).then(() => {
       this.scene = this.scenes.loading;
       this.scene.setup.call(this);
       this.scene.start.call(this);

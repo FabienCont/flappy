@@ -1,22 +1,22 @@
 [
   {
     "name":"generateComponents",
-    "scope":"debug",
+    "scope":"editor",
     "components":[]
   },
   {
     "name":"generateEntity",
-    "scope":"debug",
+    "scope":"editor",
     "components":[]
   },
   {
     "name":"mockCamera",
-    "scope":"debug",
-    "components":["camera"]
+    "scope":"editor",
+    "components":[]
   },
   {
-    "name":"debugInputs",
-    "scope":"debug",
+    "name":"debugInputsEntity",
+    "scope":"editor",
     "components":[]
   }
 ]

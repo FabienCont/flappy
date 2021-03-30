@@ -73,12 +73,13 @@ module.exports = {
   },
   resolve: {
     alias: {
+      scripts: path.resolve(__dirname, 'sources/game/scripts/'),
       models: path.resolve(__dirname, 'sources/game/models/'),
       assets: path.resolve(__dirname, 'sources/game/assets/'),
       components: path.resolve(__dirname, 'sources/game/models/components/'),
       entities: path.resolve(__dirname, 'sources/game/models/entities/'),
       lifecycles: path.resolve(__dirname, 'sources/game/lifecycles/'),
-      systems: path.resolve(__dirname, 'sources/game/models/systems/'),
+      systems: path.resolve(__dirname, 'sources/game/scripts/systems/'),
       debug: path.resolve(__dirname, 'sources/debug'),
       editor: path.resolve(__dirname, 'sources/editor/'),
       core: path.resolve(__dirname, 'sources/theatre/core/'),

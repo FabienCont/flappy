@@ -18,25 +18,25 @@ function debugInputs() {
         break;
       case 'KEY_C_DOWN':
         if (debugVariables.inputs.indexOf('KEY_CTRL') != null) {
-          this.models.snippets.debug.copyEntity();
+          this.scripts.snippets.editor.copyEntity();
         }
         break;
       case 'KEY_V_DOWN':
         if (debugVariables.inputs.indexOf('KEY_CTRL') != null) {
-          this.models.snippets.debug.pasteEntity();
+          this.scripts.snippets.editor.pasteEntity();
         }
         break;
       case 'KEY_DEL_DOWN':
-        this.models.snippets.debug.deleteEntity();
+        this.scripts.snippets.editor.deleteEntity();
         break;
       case 'SCROLL_UP':
-        this.models.snippets.debug.zoom({ x, y });
+        this.scripts.snippets.editor.zoom({ x, y });
         break;
       case 'SCROLL_DOWN':
-        this.models.snippets.debug.dezoom({ x, y });
+        this.scripts.snippets.editor.dezoom({ x, y });
         break;
       case 'CLICK_LEFT_DOWN':
-        this.models.snippets.debug.select();
+        this.scripts.snippets.editor.select();
         break;
       case 'MOVE':
         const camera = this.$cameras.debug;
@@ -56,7 +56,7 @@ function debugInputs() {
             debugVariables.commands.cameraDrag = { x, y };
           }
         } else {
-          this.models.snippets.debug.hover({ x, y });
+          this.scripts.snippets.editor.hover({ x, y });
         }
         break;
       case 'MOVE_LEAVE':

@@ -102,7 +102,7 @@ const createNewParamsFromModel = function (paramsModel, params, deep = 0) {
           newParams[keyModel][modelNewParamKey] = newParamObject[modelNewParamKey];
         }
       } else if (typeof valueParam.$snippet === 'object' && typeof valueParam === 'object') {
-        newParams[keyModel] = this.models.snippets[valueParam.$snippet.scope][valueParam.$snippet.name].call(this);
+        newParams[keyModel] = this.scripts.snippets[valueParam.$snippet.scope][valueParam.$snippet.name].call(this);
       } else if (modelNewParam._type === typeof valueParam) {
         newParams[keyModel] = valueParam;
       } else {

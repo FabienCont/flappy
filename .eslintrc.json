@@ -20,6 +20,7 @@
       "import/resolver": {
         "alias": {
             "map": [
+              ["scripts", ".sources/game/scripts/"],
               ["models", "./sources/game/models/"],
               ["assets", "./sources/game/assets/"],
               ["components", "./sources/game/models/components/"],

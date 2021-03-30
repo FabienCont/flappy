@@ -5,10 +5,10 @@ function debugInputs() {
     const inputsCombine = `${action}_${state}`;
     switch (inputsCombine) {
       case 'SCROLL_UP':
-        this.models.snippets.debug.zoom({ x, y });
+        this.scripts.snippets.editor.zoom({ x, y });
         break;
       case 'SCROLL_DOWN':
-        this.models.snippets.debug.dezoom(x, y);
+        this.scripts.snippets.editor.dezoom(x, y);
         break;
       default:
     }

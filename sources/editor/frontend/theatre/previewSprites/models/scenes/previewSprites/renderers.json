@@ -1,0 +1,22 @@
+[
+    {
+      "name":"images",
+      "scope":"common",
+      "components":["camera", "images", "position"]
+    },
+    {
+      "name":"spritesheets",
+      "scope":"common",
+      "components":["images"]
+    },
+    {
+      "name":"renderImages",
+      "scope":"canvas2d",
+      "components":[]
+    },
+    {
+      "name":"emptyCameras",
+      "scope":"common",
+      "components":[]
+    }
+]

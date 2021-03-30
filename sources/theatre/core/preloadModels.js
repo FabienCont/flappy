@@ -81,12 +81,7 @@ function loadModel(key, module) {
       type: type.substring(0, type.length - 1),
     };
 
-    if (type === 'snippets') {
-      asset.getter = asset.source.default.bind(this);
-      resolve(asset);
-    } else {
-      asset.getter = () => asset.source;
-    }
+    asset.getter = () => asset.source;
 
     resolve(asset);
   });

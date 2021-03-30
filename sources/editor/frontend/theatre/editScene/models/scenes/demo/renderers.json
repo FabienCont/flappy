@@ -1,22 +1,22 @@
 [
     {
       "name":"sprites",
-      "scope":"debug",
+      "scope":"editor",
       "components":["sprites"]
     },
     {
       "name":"animate",
-      "scope":"debug",
+      "scope":"editor",
       "components":["sprites"]
     },
     {
       "name":"images",
-      "scope":"debug",
+      "scope":"editor",
       "components":["images", "position"]
     },
     {
       "name":"text",
-      "scope":"debug",
+      "scope":"editor",
       "components":["text", "position"]
     },
     {
@@ -31,22 +31,22 @@
     },
     {
       "name":"showHitbox",
-      "scope":"debug",
+      "scope":"editor",
       "components":["hitbox"]
     },
     {
       "name":"showPosition",
-      "scope":"debug",
+      "scope":"editor",
       "components":[]
     },
     {
       "name":"showCameras",
-      "scope":"debug",
+      "scope":"editor",
       "components":[]
     },
     {
       "name":"renderGrid",
-      "scope":"debug",
+      "scope":"editor",
       "components":[]
     },
     {

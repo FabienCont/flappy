@@ -1,27 +1,27 @@
 [
   {
     "name":"generateComponents",
-    "scope":"debug",
+    "scope":"editor",
     "components":[]
   },
   {
     "name":"generateEntitiesModel",
-    "scope":"debug",
+    "scope":"editor",
     "components":[]
   },
   {
     "name":"generateSceneElements",
-    "scope":"debug",
+    "scope":"editor",
     "components":[]
   },
   {
-    "name":"debugInputs",
-    "scope":"debug",
+    "name":"debugInputsScene",
+    "scope":"editor",
     "components":[]
   },
   {
     "name":"debugCommands",
-    "scope":"debug",
+    "scope":"editor",
     "components":[]
   }
 ]

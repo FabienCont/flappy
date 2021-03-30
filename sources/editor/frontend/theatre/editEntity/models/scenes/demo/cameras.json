@@ -1,23 +1,23 @@
 [
   {
-    "name":"default",
+    "name":"debug",
     "type":"contain-frameless",
     "params":{
       "width":500,
       "height":500,
       "x":{
         "$snippet": {
-          "scope": "common",
+          "scope": "editor",
           "name": "camera-follow-x-first-entity"
       }},
       "y":{
         "$snippet": {
-          "scope": "common",
+          "scope": "editor",
           "name": "camera-follow-y-first-entity"
       }},
       "z":{
         "$snippet": {
-          "scope": "common",
+          "scope": "editor",
           "name": "camera-follow-z-first-entity"
       }}
     }

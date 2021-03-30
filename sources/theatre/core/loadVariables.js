@@ -5,7 +5,7 @@ const generateVariables = function generateVariables(sceneVariables) {
     Object.entries(sceneVariables).forEach(([name, value]) => {
       if (typeof value === 'object' && value !== null && value.$snippet !== undefined) {
         const snippet = value.$snippet;
-        variables[name] = this.models.snippets[snippet.scope][snippet.name]();
+        variables[name] = this.scripts.snippets[snippet.scope][snippet.name]();
       } else {
         variables[name] = JSON.parse(JSON.stringify(value));
       }
