@@ -39,8 +39,8 @@ function images(entities) {
         frame: {
           x: 0,
           y: 0,
-          width: size.width,
-          height: size.height,
+          width: sourceImg.naturalWidth,
+          height: sourceImg.naturalHeight,
         },
         destination: {
           x: (positionComponent.x + destination.x - size.width / 2),

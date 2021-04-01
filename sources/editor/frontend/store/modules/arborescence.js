@@ -81,7 +81,7 @@ const mutations = {
 // getters
 const getters = {
   getComponents: (state) => () => state.all.models.content.components.content,
-  getSnippets: (state) => () => state.all.models.content.snippets.content,
+  getSnippets: (state) => () => state.all.scripts.content.snippets.content,
   getEntities: (state) => () => state.all.models.content.entities.content,
   getScene: (state) => (scope) => state.all.models.content.scenes.content[scope].content,
   getImageFromSprites: (state) => (scope, fileName) => {
@@ -95,7 +95,7 @@ const getters = {
   },
   systemDico: (state) => {
     const systemDico = {};
-    Object.entries(state.all.models.content.systems.content).forEach(([scope, value]) => {
+    Object.entries(state.all.scripts.content.systems.content).forEach(([scope, value]) => {
       Object.entries(value.content).forEach(([filename, info]) => {
         if (!systemDico[scope]) systemDico[scope] = {};
         systemDico[scope][filename] = info;
@@ -105,7 +105,7 @@ const getters = {
   },
   snippetDico: (state) => {
     const snippetDico = {};
-    Object.entries(state.all.models.content.snippets.content).forEach(([scope, value]) => {
+    Object.entries(state.all.scripts.content.snippets.content).forEach(([scope, value]) => {
       Object.entries(value.content).forEach(([filename, info]) => {
         if (!snippetDico[scope]) snippetDico[scope] = {};
         snippetDico[scope][filename] = info;

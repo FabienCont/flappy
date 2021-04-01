@@ -1,6 +1,6 @@
 import { createComponentFromModel } from 'core/loadEntities';
 
-export default function moveTop(entity) {
+export default function moveLeft(entity) {
   this.$variables.started = true;
   const forces = {
     name: 'forces',
@@ -8,8 +8,8 @@ export default function moveTop(entity) {
     params: {
       parts: [
         {
-          x: 0,
-          y: -5,
+          x: -5,
+          y: 0,
           z: 0,
           rotateX: 0,
           rotateY: 0,

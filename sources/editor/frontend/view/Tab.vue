@@ -1,5 +1,5 @@
 <template>
-  <li @click.middle.prevent="close" @click.left.prevent.stop="showPanel" @click="activate" class="tab" :class="{'tab-active':isActive}">
+  <li @click.middle.prevent="close" @click="activate" class="tab" :class="{'tab-active':isActive}">
     <span></span>
     <span class="tab-title">{{fileName}}</span>
     <dev-icon @click.stop="close" :width="svgSize" :height="svgSize" iconName="close"></dev-icon>

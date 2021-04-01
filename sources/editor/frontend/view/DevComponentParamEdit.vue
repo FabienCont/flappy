@@ -2,6 +2,8 @@
   <div class="dev-component-param">
     <div v-if='displayName' class="dev-component-param-name">
       <dev-input :border="false" type="string" @update:inputValue="newVal=>updateName(newVal)" :isEditable="true" :inputValue="name"></dev-input>
+      <dev-icon :width="svgSize" :height="svgSize" @click="moveTop(name)" iconName="top"></dev-icon>
+      <dev-icon :width="svgSize" :height="svgSize" @click="moveBottom(name)" iconName="bottom"></dev-icon>
       <dev-icon :width="svgSize" :height="svgSize" @click.prevent="deleteParam" iconName="delete"></dev-icon>
     </div>
     <div class="dev-component-param-value">
@@ -63,7 +65,7 @@ export default {
   components:{'dev-component-param-edit':() => import('editor/frontend/view/DevComponentParamEdit.vue')},
   data(){
     return{
-      svgSize:"1.5rem",
+      svgSize:"2rem",
       allTypes:allTypes,
       selectedCheckbox:this.getDefaultCheckbox(),
       setToFalse:'setToFalse',
@@ -125,6 +127,12 @@ export default {
     }
   },
   methods:{
+    moveTop:function(){
+
+    },
+    moveBottom:function(){
+
+    },
     getDefaultCheckbox:function(){
       if(this.value['_default']===false && this.value['_type']!=='boolean'){
         return ['setToFalse']

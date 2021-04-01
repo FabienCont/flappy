@@ -1,9 +1,6 @@
-import { getCamera } from 'core/loadCameras';
-
 function text(entities) {
   Object.values(entities).forEach((entity) => {
     const cameraComponent = entity.get('camera');
-    const camera = getCamera.call(this, cameraComponent.cameraName);
     const textComponent = entity.get('text');
     const positionComponent = entity.get('position');
     const rotateComponent = entity.get('rotate');

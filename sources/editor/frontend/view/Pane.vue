@@ -38,6 +38,9 @@ export default {
     save:function({type,scope,name,content}){
       let path=this.currentFolder+'/'+type+'/'+scope+'/'+name;
       this.saveFile({path,content})
+      if(this.currentPane.temp){
+        this.openPane(path)
+      }
     },
     editSprites:function(scope,name){
       let extension= name.match(/\.[0-9a-z]+$/i)[0];

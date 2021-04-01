@@ -1,0 +1,1 @@
+{"name":"three0","scope":"game2","components":[{"name":"camera","scope":"common","params":{}},{"name":"position","scope":"common","params":{}},{"name":"sprites","scope":"common","params":{"parts":{"three":{"size":{"width":32,"height":32},"source":"three_0","destination":{"y":8}}}}}]}

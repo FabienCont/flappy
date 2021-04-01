@@ -2,6 +2,26 @@
     "name": "newFile",
     "scope":"common",
     "components":   [
+      {
+          "name": "camera",
+          "scope": "common",
+          "params":{
 
+          }
+      },
+      {
+          "name": "position",
+          "scope": "common",
+          "params":{
+
+          }
+      },
+      {
+          "name": "sprites",
+          "scope": "common",
+          "params":{
+            "parts":{}
+          }
+      }
       ]
 }

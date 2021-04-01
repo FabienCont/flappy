@@ -15,7 +15,7 @@
       <dev-input name='scope' type="string" :full='true' @update:inputValue="newVal=>scopeCopy=newVal" :isEditable="true" :inputValue="scopeCopy"></dev-input>
       <div class="dev-preview-sound-upload-content">
          <span>Select a new file</span>
-         <dev-upload accept="audio/mpeg" @update-file="updateFile" ></dev-upload>
+         <dev-upload accept="audio/mpeg" @change="updateFile" ></dev-upload>
      </div>
      <div class="flex" v-if="isElementModify">
        <dev-button class="dev-preview-sound-icon" @click="saveElement()">Save</dev-button>
@@ -87,7 +87,8 @@ export default {
       this.nameCopy=this.name,
       this.scopeCopy=this.scope
     },
-    updateFile:function(file){
+    updateFile:function(event){
+      let file=event.target.files[0];
       if(this.nameCopy==='')this.nameCopy=file.name.split(".mp3")[0];
       var reader = new FileReader();
        reader.onload = (e)=> {

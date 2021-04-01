@@ -1,1 +1,1 @@
-[]
+[{"scope":"common","name":"inputs","components":["inputs"]},{"scope":"demo","name":"commands","components":["commands"]},{"scope":"common","name":"forces","components":["forces"]},{"scope":"common","name":"hitbox","components":["hitbox"]},{"scope":"common","name":"previous","components":["hitbox"]}]

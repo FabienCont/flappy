@@ -64,9 +64,9 @@ export default {
     params:function(){
       this.copyProps();
     },
-    contentCopy:function(val){
-      console.log(val)
-    }
+    // contentCopy:function(val){
+    //   //console.log(val)
+    // }
   },
   computed:{
     paths:function(){

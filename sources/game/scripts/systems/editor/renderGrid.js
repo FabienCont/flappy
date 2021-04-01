@@ -1,4 +1,4 @@
-function renderGrid(entities) {
+function renderGrid() {
   const camera = this.$cameras.debug;
   const screenCam = camera.screen;
   const ctx = this.context;

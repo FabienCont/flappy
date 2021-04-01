@@ -12,11 +12,7 @@ const postFile = function postFile(folder, type, scope, name, data) {
       const path = createApiPath(folder, type, scope, name);
       xhr.open('POST', path, true);
       // Envoie les informations du header adaptées avec la requête
-      if (type === 'images' || type === 'spritesheets') {
-        xhr.setRequestHeader('Content-Type', 'image/png');
-      } else {
-        xhr.setRequestHeader('Content-Type', 'application/json');
-      }
+      xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onreadystatechange = function () { // Appelle une fonction au changement d'état.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
           // Requête finie, traitement ici.

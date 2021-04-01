@@ -28,6 +28,8 @@ function forces(entities) {
         rotateZ: force.rotateZ * easing(progress),
       };
 
+      console.log(positionComponent);
+      console.log('move', moved);
       positionComponent.x += moved.x - force.moved.x;
       positionComponent.y += moved.y - force.moved.y;
       positionComponent.z += moved.z - force.moved.z;
@@ -36,6 +38,8 @@ function forces(entities) {
         rotateComponent.y += moved.rotateY - force.moved.rotateY;
         rotateComponent.z += moved.rotateZ - force.moved.rotateZ;
       }
+
+      console.log(positionComponent);
       force.moved = moved;
 
       force.elapsed += this.delta;

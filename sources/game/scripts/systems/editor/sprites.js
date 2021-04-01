@@ -1,9 +1,6 @@
-import { getCamera } from 'core/loadCameras';
-
 function sprites(entities) {
   Object.values(entities).forEach((entity) => {
     const cameraComponent = entity.get('camera');
-    const camera = getCamera.call(this, cameraComponent.cameraName);
     const spritesComponent = entity.get('sprites');
     const positionComponent = entity.get('position');
     const rotateComponent = entity.get('rotate');
