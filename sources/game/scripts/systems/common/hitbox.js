@@ -50,7 +50,7 @@ function hitbox(entities) {
 
           const previousHitboxComponentA = entityA.get('hitbox').previous;
           const previousHitboxComponentB = entityB.get('hitbox').previous;
-
+          
           const previousA = new Rectangle(
 
             previousPositionComponentA.x + previousHitboxComponentA.x - previousHitboxComponentA.width / 2,

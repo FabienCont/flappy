@@ -1,4 +1,4 @@
-export default function pasteEntity() {
+export default function pasteEntities() {
   console.log('paste', this.$variables.$debug.cursorPos);
   let newPosX = this.$variables.$debug.cursorPos.x;
   let newPosY = this.$variables.$debug.cursorPos.y;
@@ -6,5 +6,5 @@ export default function pasteEntity() {
     newPosX -= (newPosX % this.$variables.$debug.stepGrid);
     newPosY -= (newPosY % this.$variables.$debug.stepGrid);
   }
-  this.params.pasteEntity(newPosX, newPosY);
+  this.params.pasteEntities({ pos: { x: newPosX, y: newPosY, z: 0 } });
 }

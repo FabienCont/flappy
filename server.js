@@ -36,11 +36,21 @@ if (devServerEnabled) {
   app.use(webpackHotMiddleware(compiler));
 }
 
-app.use(express.static('./dist'));
+// app.use(express.static(path.join(__dirname, 'dist'), { index: false, extensions: ['html'] }));
+// app.use(express.static('./dist'));
 
 /// Serve the files on port 3000.
 app.listen(3000, () => {
   console.log('Example app listening on port 3000!\n');
+});
+
+app.get('/editor', (req, res) => {
+  req.url = '/editor.html';
+  app.handle(req, res);
+});
+app.get('/debug', (req, res) => {
+  req.url = '/debug.html';
+  app.handle(req, res);
 });
 
 app.get('/alive', (req, res) => {

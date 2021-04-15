@@ -26,7 +26,7 @@
        </div>
      </div>
      <div>
-       <dev-entities v-if="selectedMenu==='Entities'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
+       <dev-entities v-if="selectedMenu==='Entities'" :indexFocus=indexFocusEntity :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
         :componentsModel='componentFiles' @delete-entity="deleteEntity" @add-entity='addEntity' @delete-entity-component='deleteEntityComponent' @add-entity-component='addEntityComponent'
         @update-entity-component='updateEntityComponent'></dev-entities>
        <dev-cameras v-else-if="selectedMenu==='Cameras'" :sceneFiles='sceneFilesCopy' :entitiesModel='entityFiles'
@@ -76,6 +76,9 @@ export default {
        debugVariables:{},
        theatreVariables:null,
        selectedMenu:'Entities',
+       entitiesCopied:[],
+       posSaved:{x:0,y:0,z:0},
+       indexFocusEntity:-1,
        listMenu:[
          'Entities',
          'Cameras',
@@ -106,12 +109,11 @@ export default {
         entities:this.entityFiles,
         sceneFiles:this.sceneFilesCopy,
         updateComponent:this.updateComponent,
-        copyEntity:this.copyEntity,
-        pasteEntity:this.pasteEntity,
+        copyEntities:this.copyEntities,
+        pasteEntities:this.pasteEntities,
         focusEntity:this.focusEntity,
-        deleteEntity:this.deleteEntity
+        deleteEntities:this.deleteEntities
       },
-      entityCopied:null,
       focus:false
     });
     this.$set(this.theatreInstance,'$variables',{})
@@ -174,16 +176,29 @@ export default {
     }
   },
   methods:{
-    copyEntity:function(index){
+    copyEntities:function({indexes,pos}){
       let fileFound= this.getEntitiesFile();
       if(fileFound){
-        this.entityCopied=JSON.parse(JSON.stringify(fileFound.content[index]));
+        this.posSaved.x= pos.x;
+        this.posSaved.y= pos.y;
+
+        this.entitiesCopied.splice(0)
+        indexes.forEach((index, i) => {
+            this.entitiesCopied.push(JSON.parse(JSON.stringify(fileFound.content[index])));
+        });
       }
     },
-    setPosition:function(entity,x,y){
+    getPosition:function(entity,x,y,z){
+      let positionIndex=entity.components.findIndex((comp)=> comp.name==='position')
+      if(positionIndex!==-1){
+        if(entity.components[positionIndex].params)return entity.components[positionIndex].params;
+      }
+      return  {'x':0,'y':0,'z':0}
+    },
+    setPosition:function(entity,x,y,z){
       let positionIndex=entity.components.findIndex((comp)=> comp.name==='position')
       if(positionIndex===-1){
-        entity.components.push({'name':'position','scope':'common','params':{'x':x,'y':y}})
+        entity.components.push({'name':'position','scope':'common','params':{'x':x,'y':y,'z':z}})
       }
       else {
         let position=JSON.parse(JSON.stringify(entity.components[positionIndex]))
@@ -193,16 +208,20 @@ export default {
         entity.components[positionIndex]=position
       }
     },
-    pasteEntity:function(x,y){
-      if(this.entityCopied){
-        let newEntity=JSON.parse(JSON.stringify(this.entityCopied))
-        this.setPosition(newEntity,x,y);
-        this.addEntity(newEntity)
+    pasteEntities:function({pos}){
+      if(this.entitiesCopied){
+        let difPos={x:this.posSaved.x-pos.x,y:this.posSaved.y-pos.y}
+        let entitiesArray=JSON.parse(JSON.stringify(this.entitiesCopied))
+        entitiesArray.forEach((entity)=>{
+          let entityPos=this.getPosition(entity)
+          this.setPosition(entity,difPos.x+entityPos.x,difPos.y+entityPos.y,entityPos.z);
+          this.addEntity(entity)
+        })
       }
     },
-    focusEntity:function(){
+    focusEntity:function(index){
       if(this.selectedMenu ==='Entities'){
-        //TODO send Focus to component DevEntities
+        this.indexFocusEntity=index
       }
     },
     cancelModification:function(){
@@ -309,6 +328,15 @@ export default {
       let fileFound= this.getEntitiesFile();
       if(fileFound){
         fileFound.content.splice(index, 1);
+      }
+    },
+    deleteEntities:function({indexes}){
+      let fileFound= this.getEntitiesFile();
+      if(fileFound){
+        indexes.sort(function(a,b){ return b - a; });
+        indexes.forEach((index)=>{
+          fileFound.content.splice(index, 1);
+        });
       }
     },
     addEntity:function(entity){

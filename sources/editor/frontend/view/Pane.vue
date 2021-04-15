@@ -1,7 +1,8 @@
 <template>
   <div class="pane">
     <PaneHeader :activePane="activePane" :panes="panes"></PaneHeader>
-    <component :is="componentRef" :params="componentParams" @edit-image="editImage" @edit-sprites="editSprites" @delete-elem="deleteElem" @save="save"></component>
+    <router-view v-if="componentReady" :params="componentParams"  @edit-image="editImage" @edit-sprites="editSprites" @delete-elem="deleteElem" @save="save" :key="$route.fullPath" />
+    <!-- <component :is="componentRef" :params="componentParams" @edit-image="editImage" @edit-sprites="editSprites" @delete-elem="deleteElem" @save="save"></component> -->
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import DevAceEditor from "editor/frontend/view/DevAceEditor.vue";
 import DevComponentEdit from "editor/frontend/view/DevComponentEdit.vue";
 import DevEntity from "editor/frontend/view/DevEntity.vue";
 import DevScene from "editor/frontend/view/DevScene.vue";
+import router from "editor/frontend/router";
 import { mapGetters,mapActions } from 'vuex'
 
 export default {
@@ -22,7 +24,8 @@ export default {
   data(){
     return {
       componentParams:{},
-      componentRef:null
+      componentRef:null,
+      componentReady:false
     }
   },
   methods:{
@@ -50,8 +53,8 @@ export default {
       this.selectPreviewElement("assets","images",scope,name);
     },
     selectPreviewElement(folder,type,scope,name){
-      let path=folder+'/'+type+'/'+scope+'/'+name;
-      this.openPane(path);
+      let path=`/${folder}/${type}/${scope}/${name}`;
+      router.push({ path})
     }
   },
   computed:{
@@ -69,28 +72,38 @@ export default {
     }),
   },
   watch:{
+    $route(to, from) {
+      this.componentReady =false;
+    },
     currentFiles:function(val){
       if(this.currentType==='images' && this.currentFiles.length>0){
         this.componentRef=DevImageEdit;
         this.componentParams=this.currentFiles[0];
+        this.componentReady =true;
       }else if(this.currentType==='sounds' && this.currentFiles.length>0){
         this.componentRef=DevSoundEdit;
         this.componentParams=this.currentFiles[0];
+        this.componentReady =true;
       }else if(this.currentType==='sprites' && this.currentFiles.length===2){
         this.componentRef=DevSpriteEdit;
         this.componentParams=this.currentFiles;
+        this.componentReady =true;
       }else if(this.currentType==='entities' && this.currentFiles.length>0){
         this.componentRef=DevEntity;
         this.componentParams=this.currentFiles;
+        this.componentReady =true;
       }else if(this.currentType==='scenes' && this.currentFiles.length>0){
         this.componentRef=DevScene;
         this.componentParams=this.currentFiles;
+        this.componentReady =true;
       }else if(this.currentType==='components' && this.currentFiles.length===1){
         this.componentRef=DevComponentEdit;
         this.componentParams=this.currentFiles[0];
+        this.componentReady =true;
       }else if((this.currentFolder==='lifecycles' || this.currentType==='systems' || this.currentType==='snippets' || this.currentType==='datasets') && this.currentFiles.length>0){
         this.componentRef=DevAceEditor;
         this.componentParams=this.currentFiles[0];
+        this.componentReady =true;
       }
       else if(this.currentFiles.length===0) {
         this.componentRef=null;

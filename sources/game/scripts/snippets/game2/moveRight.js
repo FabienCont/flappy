@@ -6,8 +6,8 @@ export default function moveRight(entity) {
     name: 'forces',
     scope: 'common',
     params: {
-      parts: [
-        {
+      parts: {
+        moveRight: {
           x: 5,
           y: 0,
           z: 0,
@@ -19,18 +19,11 @@ export default function moveRight(entity) {
             name: 'ease-linear',
           },
         },
-      ],
+      },
     },
   };
   const newForces = createComponentFromModel.call(this, forces);
 
   const entityForces = entity.get('forces');
-  if (entityForces) {
-    if (entityForces.parts.length > 0) {
-      entityForces.parts.pop();
-    }
-    entityForces.parts.push(newForces.parts[0]);
-  } else {
-    entity.add('forces').parts.push(newForces.parts[0]);
-  }
+  entityForces.parts.moveRight = newForces.parts.moveRight;
 }

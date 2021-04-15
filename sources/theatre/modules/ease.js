@@ -3,6 +3,17 @@ function easeIn(power) {
   return (x) => x ** power;
 }
 
+function easeInFollow(power) {
+  // accelerating from zero velocity, then follow constant velocity
+  return (x) => {
+    if (x <= 1) {
+      return easeIn(power)(x);
+    }
+
+    return 1 - linear(power)(1 - x);
+  };
+}
+
 function easeInOut(power) {
   // acceleration until halfway, then deceleration (with x in [0, 1] range)
   return (x) => {
@@ -29,14 +40,29 @@ function easeInQuad(x) {
   return easeIn(2)(x);
 }
 
+function easeInQuadFollow(x) {
+  // accelerating from zero velocity, then follow constant velocity
+  return easeInFollow(2)(x);
+}
+
 function easeInCubic(x) {
   // accelerating from zero velocity
   return easeIn(3)(x);
 }
 
+function easeInCubicFollow(x) {
+  // accelerating from zero velocity, then follow constant velocity
+  return easeInFollow(3)(x);
+}
+
 function easeInQuart(x) {
   // accelerating from zero velocity
   return easeIn(4)(x);
+}
+
+function easeInQuartFollow(x) {
+  // accelerating from zero velocity, then follow constant velocity
+  return easeInFollow(4)(x);
 }
 
 function easeInOutQuad(x) {
@@ -86,6 +112,9 @@ export {
 
   // export ease-in functions
   easeInCubic, easeInQuad, easeInQuart,
+
+  // ease in with constant value after max duration
+  easeInQuadFollow, easeInCubicFollow, easeInQuartFollow,
 
   // export ease-in-out functions
   easeInOutCubic, easeInOutQuad, easeInOutQuart,

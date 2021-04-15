@@ -1,0 +1,1 @@
+{"name":"warrior","scope":"game2","components":[{"name":"camera","scope":"common","params":{}},{"name":"position","scope":"common","params":{}},{"name":"sprites","scope":"common","params":{"parts":{"idle":{"source":"warrior_idle","size":{"width":32,"height":64}}}}},{"name":"rotate","scope":"common","params":{"y":180}}]}

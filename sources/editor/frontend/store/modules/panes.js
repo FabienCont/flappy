@@ -1,6 +1,7 @@
 // initial state
 import { cutFolderPath, createFilePath } from 'editor/frontend/utils/path';
 import { isAddable, getDefaultExt, getDefaultContent } from 'editor/frontend/utils/folderType';
+import router from 'editor/frontend/router';
 
 const state = () => ({
   all: [],
@@ -39,11 +40,17 @@ const actions = {
   open({ commit, dispatch, state }, path) {
     const index = state.all.findIndex((pane) => pane.path === path);
     if (index === -1) {
-      const newPane = {
-        path,
-      };
-      dispatch('files/retrieve', path, { root: true });
-      commit('add', newPane);
+      if (path !== '') {
+        const newPane = {
+          path,
+        };
+
+        commit('add', newPane);
+        dispatch('files/retrieve', path, { root: true }).catch((err) => {
+          //    commit('remove', path);
+
+        });
+      }
     } else {
       dispatch('files/retrieve', path, { root: true });
       commit('activate', path);
@@ -53,8 +60,10 @@ const actions = {
     commit('remove', path);
     if (state.all.length > 0) {
       dispatch('files/retrieve', state.all[state.active].path, { root: true });
+      router.replace(`/${state.all[state.active].path}`);
     } else {
       dispatch('files/inactive', null, { root: true });
+      router.push('/');
     }
   },
 };

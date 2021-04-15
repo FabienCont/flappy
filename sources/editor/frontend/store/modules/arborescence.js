@@ -1,8 +1,9 @@
 import { getArborescence } from 'editor/frontend/api/arborescence';
 
 // initial state
-const state = () => ({
+const initialState = () => ({
   all: {},
+  ready: false,
 });
 
 const reduceFindOrCreatePath = function reduceFindOrCreatePath(pathInState, subPath, i, paths) {
@@ -36,6 +37,7 @@ const findPath = function findPath(pathInState, paths) {
 const actions = {
   retrieveAllArborescence({ commit }) {
     getArborescence().then((arborescence) => {
+      commit('setReady', true);
       commit('setArborescence', arborescence);
     });
   },
@@ -71,6 +73,9 @@ const mutations = {
       }
     }
   },
+  setReady(state, value) {
+    state.ready = value;
+  },
   setArborescence(state, arborescence) {
     state.all = arborescence;
   },
@@ -80,6 +85,7 @@ const mutations = {
 };
 // getters
 const getters = {
+  isReady: (state) => () => state.ready,
   getComponents: (state) => () => state.all.models.content.components.content,
   getSnippets: (state) => () => state.all.scripts.content.snippets.content,
   getEntities: (state) => () => state.all.models.content.entities.content,
@@ -137,7 +143,7 @@ const getters = {
 
 export default {
   namespaced: true,
-  state,
+  state: initialState,
   getters,
   actions,
   mutations,

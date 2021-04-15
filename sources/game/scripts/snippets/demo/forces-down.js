@@ -5,30 +5,32 @@ export default function forcesDown(entity) {
     name: 'forces',
     scope: 'common',
     params: {
-      parts: [{
-        x: 0,
-        y: 8,
-        z: 0,
-        rotateX: 0,
-        rotateY: 0,
-        rotateZ: 60,
-        duration: 250,
-        easing: {
-          type: 'snippets',
-          scope: 'demo',
-          name: 'ease-in',
+      parts: {
+        forcesDown: {
+          x: 0,
+          y: 8,
+          z: 0,
+          rotateX: 0,
+          rotateY: 0,
+          rotateZ: 60,
+          duration: 250,
+          easing: {
+            type: 'snippets',
+            scope: 'demo',
+            name: 'ease-in',
+          },
+          handling: {
+            type: 'snippets',
+            scope: 'demo',
+            name: 'rotation-limit',
+          },
+          elapsed: 0,
         },
-        handling: {
-          type: 'snippets',
-          scope: 'demo',
-          name: 'rotation-limit',
-        },
-        elapsed: 0,
-      }],
+      },
     },
   };
 
   const newForces = createComponentFromModel.call(this, forces);
 
-  entity.get('forces').parts.push(newForces.parts[0]);
+  entity.get('forces').parts.forcesDown = newForces.parts.forcesDown;
 }

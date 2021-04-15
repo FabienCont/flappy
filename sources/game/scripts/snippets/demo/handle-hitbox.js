@@ -26,7 +26,8 @@ export default function (entity, collision) {
     name: 'forces',
     scope: 'common',
     params: {
-      parts: [
+      parts: {
+        fall:
         {
           x: 0,
           y: -20,
@@ -41,7 +42,7 @@ export default function (entity, collision) {
             name: 'forces-down',
           },
         },
-      ],
+      },
     },
   };
 

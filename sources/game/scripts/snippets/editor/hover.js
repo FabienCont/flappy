@@ -5,33 +5,34 @@ const dezoomCamera = function (camera) {
 
 export default function hover({ x, y }) {
   const $camera = this.$cameras.debug;
+  const debugVariables = this.$variables.$debug;
   if ($camera) {
-    const xPointer = (x - $camera.screen.x()
-    + $camera.position.x() * $camera.screen.scale()
-    - $camera.screen.width() / 2) / $camera.screen.scale();
-
-    const yPointer = (y - $camera.screen.y()
-    + $camera.position.y() * $camera.screen.scale()
-    - $camera.screen.height() / 2) / $camera.screen.scale();
-
     const entitiesHover = [];
-
     Object.entries(this.$world.entities).forEach(([key, value], i) => {
       const pos = value.get('position');
 
       if (pos) {
-        if (Math.abs(pos.x - xPointer) < 16 && Math.abs(pos.y - yPointer) < 16) {
-          entitiesHover.push({ pos, entity: value });
+        const distance = debugVariables.stepGrid;
+        if (Math.abs(pos.x - x) < distance && Math.abs(pos.y - y) < distance) {
+          entitiesHover.push(value);
         }
       }
     });
 
-    if (entitiesHover.length === 0) {
-      this.$variables.$debug.oldPos = { x, y };
-      this.$variables.$debug.focusElement = null;
+    if (debugVariables.entitySelection === false) {
+      debugVariables.oldPos = { x, y };
+      debugVariables.hoverElements.splice(0);
     } else {
-      this.$variables.$debug.oldPos = entitiesHover[0].pos;
-      this.$variables.$debug.focusElement = entitiesHover[0].entity;
+      debugVariables.hoverElements.splice(0);
+      debugVariables.hoverElements = [...debugVariables.hoverElements, ...entitiesHover];
+      if (debugVariables.hoverElements[debugVariables.hoverLevel]) {
+        debugVariables.oldPos = debugVariables.hoverElements[debugVariables.hoverLevel].get('position');
+      } else if (debugVariables.hoverLevel > debugVariables.hoverElements.length - 1 && debugVariables.hoverElements.length > 0) {
+        debugVariables.hoverLevel = 0;
+        debugVariables.oldPos = debugVariables.hoverElements[debugVariables.hoverLevel].get('position');
+      } else {
+        debugVariables.oldPos = { x, y };
+      }
     }
   }
 }

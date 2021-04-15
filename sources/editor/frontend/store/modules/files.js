@@ -2,7 +2,11 @@ import {
   getFile, postFile, deleteFile,
 } from 'editor/frontend/api/files';
 import { cutFilePath, createFilePath } from 'editor/frontend/utils/path';
-
+import camerasJSON from 'editor/frontend/utils/template/cameras.json';
+import variablesJSON from 'editor/frontend/utils/template/variables.json';
+import systemsJSON from 'editor/frontend/utils/template/systems.json';
+import renderersJSON from 'editor/frontend/utils/template/renderers.json';
+import inputsJSON from 'editor/frontend/utils/template/inputs.json';
 // initial state
 const state = () => ({
   all: {},
@@ -61,7 +65,7 @@ const actions = {
     } else if (type === 'scenes' && paths.length === 4) {
       commit('cleanActiveFiles');
       const sceneFiles = {
-        cameras: [], inputs: [], renderers: [], systems: [], variables: {},
+        cameras: camerasJSON, inputs: inputsJSON, renderers: renderersJSON, systems: systemsJSON, variables: variablesJSON,
       };
       const entityPromises = retrieveEntityFiles({ rootGetters });
       const componentPromises = retrieveComponentFiles({ rootGetters });
@@ -84,80 +88,87 @@ const actions = {
     }
   },
   retrieve({ commit, state, rootGetters }, path) {
-    const {
-      paths, folder, type, scope, name,
-    } = cutFilePath(path);
+    return new Promise((resolve, reject) => {
+      try {
+        const {
+          paths, folder, type, scope, name,
+        } = cutFilePath(path);
 
-    const filesToAdd = {};
+        const filesToAdd = {};
 
-    if (type === 'sprites' && paths.length === 4) {
-      //      dispatch('files/inactive', null, { root: true });
+        if (type === 'sprites' && paths.length === 4) {
+          //      dispatch('files/inactive', null, { root: true });
 
-      const pngFileName = rootGetters['arborescence/getImageFromSprites'](scope, name);
-      const pngPath = [folder, 'images', scope, pngFileName].join('/');
-      commit('cleanActiveFiles');
-      const mainFilePromise = getFile(path, folder, type, scope, name);
+          const pngFileName = rootGetters['arborescence/getImageFromSprites'](scope, name);
+          const pngPath = [folder, 'images', scope, pngFileName].join('/');
+          commit('cleanActiveFiles');
+          const mainFilePromise = getFile(path, folder, type, scope, name);
 
-      const pngFilePromise = getFile(pngPath, folder, 'images', scope, pngFileName);
+          const pngFilePromise = getFile(pngPath, folder, 'images', scope, pngFileName);
 
-      Promise.all([mainFilePromise.then((file) => {
-        filesToAdd[path] = file;
-      }, (err) => {
-        if (err === 404) {
-          filesToAdd[path] = {
-            path, folder, type, scope, name, content: [], temp: true,
-          };
+          Promise.all([mainFilePromise.then((file) => {
+            filesToAdd[path] = file;
+          }, (err) => {
+            if (err === 404) {
+              filesToAdd[path] = {
+                path, folder, type, scope, name, content: [], temp: true,
+              };
+            }
+          }),
+          pngFilePromise.then((file) => {
+            filesToAdd[file.path] = file;
+          }),
+          ]).then(() => {
+            commit('addMultipleFile', filesToAdd);
+          });
+        } else if (type === 'entities' && paths.length === 4) {
+          commit('cleanActiveFiles');
+
+          const promiseArray = retrieveComponentFiles({ rootGetters });
+
+          const entityPromise = getFile(path, folder, type, scope, name);
+
+          Promise.all([entityPromise.then((file) => {
+            filesToAdd[file.path] = file;
+          }, (err) => {
+            if (err === 404) {
+              filesToAdd[path] = {
+                path, folder, type, scope, name, content: [], temp: true,
+              };
+            }
+          }),
+          Promise.all(promiseArray).then((files) => {
+            files.forEach((file) => filesToAdd[file.path] = file);
+          })]).then(() => {
+            commit('addMultipleFile', filesToAdd);
+          });
+        } else if (type === 'scenes' && paths.length === 4) {
+          const sceneArbo = rootGetters['arborescence/getScene'](scope);
+          commit('cleanActiveFiles');
+          const entityPromises = retrieveEntityFiles({ rootGetters });
+          const componentPromises = retrieveComponentFiles({ rootGetters });
+          const scenesPromises = [];
+          Object.keys(sceneArbo).forEach((sceneFileName) => {
+            const pathSceneFile = createFilePath(folder, type, scope, sceneFileName);
+            scenesPromises.push(getFile(pathSceneFile, folder, type, scope, sceneFileName));
+          });
+
+          Promise.all([...entityPromises, ...componentPromises, ...scenesPromises])
+            .then((files) => {
+              files.forEach((file) => filesToAdd[file.path] = file);
+              commit('addMultipleFile', filesToAdd);
+            });
+        } else {
+          commit('cleanActiveFiles');
+          getFile(path, folder, type, scope, name).then((file) => {
+            commit('addFile', file);
+          });
         }
-      }),
-      pngFilePromise.then((file) => {
-        filesToAdd[file.path] = file;
-      }),
-      ]).then(() => {
-        commit('addMultipleFile', filesToAdd);
-      });
-    } else if (type === 'entities' && paths.length === 4) {
-      commit('cleanActiveFiles');
-
-      const promiseArray = retrieveComponentFiles({ rootGetters });
-
-      const entityPromise = getFile(path, folder, type, scope, name);
-
-      Promise.all([entityPromise.then((file) => {
-        filesToAdd[file.path] = file;
-      }, (err) => {
-        if (err === 404) {
-          filesToAdd[path] = {
-            path, folder, type, scope, name, content: [], temp: true,
-          };
-        }
-      }),
-      Promise.all(promiseArray).then((files) => {
-        files.forEach((file) => filesToAdd[file.path] = file);
-      })]).then(() => {
-        commit('addMultipleFile', filesToAdd);
-      });
-    } else if (type === 'scenes' && paths.length === 4) {
-      const sceneArbo = rootGetters['arborescence/getScene'](scope);
-      commit('cleanActiveFiles');
-      const entityPromises = retrieveEntityFiles({ rootGetters });
-      const componentPromises = retrieveComponentFiles({ rootGetters });
-      const scenesPromises = [];
-      Object.keys(sceneArbo).forEach((sceneFileName) => {
-        const pathSceneFile = createFilePath(folder, type, scope, sceneFileName);
-        scenesPromises.push(getFile(pathSceneFile, folder, type, scope, sceneFileName));
-      });
-
-      Promise.all([...entityPromises, ...componentPromises, ...scenesPromises])
-        .then((files) => {
-          files.forEach((file) => filesToAdd[file.path] = file);
-          commit('addMultipleFile', filesToAdd);
-        });
-    } else {
-      commit('cleanActiveFiles');
-      getFile(path, folder, type, scope, name).then((file) => {
-        commit('addFile', file);
-      });
-    }
+      } catch (err) {
+        console.error(err);
+        reject(err);
+      }
+    });
   },
   inactive({ commit, state }) {
     commit('cleanActiveFiles');

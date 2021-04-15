@@ -1,1 +1,0 @@
-{"name":"newFile","scope":"common","components":[{"name":"camera","scope":"common"},{"name":"sprites","scope":"common","params":{"parts":{"ground":{"source":"ground"}}}},{"name":"position","scope":"common"}]}

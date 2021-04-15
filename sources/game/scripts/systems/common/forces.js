@@ -8,7 +8,7 @@ function forces(entities) {
 
     const trashes = [];
 
-    forcesComponent.parts.forEach((force) => {
+    Object.entries(forcesComponent.parts).forEach(([key, force]) => {
       const unlimited = force.ending === false;
       const remaining = force.duration - force.elapsed;
       const delta = (unlimited === false && this.delta > remaining) ? remaining : this.delta;
@@ -28,8 +28,6 @@ function forces(entities) {
         rotateZ: force.rotateZ * easing(progress),
       };
 
-      console.log(positionComponent);
-      console.log('move', moved);
       positionComponent.x += moved.x - force.moved.x;
       positionComponent.y += moved.y - force.moved.y;
       positionComponent.z += moved.z - force.moved.z;
@@ -39,7 +37,6 @@ function forces(entities) {
         rotateComponent.z += moved.rotateZ - force.moved.rotateZ;
       }
 
-      console.log(positionComponent);
       force.moved = moved;
 
       force.elapsed += this.delta;
@@ -48,7 +45,7 @@ function forces(entities) {
         const handling = this.scripts.snippets[source.scope][source.name];
 
         const remove = () => {
-          trashes.push(force);
+          trashes.push(key);
         };
 
         handling(entity, force.moved.x, force.moved.y, force.moved.z, force.moved.rotateX, force.moved.rotateY, force.moved.rotateZ, force.elapsed, remove);
@@ -56,16 +53,17 @@ function forces(entities) {
 
       if (force.elapsed >= force.duration
             && force.ending !== false
-            && trashes.indexOf(force) === -1) {
+            && trashes.indexOf(key) === -1) {
         const source = force.ending;
         const ending = this.scripts.snippets[source.scope][source.name];
 
         ending(entity, force.moved.x, force.moved.y, force.moved.z, force.moved.rotateX, force.moved.rotateY, force.moved.rotateZ, force.elapsed);
-        trashes.push(force);
+        trashes.push(key);
       }
     });
-
-    forcesComponent.parts = forcesComponent.parts.filter((force) => trashes.indexOf(force) === -1);
+    trashes.forEach((trashKey, i) => {
+      delete forcesComponent.parts[trashKey];
+    });
   });
 }
 

@@ -6,8 +6,8 @@ export default function jump(entity) {
     name: 'forces',
     scope: 'common',
     params: {
-      parts: [
-        {
+      parts: {
+        jump: {
           x: 0,
           y: -20,
           z: 0,
@@ -29,15 +29,16 @@ export default function jump(entity) {
             name: 'rotation-limit',
           },
         },
-      ],
+      },
     },
   };
   const newForces = createComponentFromModel.call(this, forces);
 
   const { parts } = entity.get('forces');
-  if (parts.length > 1) {
-    parts.pop();
-  }
+  Object.keys(parts).forEach((key) => {
+    if (key !== 'infiniteMove') delete parts[key];
+  });
+
   this.assets.sounds.demo.jump().play();
-  entity.get('forces').parts.push(newForces.parts[0]);
+  parts.jump = newForces.parts.jump;
 }

@@ -42,9 +42,15 @@ export default {
     }
   },
   props:{
+    indexFocus:{type:Number},
     sceneFiles:{type:Object},
     entitiesModel:{type:Object},
     componentsModel:{type:Object},
+  },
+  watch:{
+    indexFocus:function(val){
+      this.entityFocus=val;
+    }
   },
   computed:{
     ...mapGetters({

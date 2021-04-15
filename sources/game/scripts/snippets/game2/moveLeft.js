@@ -6,8 +6,8 @@ export default function moveLeft(entity) {
     name: 'forces',
     scope: 'common',
     params: {
-      parts: [
-        {
+      parts: {
+        moveLeft: {
           x: -5,
           y: 0,
           z: 0,
@@ -20,18 +20,11 @@ export default function moveLeft(entity) {
           },
           elapsed: 0,
         },
-      ],
+      },
     },
   };
   const newForces = createComponentFromModel.call(this, forces);
 
   const entityForces = entity.get('forces');
-  if (entityForces) {
-    if (entityForces.parts.length > 0) {
-      entityForces.parts.pop();
-    }
-    entityForces.parts.push(newForces.parts[0]);
-  } else {
-    entity.add('forces').parts.push(newForces.parts[0]);
-  }
+  entityForces.parts.moveLeft = newForces.parts.moveLeft;
 }

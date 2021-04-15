@@ -9,6 +9,8 @@
 
 import { mapActions,mapGetters } from 'vuex'
 import TreeBranch from "editor/frontend/view/TreeBranch.vue";
+import router from "editor/frontend/router";
+
 //check Ref
 export default {
   name: 'tree-view',
@@ -30,8 +32,8 @@ export default {
       currentPane:"panes/currentPane",
     }),
     childSelectFile:function({branch,path}){
-      let fullPath=path.reverse().join("/");
-      this.openPane(fullPath);
+      let fullPath="/"+path.reverse().join("/");
+      router.push({ path: fullPath})
     }
   },
 }

@@ -22,8 +22,15 @@ function showPosition(entities) {
     this.context.save();
 
     this.context.lineWidth = width;
-    if (this.$variables.$debug.focusElement && this.$variables.$debug.focusElement.id === entity.id) {
-      this.context.fillStyle = '#32CD32';
+    const debugVariables = this.$variables.$debug;
+    if (debugVariables.focusElement && debugVariables.focusElement.id === entity.id) {
+      this.context.fillStyle = '#992420';
+    } else if (debugVariables.hoverElements.length > 0
+      && debugVariables.hoverElements[debugVariables.hoverLevel]
+       && debugVariables.hoverElements[debugVariables.hoverLevel].id === entity.id) {
+      this.context.fillStyle = '#119960';
+    } else if (debugVariables.selectedElements.indexOf(entity) !== -1) {
+      this.context.fillStyle = '#992420';
     } else {
       this.context.fillStyle = '#A9A9A9';
     }

@@ -6,32 +6,33 @@ export default function moveTop(entity) {
     name: 'forces',
     scope: 'common',
     params: {
-      parts: [
-        {
+      parts: {
+        jump: {
           x: 0,
-          y: -5,
+          y: -35,
           z: 0,
           rotateX: 0,
           rotateY: 0,
-          duration: 100,
-          easing: {
-            scope: 'demo',
-            name: 'ease-linear',
-          },
+          duration: 300,
           elapsed: 0,
+          easing: {
+            scope: 'ease',
+            name: 'easeOutCubic',
+          },
+          ending: {
+            scope: 'game2',
+            name: 'fall',
+          },
         },
-      ],
+      },
     },
   };
   const newForces = createComponentFromModel.call(this, forces);
 
   const entityForces = entity.get('forces');
-  if (entityForces) {
-    if (entityForces.parts.length > 0) {
-      entityForces.parts.pop();
-    }
-    entityForces.parts.push(newForces.parts[0]);
-  } else {
-    entity.add('forces').parts.push(newForces.parts[0]);
+  if (entityForces.parts.fall) {
+    delete entityForces.parts.fall;
   }
+
+  entityForces.parts.jump = newForces.parts.jump;
 }
