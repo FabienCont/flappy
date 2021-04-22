@@ -1,0 +1,1 @@
+{"name":"grass","scope":"game2","components":[{"name":"camera","scope":"common","params":{}},{"name":"position","scope":"common","params":{"z":-5}},{"name":"sprites","scope":"common","params":{"parts":{"long_grass":{"source":"longGrass","size":{"height":32,"width":96}}}}}]}

@@ -1,6 +1,10 @@
 import { createComponentFromModel } from 'core/loadEntities';
 
 export default function moveTop(entity) {
+    
+ let states = entity.get('states')
+ if(states && states.values && states.values.grounded && states.values.grounded==="true"){
+ 
   this.$variables.started = true;
   const forces = {
     name: 'forces',
@@ -30,9 +34,10 @@ export default function moveTop(entity) {
   const newForces = createComponentFromModel.call(this, forces);
 
   const entityForces = entity.get('forces');
- 
-  if(!entityForces.parts.jump && !entityForces.parts.fall){
   
   entityForces.parts.jump = newForces.parts.jump;
-  }
-}
+  if(entityForces.parts.fall)
+  delete entityForces.parts.fall
+     
+ }
+ }

@@ -35,6 +35,7 @@ function sprites(entities) {
       };
 
       camera.add('images', {
+        spriteName: `_sprite_${sprite.source}_${frame}`,
         rotate: {
           x: rotateX,
           y: rotateY,
@@ -48,7 +49,8 @@ function sprites(entities) {
           height,
         },
         destination: {
-
+          shiftX: 0,
+          shiftY: 0,
           x: (positionComponent.x + destination.x - size.width / 2),
           y: (positionComponent.y + destination.y - size.height / 2),
           z: positionComponent.z + destination.z,

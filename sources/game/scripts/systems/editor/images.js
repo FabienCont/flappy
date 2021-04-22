@@ -32,6 +32,7 @@ function images(entities) {
         };
 
         this.$cameras.debug.add('images', {
+          spriteName: `_img_${source.scope}${source.file}`,
           rotate: {
             x: rotateX,
             y: rotateY,

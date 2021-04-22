@@ -34,6 +34,7 @@ function sprites(entities) {
         };
 
         this.$cameras.debug.add('images', {
+          spriteName: `_sprite_${sprite.source}_${sprite.animation.frame}`,
           rotate: {
             x: rotateX,
             y: rotateY,

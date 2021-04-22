@@ -71,8 +71,9 @@ function Theatre(config) {
       };
     } else if (type === '2d') {
       this.cleanCanvas = () => {
+        canvas.context.setTransform(1, 0, 0, 1, 0, 0);
         canvas.context.fillStyle = '#000000';
-        canvas.context.fillRect(0, 0, canvas.context.canvas.width, canvas.context.canvas.height);
+        canvas.context.fillRect(0, 0, canvas.element.width, canvas.element.width);
       };
     }
 

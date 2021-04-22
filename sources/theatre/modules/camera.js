@@ -16,8 +16,8 @@ function Camera(name, type, screenSize, attr) {
 
     case 'contain-framed':
 
-      this.screen.x = () => Math.floor((screenSize.width - attr.width * scale()) / 2);
-      this.screen.y = () => Math.floor((screenSize.height - attr.height * scale()) / 2);
+      this.screen.x = () => (screenSize.width - attr.width * scale()) / 2;
+      this.screen.y = () => (screenSize.height - attr.height * scale()) / 2;
       this.screen.z = () => 0;
       this.screen.width = () => attr.width * scale();
       this.screen.height = () => attr.height * scale();

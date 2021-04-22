@@ -1,0 +1,1 @@
+{"name":"scale","params":{"x":{"_type":"number","_default":1},"y":{"_type":"number","_default":1},"z":{"_type":"number","_default":1}}}

@@ -30,6 +30,7 @@ function images(entities) {
       };
 
       camera.add('images', {
+        spriteName: `_img_${source.scope}${source.file}`,
         rotate: {
           x: rotateX,
           y: rotateY,
@@ -43,6 +44,8 @@ function images(entities) {
           height: sourceImg.naturalHeight,
         },
         destination: {
+          shiftX: 0,
+          shiftY: 0,
           x: (positionComponent.x + destination.x - size.width / 2),
           y: (positionComponent.y + destination.y - size.height / 2),
           z: positionComponent.z + destination.z,

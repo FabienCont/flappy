@@ -1,1 +1,1 @@
-{"name":"bgGround","scope":"game2","components":[{"name":"camera","scope":"common","params":{}},{"name":"position","scope":"common","params":{}},{"name":"sprites","scope":"common","params":{"parts":{"bgGround":{"size":{"width":960,"height":200},"source":"ground_1"}}}}]}
+{"name":"bgGround","scope":"game2","components":[{"name":"camera","scope":"common","params":{}},{"name":"position","scope":"common","params":{}},{"name":"sprites","scope":"common","params":{"parts":{"bgGround":{"source":"ground_1"}}}}]}

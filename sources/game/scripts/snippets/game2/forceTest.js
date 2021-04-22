@@ -1,28 +1,24 @@
 import { createComponentFromModel } from 'core/loadEntities';
 
-export default function moveTop(entity) {
+export default function forceTest(entity) {
   this.$variables.started = true;
   const forces = {
     name: 'forces',
     scope: 'common',
     params: {
       parts: {
-        jump: {
-          x: 0,
-          y: -35,
+        forceTest: {
+          x: 5,
+          y: 5,
           z: 0,
           rotateX: 0,
           rotateY: 0,
-          duration: 300,
-          elapsed: 0,
+          duration: 100,
           easing: {
-            scope: 'ease',
-            name: 'easeOutCubic',
+            scope: 'demo',
+            name: 'ease-linear',
           },
-          ending: {
-            scope: 'game2',
-            name: 'fall',
-          },
+          ending:false,
         },
       },
     },
@@ -30,9 +26,5 @@ export default function moveTop(entity) {
   const newForces = createComponentFromModel.call(this, forces);
 
   const entityForces = entity.get('forces');
- 
-  if(!entityForces.parts.jump && !entityForces.parts.fall){
-  
-  entityForces.parts.jump = newForces.parts.jump;
-  }
+  entityForces.parts.forceTest = newForces.parts.forceTest;
 }

@@ -1,0 +1,43 @@
+TODO list :
+
+add snippet for each param entities
+
+save entityModel from scene to entities
+
+add pulls
+
+fix sound play
+
+add multiple selection
+
+z selection
+
+show multiple element on same case
+
+add size modification
+
+fix scenario.json edition
+
+add list with image selection
+
+modify devSelect.vue to add search/none value and multiple selection
+
+drag and drop entities to change order in scenes
+search entities in scene
+
+devAnimation
+
+composant instanci�
+ ---------------------------------
+
+search in select component, multiple select component
+focus une entité dans la scene
+add preview forces
+add textImage
+parralax
+repeatable image
+
+
+copyComponent entity
+modify multiple entity
+save template entity
